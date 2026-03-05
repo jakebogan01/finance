@@ -3,13 +3,32 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import * as Password from '$lib/components/ui/password';
 	import { resolve } from '$app/paths';
+	import pb from '$lib/pocketbase.js';
+	import { createForm } from 'felte';
+
+	const { form, reset } = createForm({
+		initialValues: {
+			email: null,
+			password: null
+		},
+		onSubmit: async (values) => {
+			try {
+				await pb.collection('users').authWithPassword(values.email, values.password);
+				reset();
+			} catch (error) {
+				console.dir(error?.response, { depth: null });
+			}
+		}
+	});
 </script>
 
-<form class="space-y-6">
+<form class="space-y-6" use:form>
 	<div>
 		<label for="email" class="sr-only">Email address</label>
 		<Input
 			type="email"
+			id="email"
+			name="email"
 			placeholder="Email Address"
 			autocomplete="email"
 			minlength={1}
@@ -21,7 +40,8 @@
 	<div>
 		<Password.Root>
 			<Password.Input
-				value=""
+				id="password"
+				name="password"
 				placeholder="Password"
 				autocomplete="current-password"
 				minlength={1}
