@@ -1,5 +1,4 @@
 <script module>
-	import { cn } from '$lib/utils.js';
 	import { tv } from 'tailwind-variants';
 
 	export const buttonVariants = tv({
@@ -32,41 +31,59 @@
 </script>
 
 <script>
+	import { cn } from '$lib/utils.js';
+	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
+
 	let {
-		class: className,
+		ref = $bindable(null),
 		variant = 'default',
 		size = 'default',
-		ref = $bindable(null),
 		href = undefined,
 		type = 'button',
-		disabled,
+		loading = false,
+		disabled = false,
+		tabindex = 0,
+		onclick,
+		onClickPromise,
+		class: className,
+		'data-slot': dataSlot = 'button',
 		children,
-		...restProps
+		...rest
 	} = $props();
 </script>
 
-{#if href}
-	<a
-		bind:this={ref}
-		data-slot="button"
-		class={cn(buttonVariants({ variant, size }), className)}
-		href={disabled ? undefined : href}
-		aria-disabled={disabled}
-		role={disabled ? 'link' : undefined}
-		tabindex={disabled ? -1 : undefined}
-		{...restProps}
-	>
-		{@render children?.()}
-	</a>
-{:else}
-	<button
-		bind:this={ref}
-		data-slot="button"
-		class={cn(buttonVariants({ variant, size }), className)}
-		{type}
-		{disabled}
-		{...restProps}
-	>
-		{@render children?.()}
-	</button>
-{/if}
+<!-- This approach to disabled links is inspired by bits-ui see: https://github.com/huntabyte/bits-ui/pull/1055 -->
+<svelte:element
+	this={href ? 'a' : 'button'}
+	{...rest}
+	data-slot={dataSlot}
+	type={href ? undefined : type}
+	href={href && !disabled ? href : undefined}
+	disabled={href ? undefined : disabled || loading}
+	aria-disabled={href ? disabled : undefined}
+	role={href && disabled ? 'link' : undefined}
+	tabindex={href && disabled ? -1 : tabindex}
+	class={cn(buttonVariants({ variant, size }), className)}
+	bind:this={ref}
+	onclick={async (e) => {
+		onclick?.(e);
+
+		if (type === undefined) return;
+
+		if (onClickPromise) {
+			loading = true;
+
+			await onClickPromise(e);
+
+			loading = false;
+		}
+	}}
+>
+	{#if type !== undefined && loading}
+		<div class="flex animate-spin place-items-center justify-center">
+			<LoaderCircleIcon class="size-4" />
+		</div>
+		<span class="sr-only">Loading</span>
+	{/if}
+	{@render children?.()}
+</svelte:element>
