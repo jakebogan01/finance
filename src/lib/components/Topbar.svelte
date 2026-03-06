@@ -1,5 +1,11 @@
 <script>
+	import CircleButton from '$lib/components/CircleButton.svelte';
+	import SettingsIcon from '@lucide/svelte/icons/settings';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import MenuIcon from '@lucide/svelte/icons/menu';
+	import { SETTINGS } from '$lib/utils/constants';
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
 </script>
 
 <div
@@ -12,4 +18,14 @@
 			<p class="text-preset-5-medium sm:text-3xl">Jake Bogan</p>
 		</div>
 	</div>
+	<CircleButton
+		command="show-modal"
+		commandfor="sidebar"
+		Icon={MenuIcon}
+		size="6"
+		class="1126:hidden"
+	/>
+	{#if page.url.pathname !== SETTINGS}
+		<CircleButton href={resolve(SETTINGS)} Icon={SettingsIcon} size="6" class="hidden 1126:flex" />
+	{/if}
 </div>
