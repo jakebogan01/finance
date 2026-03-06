@@ -6,7 +6,10 @@
 
 	let { children } = $props();
 
-	onMount(() => document.body.classList.add('auth-bg'));
+	onMount(() => {
+		document.body.classList.add('auth-bg');
+		return () => document.body.classList.remove('auth-bg');
+	});
 </script>
 
 <div class="flex min-h-full flex-1">
