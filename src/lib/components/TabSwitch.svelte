@@ -5,7 +5,7 @@
 
 	let { tabItems, showIcons, currentTab = $bindable() } = $props();
 	let positions = $state([]);
-	let active = $state(tabItems[0]);
+	let active = $derived(tabItems[0]);
 	let indicatorEl = null;
 	let containerEl = null;
 
