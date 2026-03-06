@@ -6,6 +6,7 @@
 
 <Button
 	type="submit"
+	disabled={props.disableButton}
 	class={['h-13 bg-yellow-200 font-medium text-grey-800 md:hover:bg-yellow-100', props.class]}
 >
 	{@render children?.()}

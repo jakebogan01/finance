@@ -14,7 +14,7 @@
 		useStrongPassword: false
 	};
 
-	const { form, reset } = createForm({
+	const { form, reset, isSubmitting } = createForm({
 		initialValues: {
 			email: '',
 			password: ''
@@ -31,4 +31,4 @@
 	});
 </script>
 
-<AuthForm {form} {...props} />
+<AuthForm {form} disableButton={$isSubmitting} {...props} />

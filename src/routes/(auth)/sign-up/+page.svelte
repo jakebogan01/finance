@@ -27,7 +27,7 @@
 			path: ['passwordConfirm']
 		});
 
-	const { form, reset } = createForm({
+	const { form, reset, isSubmitting } = createForm({
 		initialValues: {
 			name: '',
 			email: '',
@@ -47,7 +47,7 @@
 	});
 </script>
 
-<AuthForm {form} {...props}>
+<AuthForm {form} disableButton={$isSubmitting} {...props}>
 	{#snippet nameField()}
 		{@render inputField('Name', 'name', 'name')}
 	{/snippet}

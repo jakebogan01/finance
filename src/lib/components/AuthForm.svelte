@@ -1,10 +1,11 @@
 <script>
 	import { passwordField } from '$lib/snippets/PasswordField.svelte';
+	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import { inputField } from '$lib/snippets/InputField.svelte';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import { resolve } from '$app/paths';
 
-	let { form, nameField, passwordConfirmField, ...props } = $props();
+	let { form, disableButton, nameField, passwordConfirmField, ...props } = $props();
 </script>
 
 <form class="space-y-6" use:form>
@@ -14,7 +15,14 @@
 	{@render passwordConfirmField?.()}
 	<div class="space-y-5">
 		<div>
-			<FormButton class="w-full">{props.buttonText}</FormButton>
+			<FormButton {disableButton} class="w-full">
+				{#if disableButton}
+					<Spinner />
+					Validating...
+				{:else}
+					{props.buttonText}
+				{/if}
+			</FormButton>
 		</div>
 
 		<p class="text-preset-2 text-center text-grey-50">
