@@ -3,12 +3,14 @@
 	import LayoutGridIcon from '@lucide/svelte/icons/layout-grid';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
+	import TabSwitch from '$lib/components/TabSwitch.svelte';
 	import ReceiptIcon from '@lucide/svelte/icons/receipt';
 	import { active } from '$lib/actions/active.svelte';
 	import logo from '$lib/assets/graphics/logo.svg';
 	import { resolve } from '$app/paths';
 
 	let { mobile = false } = $props();
+	let currentTab = $state('Dark');
 
 	const navItems = $derived([
 		{
@@ -51,12 +53,17 @@
 								class="text-preset-4-semibold flex items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 data-[active=true]:bg-yellow-100 data-[active=true]:text-grey-600 md:transition-colors md:data-[active=false]:hover:text-white-0"
 								use:active
 							>
-								<Icon class="size-5 shrink-0" strokeWidth="1.5" />
+								<Icon
+									class={['size-5 shrink-0', i === 0 ? 'fill-grey-600 stroke-[1.5]' : 'stroke-2']}
+								/>
 								{page}
 							</a>
 						</li>
 					{/each}
 				</ul>
+			</li>
+			<li class="mt-auto">
+				<TabSwitch tabItems={['Dark', 'Light']} showIcons={true} bind:currentTab />
 			</li>
 		</ul>
 	</nav>

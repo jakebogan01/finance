@@ -1,0 +1,96 @@
+<script>
+	import { onMount } from 'svelte';
+	import MoonIcon from '@lucide/svelte/icons/moon';
+	import SunIcon from '@lucide/svelte/icons/sun';
+
+	let { tabItems, showIcons, currentTab = $bindable() } = $props();
+	let positions = $state([]);
+	let active = $state(tabItems[0]);
+	let indicatorEl = null;
+	let containerEl = null;
+
+	const updatePositions = () => {
+		if (!containerEl) return;
+
+		const containerRect = containerEl.getBoundingClientRect();
+
+		positions = Array.from(containerEl.querySelectorAll('button')).map((btn) => {
+			const rect = btn.getBoundingClientRect();
+
+			return {
+				left: rect.left - containerRect.left,
+				width: rect.width
+			};
+		});
+	};
+
+	onMount(() => {
+		updatePositions();
+
+		if (!containerEl) return;
+
+		const observer = new ResizeObserver(() => {
+			updatePositions();
+		});
+
+		observer.observe(containerEl);
+
+		return () => {
+			observer.disconnect();
+		};
+	});
+
+	$effect(() => {
+		if (!indicatorEl || positions.length === 0) return;
+
+		const idx = tabItems.indexOf(active);
+		if (idx === -1 || !positions[idx]) return;
+
+		const { left, width } = positions[idx];
+
+		indicatorEl.style.transform = `translateX(${left}px)`;
+		indicatorEl.style.width = `${width}px`;
+	});
+</script>
+
+<ul
+	bind:this={containerEl}
+	role="list"
+	class="text-preset-2-medium relative flex h-10.5 w-full items-center justify-center overflow-hidden rounded-10 bg-grey-600 px-1"
+>
+	<li
+		role="presentation"
+		bind:this={indicatorEl}
+		class="transition-[width, transform] absolute top-1/2 left-0 list-item h-8.5 -translate-y-1/2 rounded-lg bg-yellow-200 duration-200 ease-[cubic-bezier(0.18,0.89,0.35,1.15)]"
+	></li>
+	{#each tabItems as item, i (i)}
+		<li role="listitem" class="h-full flex-1">
+			<button
+				type="button"
+				aria-label={item}
+				onclick={() => {
+					currentTab = item;
+					active = item;
+					window.scrollTo({
+						top: 0,
+						behavior: 'smooth'
+					});
+				}}
+				aria-current={active ? `${item} page` : 'About page'}
+				class="disable relative z-10 flex h-full w-full cursor-pointer items-center justify-center gap-x-1.5 transition-colors duration-200 ease-in-out select-none {active ===
+				item
+					? 'text-grey-1100'
+					: 'text-grey-50 not-hover:duration-200 md:hover:text-white-0'}"
+			>
+				{#if showIcons}
+					{#if item === 'Dark'}
+						<MoonIcon class="size-4" strokeWidth="1.5" fill="currentColor" />
+					{:else}
+						<SunIcon class="size-4" fill="currentColor" />
+					{/if}
+				{/if}
+				{item}
+			</button>
+		</li>
+	{/each}
+</ul>
