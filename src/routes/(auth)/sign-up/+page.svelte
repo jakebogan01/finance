@@ -2,10 +2,13 @@
 	import { passwordField } from '$lib/snippets/PasswordField.svelte';
 	import { authSchema, nameSchema } from '$lib/utils/schemas.js';
 	import { inputField } from '$lib/snippets/InputField.svelte';
+	import { DASHBOARD, SIGNIN } from '$lib/utils/constants.js';
 	import AuthForm from '$lib/components/AuthForm.svelte';
 	import { validator } from '@felte/validator-zod';
-	import { SIGNIN } from '$lib/utils/constants.js';
 	import reporterDom from '@felte/reporter-dom';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import { resolve } from '$app/paths';
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
 	import * as zod from 'zod';
@@ -39,6 +42,8 @@
 			try {
 				await pb.collection('users').create(values);
 				await pb.collection('users').authWithPassword(values.email, values.password);
+				await goto(resolve(DASHBOARD));
+				toast.success('Account successfully created!');
 				reset();
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
