@@ -106,17 +106,13 @@
 
 			const result = avatarSchema.safeParse(webpFile);
 			if (!result.success) {
-				toast.error(result.error.issues[0].message, {
-					class: 'bg-grey-1000! border-grey-300! text-red-400!'
-				});
+				toast.error(result.error.issues[0].message);
 				return;
 			}
 
 			const userId = pb.authStore.record?.id;
 			if (!userId) {
-				toast.error('User not authenticated', {
-					class: 'bg-grey-1000! border-grey-300! text-red-400!'
-				});
+				toast.error('User not authenticated');
 				return;
 			}
 
@@ -131,9 +127,7 @@
 			updateAvatarUrl();
 		} catch (err) {
 			console.dir(err?.response, { depth: null });
-			toast.error(err?.message ?? 'Upload failed', {
-				class: 'bg-grey-1000! border-grey-300! text-red-400!'
-			});
+			toast.error(err?.message ?? 'Upload failed');
 		} finally {
 			loading = false;
 		}
@@ -144,9 +138,7 @@
 	src={getAvatarUrl()}
 	onCropped={handleCropped}
 	onUnsupportedFile={(file) => {
-		toast.error(`Unsupported file type: ${file.type}`, {
-			class: 'bg-grey-1000! border-grey-300! text-red-400!'
-		});
+		toast.error(`Unsupported file type: ${file.type}`);
 	}}
 >
 	<ImageCropper.UploadTrigger>
