@@ -37,6 +37,7 @@
 		e.currentTarget.value = '';
 	}}
 	type="file"
+	accept=".jpeg,.jpg,.png,.webp"
 	{id}
 	style="display: none;"
 />

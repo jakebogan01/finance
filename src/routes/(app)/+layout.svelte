@@ -1,5 +1,6 @@
 <script>
 	import Sidebar from '$lib/components/Sidebar.svelte';
+	import Topbar from '$lib/components/Topbar.svelte';
 
 	let { children } = $props();
 </script>
@@ -10,6 +11,8 @@
 	</div>
 
 	<div class="flex flex-1 flex-col space-y-5 1126:pl-71">
+		<Topbar />
+
 		<main class="relative grid gap-5 lg:flex-1 lg:grid-cols-[9fr_8fr]">
 			{@render children?.()}
 		</main>
