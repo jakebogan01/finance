@@ -1,8 +1,10 @@
 <script module>
+	export { inputField };
+</script>
+
+<script>
 	import FieldErrors from '$lib/components/FieldErrors.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
-
-	export { inputField };
 </script>
 
 {#snippet inputField(placeholder, name, autocomplete = 'off', type = 'text')}

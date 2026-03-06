@@ -1,8 +1,10 @@
 <script module>
+	export { passwordField };
+</script>
+
+<script>
 	import FieldErrors from '$lib/components/FieldErrors.svelte';
 	import * as Password from '$lib/components/ui/password';
-
-	export { passwordField };
 </script>
 
 {#snippet passwordField(placeholder, name, useStrongPassword = false, autocomplete = 'off')}
