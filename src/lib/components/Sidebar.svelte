@@ -4,6 +4,7 @@
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
 	import ReceiptIcon from '@lucide/svelte/icons/receipt';
+	import { active } from '$lib/actions/active.svelte';
 	import logo from '$lib/assets/graphics/logo.svg';
 	import { resolve } from '$app/paths';
 
@@ -48,6 +49,7 @@
 							<a
 								href={resolve(link)}
 								class="text-preset-4-semibold flex items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 data-[active=true]:bg-yellow-100 data-[active=true]:text-grey-600 md:transition-colors md:data-[active=false]:hover:text-white-0"
+								use:active
 							>
 								<Icon class="size-5 shrink-0" strokeWidth="1.5" />
 								{page}
