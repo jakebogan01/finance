@@ -1,8 +1,7 @@
 <script>
+	import { passwordField } from '$lib/snippets/PasswordField.svelte';
 	import { authSchema, nameSchema } from '$lib/utils/schemas.js';
-	import FieldErrors from '$lib/components/FieldErrors.svelte';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import * as Password from '$lib/components/ui/password';
+	import { inputField } from '$lib/snippets/InputField.svelte';
 	import AuthForm from '$lib/components/AuthForm.svelte';
 	import { validator } from '@felte/validator-zod';
 	import { SIGNIN } from '$lib/utils/constants.js';
@@ -50,38 +49,9 @@
 
 <AuthForm {form} {...props}>
 	{#snippet nameField()}
-		<div>
-			<label for="name" class="sr-only">Your name</label>
-			<Input
-				type="text"
-				id="name"
-				name="name"
-				placeholder="Name"
-				autocomplete="name"
-				minlength={1}
-				maxlength={255}
-				required
-			/>
-			<FieldErrors ref="name" />
-		</div>
+		{@render inputField('Name', 'name', 'name')}
 	{/snippet}
 	{#snippet passwordConfirmField()}
-		<div>
-			<label for="passwordConfirm" class="sr-only">Confirm password</label>
-			<Password.Root>
-				<Password.Input
-					id="passwordConfirm"
-					name="passwordConfirm"
-					placeholder="Confirm Password"
-					autocomplete="current-password"
-					minlength={1}
-					maxlength={71}
-					required
-				>
-					<Password.ToggleVisibility />
-				</Password.Input>
-			</Password.Root>
-			<FieldErrors ref="passwordConfirm" />
-		</div>
+		{@render passwordField('Confirm Password', 'passwordConfirm', false, 'current-password')}
 	{/snippet}
 </AuthForm>
