@@ -1,9 +1,12 @@
 <script>
+	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
 
 	let { children } = $props();
 </script>
+
+<MobileSidebar />
 
 <div class="relative mx-auto flex w-full max-w-367.5 flex-1 flex-col px-4 py-5 sm:px-5">
 	<div class="hidden 1126:fixed 1126:inset-y-5 1126:z-50 1126:flex 1126:w-66 1126:flex-col">

@@ -6,6 +6,7 @@
 	import { SETTINGS } from '$lib/utils/constants';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
+	import pb from '$lib/pocketbase';
 </script>
 
 <div
@@ -15,7 +16,7 @@
 		<Avatar />
 		<div>
 			<p class="text-preset-2">Welcome!</p>
-			<p class="text-preset-5-medium sm:text-3xl">Jake Bogan</p>
+			<p class="text-preset-5-medium sm:text-3xl">{pb?.authStore?.record?.name || 'User'}</p>
 		</div>
 	</div>
 	<CircleButton
