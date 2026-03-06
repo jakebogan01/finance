@@ -26,7 +26,7 @@
 		</div>
 
 		<p class="text-preset-2 text-center text-grey-50">
-			Don't have an account?
+			{props.preLinkText}
 			<a href={resolve(props.link)} class="md:transition-colors md:hover:text-yellow-200">
 				{props.linkText}
 			</a>

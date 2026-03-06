@@ -16,6 +16,7 @@
 	let props = {
 		linkText: 'Sign in',
 		link: SIGNIN,
+		preLinkText: 'Already have an account?',
 		buttonText: 'Sign up',
 		useStrongPassword: true
 	};
