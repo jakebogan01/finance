@@ -29,5 +29,11 @@ export const incomeSchema = zod.object({
 		.toLowerCase()
 		.min(1, { message: '*Required' })
 		.max(254, { message: 'Max length' }),
-	income: zod.string().trim().min(1, { message: '*Required' }).max(254, { message: 'Max length' })
+	income: zod
+		.number({
+			required_error: '*Required',
+			invalid_type_error: '*Required'
+		})
+		.min(1, { message: '*Required' })
+		.max(1_000_000_000, { message: 'Too large' })
 });

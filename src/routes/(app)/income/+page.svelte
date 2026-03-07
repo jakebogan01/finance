@@ -19,6 +19,14 @@
 			income: ''
 		},
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
+		transform: (values) => {
+			const cleaned = String(values.income).replace(/\D/g, '');
+
+			return {
+				...values,
+				income: cleaned ? Number(cleaned) : null
+			};
+		},
 		onSubmit: async (values) => {
 			try {
 				console.log(values);
@@ -71,10 +79,10 @@
 			<form class="space-y-11.5" use:form>
 				<div class:hidden={step !== 1} class="grid grid-cols-6 gap-6.5">
 					<div class="col-span-full">
-						{@render inputField('Company Name', 'company_name', 'off', 'text')}
+						{@render inputField('Company Name', 'company_name')}
 					</div>
 					<div class="col-span-2">
-						{@render inputField('Income', 'income', 'off', 'text')}
+						{@render inputField('Income', 'income', 'off', 'text', true)}
 					</div>
 				</div>
 
