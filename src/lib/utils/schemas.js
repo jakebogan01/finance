@@ -21,3 +21,13 @@ export const nameSchema = zod.object({
 		.min(1, { message: 'Name is required' })
 		.max(254, { message: 'Name must be less than 255 characters' })
 });
+
+export const incomeSchema = zod.object({
+	company_name: zod
+		.string()
+		.trim()
+		.toLowerCase()
+		.min(1, { message: '*Required' })
+		.max(254, { message: 'Max length' }),
+	income: zod.string().trim().min(1, { message: '*Required' }).max(254, { message: 'Max length' })
+});

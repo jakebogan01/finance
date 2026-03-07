@@ -5,9 +5,4 @@
 	let { ref = $bindable(null), class: className, ...restProps } = $props();
 </script>
 
-<DialogPrimitive.Title
-	bind:ref
-	data-slot="dialog-title"
-	class={cn('text-lg leading-none font-semibold', className)}
-	{...restProps}
-/>
+<DialogPrimitive.Title bind:ref data-slot="dialog-title" class={cn('', className)} {...restProps} />
