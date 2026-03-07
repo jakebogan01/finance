@@ -4,6 +4,7 @@
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import { inputField } from '$lib/snippets/InputField.svelte';
 	import FormButton from '$lib/components/FormButton.svelte';
+	import Combobox from '$lib/components/Combobox.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
@@ -13,6 +14,57 @@
 
 	let open = $state(false);
 	let step = $state(1);
+	const payTypes = [
+		{
+			value: 'per day',
+			label: 'Per Day'
+		},
+		{
+			value: 'per week',
+			label: 'Per Week'
+		},
+		{
+			value: 'bi weekly',
+			label: 'Bi Weekly'
+		},
+		{
+			value: 'per month',
+			label: 'Per Month'
+		},
+		{
+			value: 'semi monthly',
+			label: 'Semi Monthly'
+		},
+		{
+			value: 'bi monthly',
+			label: 'Bi Monthly'
+		},
+		{
+			value: 'quarterly',
+			label: 'Quarterly'
+		},
+		{
+			value: 'semi annually',
+			label: 'Semi annually'
+		},
+		{
+			value: 'annually',
+			label: 'Annually'
+		},
+		{
+			value: 'on commission',
+			label: 'On Commission'
+		},
+		{
+			value: 'on demand',
+			label: 'On Demand'
+		},
+		{
+			value: 'irregularly',
+			label: 'Irregularly'
+		}
+	];
+	let dropDown = $state(payTypes[0].value);
 
 	const { form, reset, isSubmitting, validate } = createForm({
 		initialValues: {
@@ -31,6 +83,7 @@
 		onSubmit: async (values) => {
 			try {
 				console.log(values);
+				console.log(dropDown);
 				reset();
 				open = false;
 				step = 1;
@@ -70,7 +123,7 @@
 			<div class="flex items-center justify-center space-x-4">
 				{#each [1, 2] as s, i (i)}
 					<div
-						class="text-preset-3-medium flex size-10 items-center justify-center rounded-full border"
+						class="text-preset-3-medium flex size-10 items-center justify-center rounded-full border select-none"
 						class:border-white-0={step >= s}
 						class:border-grey-300={step < s}
 					>
@@ -89,6 +142,9 @@
 					</div>
 					<div class="col-span-2">
 						{@render inputField('Income', 'income', 'off', 'text', true)}
+					</div>
+					<div class="relative col-span-4">
+						<Combobox list={payTypes} bind:result={dropDown} />
 					</div>
 				</div>
 
