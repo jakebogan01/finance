@@ -13,7 +13,7 @@
 	let open = $state(false);
 	let step = $state(1);
 
-	const { form, reset, errors, isSubmitting } = createForm({
+	const { form, reset, isSubmitting, validate } = createForm({
 		initialValues: {
 			company_name: '',
 			income: ''
@@ -31,9 +31,14 @@
 		}
 	});
 
-	const next = () => {
-		if ($errors.company_name !== null) return;
-		step += 1;
+	const next = async () => {
+		const result = await validate();
+		if (
+			(result.company_name === null && result.income === null) ||
+			(result.company_name.length === 0 && result.income.length === 0)
+		) {
+			step += 1;
+		}
 	};
 	const back = () => (step -= 1);
 </script>
@@ -48,7 +53,7 @@
 			<ArrowRightIcon class="size-6" strokeWidth="1.5" />Add new
 		</Dialog.Trigger>
 
-		<Dialog.Content>
+		<Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
 			<Dialog.Header>
 				<Dialog.Title class="text-preset-5-semibold text-grey-50">Add income</Dialog.Title>
 			</Dialog.Header>
@@ -74,12 +79,12 @@
 				</div>
 
 				<div class:hidden={step !== 2} class="grid grid-cols-6 gap-6.5">
-					<div class="col-span-full">
-						{@render inputField('Company Name', 'company_name', 'off', 'text')}
-					</div>
-					<div class="col-span-2">
-						{@render inputField('Income', 'income', 'off', 'text')}
-					</div>
+					<!--					<div class="col-span-full">-->
+					<!--						{@render inputField('Company Name', 'company_name', 'off', 'text')}-->
+					<!--					</div>-->
+					<!--					<div class="col-span-2">-->
+					<!--						{@render inputField('Income', 'income', 'off', 'text')}-->
+					<!--					</div>-->
 				</div>
 
 				<Dialog.Footer>
