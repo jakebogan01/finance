@@ -1,4 +1,5 @@
 <script>
+	import { Separator } from '$lib/components/ui/separator/index.js';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import { inputField } from '$lib/snippets/InputField.svelte';
@@ -62,17 +63,22 @@
 		</Dialog.Trigger>
 
 		<Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
-			<Dialog.Header>
-				<Dialog.Title class="text-preset-5-semibold text-grey-50">Add income</Dialog.Title>
+			<Dialog.Header class="text-center!">
+				<Dialog.Title><span class="text-preset-5 text-grey-50">Add income</span></Dialog.Title>
 			</Dialog.Header>
 
-			<div class="flex gap-2">
+			<div class="flex items-center justify-center space-x-4">
 				{#each [1, 2] as s, i (i)}
 					<div
-						class="h-2 flex-1 rounded"
-						class:bg-red-500={step >= s}
-						class:bg-blue-500={step < s}
-					></div>
+						class="text-preset-3-medium flex size-10 items-center justify-center rounded-full border"
+						class:border-white-0={step >= s}
+						class:border-grey-300={step < s}
+					>
+						{s}
+					</div>
+					{#if s === 1}
+						<Separator class="max-w-13.5 bg-grey-300" />
+					{/if}
 				{/each}
 			</div>
 
