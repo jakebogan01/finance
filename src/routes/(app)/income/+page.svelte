@@ -15,6 +15,7 @@
 
 	let open = $state(false);
 	let step = $state(1);
+	let phoneValue = $state(null);
 	const payTypes = [
 		{
 			value: 'per day',
@@ -85,7 +86,9 @@
 			try {
 				console.log(values);
 				console.log(dropDown);
+				console.log(phoneValue);
 				reset();
+				phoneValue = null;
 				open = false;
 				step = 1;
 			} catch (error) {
@@ -148,7 +151,7 @@
 						<Combobox list={payTypes} bind:result={dropDown} />
 					</div>
 					<div class="relative col-span-4">
-						<PhoneInput country="US" placeholder="Phone" />
+						<PhoneInput country="US" placeholder="Phone" bind:value={phoneValue} />
 					</div>
 				</div>
 
