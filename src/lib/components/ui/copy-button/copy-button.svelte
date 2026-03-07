@@ -1,5 +1,5 @@
 <script>
-	import { Button } from '../button';
+	import { Button } from '../button/index.js';
 	import { UseClipboard } from '$lib/hooks/use-clipboard.svelte.js';
 	import { cn } from '$lib/utils.js';
 	import CheckIcon from '@lucide/svelte/icons/check';

@@ -1,7 +1,6 @@
 <script>
-	import { Popover as PopoverPrimitive } from 'bits-ui';
-	import PopoverPortal from './popover-portal.svelte';
 	import { cn } from '$lib/utils.js';
+	import { Popover as PopoverPrimitive } from 'bits-ui';
 
 	let {
 		ref = $bindable(null),
@@ -13,7 +12,7 @@
 	} = $props();
 </script>
 
-<PopoverPortal {...portalProps}>
+<PopoverPrimitive.Portal {...portalProps}>
 	<PopoverPrimitive.Content
 		bind:ref
 		data-slot="popover-content"
@@ -25,4 +24,4 @@
 		)}
 		{...restProps}
 	/>
-</PopoverPortal>
+</PopoverPrimitive.Portal>

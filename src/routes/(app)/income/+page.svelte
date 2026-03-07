@@ -3,6 +3,7 @@
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import { inputField } from '$lib/snippets/InputField.svelte';
+	import { PhoneInput } from '$lib/components/ui/phone-input';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import Combobox from '$lib/components/Combobox.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
@@ -145,6 +146,9 @@
 					</div>
 					<div class="relative col-span-4">
 						<Combobox list={payTypes} bind:result={dropDown} />
+					</div>
+					<div class="relative col-span-4">
+						<PhoneInput country="US" placeholder="Phone" />
 					</div>
 				</div>
 
