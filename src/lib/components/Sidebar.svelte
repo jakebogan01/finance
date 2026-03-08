@@ -9,7 +9,7 @@
 	import logo from '$lib/assets/graphics/logo.svg';
 	import { resolve } from '$app/paths';
 
-	let { mobile = false } = $props();
+	let { mobile = false, onAction = () => {} } = $props();
 	let currentTab = $state('Dark');
 
 	const navItems = $derived([
@@ -29,6 +29,8 @@
 			link: EXPENSES
 		}
 	]);
+
+	const handleClick = () => onAction?.();
 </script>
 
 <div
@@ -50,6 +52,7 @@
 						<li>
 							<a
 								href={resolve(link)}
+								onclick={handleClick}
 								class="text-preset-4-semibold flex items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 data-[active=true]:bg-yellow-100 data-[active=true]:text-grey-600 md:transition-colors md:data-[active=false]:hover:text-white-0"
 								use:active
 							>

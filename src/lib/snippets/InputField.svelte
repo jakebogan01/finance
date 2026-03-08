@@ -15,6 +15,8 @@
 				{name}
 				{placeholder}
 				{autocomplete}
+				inputmode="numeric"
+				pattern="[0-9]*"
 				oninput={onlyNumbers}
 				onfocus={unformatCurrency}
 				onblur={formatCurrency}
