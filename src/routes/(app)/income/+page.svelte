@@ -14,7 +14,7 @@
 	import reporterDom from '@felte/reporter-dom';
 	import { createForm } from 'felte';
 
-	let open = $state(true);
+	let open = $state(false);
 	let step = $state(1);
 	let phoneValue = $state(null);
 	let dateValue = $state(null);
@@ -100,6 +100,7 @@
 				console.log(dateValue);
 				reset();
 				phoneValue = null;
+				dateValue = null;
 				open = false;
 				step = 1;
 			} catch (error) {
@@ -161,6 +162,9 @@
 					<div class="relative col-span-4">
 						<Combobox list={payTypes} bind:result={dropDown} />
 					</div>
+				</div>
+
+				<div class:hidden={step !== 2} class="grid grid-cols-6 gap-6.5">
 					<div class="col-span-full">
 						{@render inputField('Company Email', 'company_email', 'email', 'email')}
 					</div>
@@ -179,15 +183,6 @@
 					<div class="col-span-full">
 						{@render inputField('Managers Name', 'manager_name')}
 					</div>
-				</div>
-
-				<div class:hidden={step !== 2} class="grid grid-cols-6 gap-6.5">
-					<!--					<div class="col-span-full">-->
-					<!--						{@render inputField('Company Name', 'company_name', 'off', 'text')}-->
-					<!--					</div>-->
-					<!--					<div class="col-span-2">-->
-					<!--						{@render inputField('Income', 'income', 'off', 'text')}-->
-					<!--					</div>-->
 				</div>
 
 				<Dialog.Footer>
