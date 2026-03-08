@@ -5,6 +5,7 @@
 	import { inputField } from '$lib/snippets/InputField.svelte';
 	import { PhoneInput } from '$lib/components/ui/phone-input';
 	import FormButton from '$lib/components/FormButton.svelte';
+	import DatePicker from '$lib/components/DatePicker.svelte';
 	import Combobox from '$lib/components/Combobox.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -13,9 +14,10 @@
 	import reporterDom from '@felte/reporter-dom';
 	import { createForm } from 'felte';
 
-	let open = $state(false);
+	let open = $state(true);
 	let step = $state(1);
 	let phoneValue = $state(null);
+	let dateValue = $state(null);
 	const payTypes = [
 		{
 			value: 'per day',
@@ -87,6 +89,7 @@
 				console.log(values);
 				console.log(dropDown);
 				console.log(phoneValue);
+				console.log(dateValue);
 				reset();
 				phoneValue = null;
 				open = false;
@@ -150,8 +153,11 @@
 					<div class="relative col-span-4">
 						<Combobox list={payTypes} bind:result={dropDown} />
 					</div>
-					<div class="relative col-span-4">
+					<div class="relative col-span-3">
 						<PhoneInput country="US" placeholder="Phone" bind:value={phoneValue} />
+					</div>
+					<div class="relative col-span-3">
+						<DatePicker bind:value={dateValue} />
 					</div>
 				</div>
 

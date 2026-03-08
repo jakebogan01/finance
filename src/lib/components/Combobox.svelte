@@ -34,7 +34,7 @@
 				aria-expanded={open}
 			>
 				{selectedValue || 'Recurring'}
-				<ChevronsUpDownIcon />
+				<ChevronsUpDownIcon class="text-grey-200" />
 			</Button>
 		{/snippet}
 	</Popover.Trigger>

@@ -1,11 +1,12 @@
 <script>
-	import CountrySelector from './country-selector.svelte';
+	// import CountrySelector from './country-selector.svelte';
 	import { defaultOptions } from './';
 	import { cn } from '$lib/utils.js';
-	import { TelInput, normalizedCountries } from 'svelte-tel-input';
+	// import { normalizedCountries } from 'svelte-tel-input';
+	import { TelInput } from 'svelte-tel-input';
 	import 'svelte-tel-input/styles/flags.css';
 
-	const countries = normalizedCountries;
+	// const countries = normalizedCountries;
 
 	let {
 		class: className = undefined,
@@ -18,7 +19,7 @@
 		value = $bindable(null),
 		valid = $bindable(false),
 		detailedValue = $bindable(),
-		order = undefined,
+		// order = undefined,
 		name = undefined,
 		...rest
 	} = $props();
@@ -34,7 +35,7 @@
 </script>
 
 <div class="flex place-items-center">
-	<CountrySelector {order} {countries} bind:selected={country} onselect={focus} />
+	<!--	<CountrySelector {order} {countries} bind:selected={country} onselect={focus} />-->
 	<TelInput
 		{name}
 		bind:country
@@ -47,7 +48,7 @@
 		bind:el
 		{options}
 		class={cn(
-			'mb-0 flex h-13 w-full min-w-0 rounded-l-none rounded-r-lg border border-t-grey-300 border-r-grey-300 border-b-grey-300 border-l-transparent bg-grey-900 px-4 ring-offset-yellow-100 outline-none selection:bg-yellow-100 selection:text-grey-1100 placeholder:text-grey-200 disabled:cursor-not-allowed disabled:opacity-50 md:transition-colors md:hover:border-yellow-200',
+			'mb-0 flex h-13 w-full min-w-0 rounded-lg border border-grey-300 bg-grey-900 px-4 ring-offset-yellow-100 outline-none selection:bg-yellow-100 selection:text-grey-1100 placeholder:text-grey-200 disabled:cursor-not-allowed disabled:opacity-50 md:transition-colors md:hover:border-yellow-200',
 			'focus-visible:border-yellow-100 focus-visible:ring-[3px] focus-visible:ring-yellow-200/500',
 			'aria-invalid:border-red-200 aria-invalid:ring-red-100/20',
 			className

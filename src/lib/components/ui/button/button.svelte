@@ -1,5 +1,7 @@
 <script module>
+	import { cn } from '$lib/utils.js';
 	import { tv } from 'tailwind-variants';
+	import { resolve } from '$app/paths';
 
 	export const buttonVariants = tv({
 		base: "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 aria-invalid:border-destructive inline-flex shrink-0 items-center justify-center gap-2 rounded-lg whitespace-nowrap md:transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 cursor-pointer",
@@ -31,59 +33,41 @@
 </script>
 
 <script>
-	import { cn } from '$lib/utils.js';
-	import LoaderCircleIcon from '@lucide/svelte/icons/loader-circle';
-
 	let {
-		ref = $bindable(null),
+		class: className,
 		variant = 'default',
 		size = 'default',
+		ref = $bindable(null),
 		href = undefined,
 		type = 'button',
-		loading = false,
-		disabled = false,
-		tabindex = 0,
-		onclick,
-		onClickPromise,
-		class: className,
-		'data-slot': dataSlot = 'button',
+		disabled,
 		children,
-		...rest
+		...restProps
 	} = $props();
 </script>
 
-<!-- This approach to disabled links is inspired by bits-ui see: https://github.com/huntabyte/bits-ui/pull/1055 -->
-<svelte:element
-	this={href ? 'a' : 'button'}
-	{...rest}
-	data-slot={dataSlot}
-	type={href ? undefined : type}
-	href={href && !disabled ? href : undefined}
-	disabled={href ? undefined : disabled || loading}
-	aria-disabled={href ? disabled : undefined}
-	role={href && disabled ? 'link' : undefined}
-	tabindex={href && disabled ? -1 : tabindex}
-	class={cn(buttonVariants({ variant, size }), className)}
-	bind:this={ref}
-	onclick={async (e) => {
-		onclick?.(e);
-
-		if (type === undefined) return;
-
-		if (onClickPromise) {
-			loading = true;
-
-			await onClickPromise(e);
-
-			loading = false;
-		}
-	}}
->
-	{#if type !== undefined && loading}
-		<div class="flex animate-spin place-items-center justify-center">
-			<LoaderCircleIcon class="size-4" />
-		</div>
-		<span class="sr-only">Loading</span>
-	{/if}
-	{@render children?.()}
-</svelte:element>
+{#if href}
+	<a
+		bind:this={ref}
+		data-slot="button"
+		class={cn(buttonVariants({ variant, size }), className)}
+		href={resolve(disabled ? undefined : href)}
+		aria-disabled={disabled}
+		role={disabled ? 'link' : undefined}
+		tabindex={disabled ? -1 : undefined}
+		{...restProps}
+	>
+		{@render children?.()}
+	</a>
+{:else}
+	<button
+		bind:this={ref}
+		data-slot="button"
+		class={cn(buttonVariants({ variant, size }), className)}
+		{type}
+		{disabled}
+		{...restProps}
+	>
+		{@render children?.()}
+	</button>
+{/if}
