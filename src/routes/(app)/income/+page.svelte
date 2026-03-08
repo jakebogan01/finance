@@ -75,7 +75,8 @@
 			company_name: '',
 			income: '',
 			pay: '',
-			position: ''
+			position: '',
+			manager_name: ''
 		},
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
 		transform: (values) => {
@@ -170,6 +171,9 @@
 					</div>
 					<div class="col-span-3">
 						{@render inputField('Position', 'position')}
+					</div>
+					<div class="col-span-full">
+						{@render inputField('Managers Name', 'manager_name')}
 					</div>
 				</div>
 
