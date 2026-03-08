@@ -133,8 +133,14 @@
 	const next = async () => {
 		const result = await validate();
 		if (
-			(result.company_name === null && result.income === null) ||
-			(result.company_name.length === 0 && result.income.length === 0)
+			(result.company_name === null &&
+				result.income === null &&
+				result.pay === null &&
+				result.position === null) ||
+			(result.company_name.length === 0 &&
+				result.income.length === 0 &&
+				result.pay.length === 0 &&
+				result.position.length === 0)
 		) {
 			step += 1;
 		}
@@ -172,7 +178,7 @@
 				{/each}
 			</div>
 
-			<form class="space-y-11.5" use:form>
+			<form class="space-y-6.5" use:form>
 				<div class:hidden={step !== 1} class="grid grid-cols-6 gap-6.5">
 					<div class="col-span-full">
 						{@render inputField('Company Name', 'company_name')}
@@ -182,6 +188,12 @@
 					</div>
 					<div class="relative col-span-4">
 						<Combobox list={payTypes} bind:result={payDropDown} defaultText="Recurring" />
+					</div>
+					<div class="col-span-3">
+						{@render inputField('Pay', 'pay', 'off', 'text', true)}
+					</div>
+					<div class="col-span-3">
+						{@render inputField('Position', 'position')}
 					</div>
 				</div>
 
@@ -194,12 +206,6 @@
 					</div>
 					<div class="relative col-span-3">
 						<DatePicker bind:value={dateValue} />
-					</div>
-					<div class="col-span-3">
-						{@render inputField('Pay', 'pay', 'off', 'text', true)}
-					</div>
-					<div class="col-span-3">
-						{@render inputField('Position', 'position')}
 					</div>
 					<div class="col-span-full">
 						{@render inputField('Managers Name', 'manager_name')}

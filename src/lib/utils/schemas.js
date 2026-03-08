@@ -36,6 +36,19 @@ export const incomeSchema = zod.object({
 		})
 		.min(1, { message: '*Required' })
 		.max(1_000_000_000, { message: 'Too large' }),
+	pay: zod
+		.number({
+			required_error: '*Required',
+			invalid_type_error: '*Required'
+		})
+		.min(1, { message: '*Required' })
+		.max(1_000_000_000, { message: 'Too large' }),
+	position: zod
+		.string()
+		.trim()
+		.toLowerCase()
+		.min(1, { message: '*Required' })
+		.max(254, { message: 'Max length' }),
 	company_email: zod.preprocess(
 		(val) => {
 			if (val === '') return undefined;
@@ -49,14 +62,6 @@ export const incomeSchema = zod.object({
 			.email({ message: 'Please enter a valid email address' })
 			.optional()
 	),
-	pay: zod.preprocess(
-		(val) => {
-			if (val === '' || val === undefined) return undefined;
-			return Number(val);
-		},
-		zod.number().max(1_000_000_000, { message: 'Too large' }).optional()
-	),
-	position: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
 	manager_name: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
 	company_address: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
 	company_city: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
