@@ -35,5 +35,12 @@ export const incomeSchema = zod.object({
 			invalid_type_error: '*Required'
 		})
 		.min(1, { message: '*Required' })
-		.max(1_000_000_000, { message: 'Too large' })
+		.max(1_000_000_000, { message: 'Too large' }),
+	pay: zod.preprocess(
+		(val) => {
+			if (val === '' || val === undefined) return undefined;
+			return Number(val);
+		},
+		zod.number().max(1_000_000_000, { message: 'Too large' }).optional()
+	)
 });

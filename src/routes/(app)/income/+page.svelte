@@ -73,15 +73,20 @@
 	const { form, reset, isSubmitting, validate } = createForm({
 		initialValues: {
 			company_name: '',
-			income: ''
+			income: '',
+			pay: ''
 		},
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
 		transform: (values) => {
-			const cleaned = String(values.income).replace(/\D/g, '');
+			const cleanNumber = (v) => {
+				const cleaned = String(v).replace(/\D/g, '');
+				return cleaned ? Number(cleaned) : null;
+			};
 
 			return {
 				...values,
-				income: cleaned ? Number(cleaned) : null
+				income: cleanNumber(values.income),
+				pay: cleanNumber(values.pay)
 			};
 		},
 		onSubmit: async (values) => {
@@ -158,6 +163,9 @@
 					</div>
 					<div class="relative col-span-3">
 						<DatePicker bind:value={dateValue} />
+					</div>
+					<div class="col-span-2">
+						{@render inputField('Pay', 'pay', 'off', 'text', true)}
 					</div>
 				</div>
 
