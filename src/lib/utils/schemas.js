@@ -42,5 +42,6 @@ export const incomeSchema = zod.object({
 			return Number(val);
 		},
 		zod.number().max(1_000_000_000, { message: 'Too large' }).optional()
-	)
+	),
+	position: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional()
 });

@@ -74,7 +74,8 @@
 		initialValues: {
 			company_name: '',
 			income: '',
-			pay: ''
+			pay: '',
+			position: ''
 		},
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
 		transform: (values) => {
@@ -164,8 +165,11 @@
 					<div class="relative col-span-3">
 						<DatePicker bind:value={dateValue} />
 					</div>
-					<div class="col-span-2">
+					<div class="col-span-3">
 						{@render inputField('Pay', 'pay', 'off', 'text', true)}
+					</div>
+					<div class="col-span-3">
+						{@render inputField('Position', 'position')}
 					</div>
 				</div>
 
