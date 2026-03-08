@@ -57,5 +57,14 @@ export const incomeSchema = zod.object({
 		zod.number().max(1_000_000_000, { message: 'Too large' }).optional()
 	),
 	position: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
-	manager_name: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional()
+	manager_name: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
+	company_address: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
+	company_city: zod.string().trim().toLowerCase().max(254, { message: 'Max length' }).optional(),
+	company_zip: zod.preprocess(
+		(val) => {
+			if (val === '' || val === undefined) return undefined;
+			return Number(val);
+		},
+		zod.number().max(1_000_000_000_0, { message: 'Too large' }).optional()
+	)
 });

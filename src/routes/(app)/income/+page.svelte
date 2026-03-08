@@ -19,56 +19,73 @@
 	let phoneValue = $state(null);
 	let dateValue = $state(null);
 	const payTypes = [
-		{
-			value: 'per day',
-			label: 'Per Day'
-		},
-		{
-			value: 'per week',
-			label: 'Per Week'
-		},
-		{
-			value: 'bi weekly',
-			label: 'Bi Weekly'
-		},
-		{
-			value: 'per month',
-			label: 'Per Month'
-		},
-		{
-			value: 'semi monthly',
-			label: 'Semi Monthly'
-		},
-		{
-			value: 'bi monthly',
-			label: 'Bi Monthly'
-		},
-		{
-			value: 'quarterly',
-			label: 'Quarterly'
-		},
-		{
-			value: 'semi annually',
-			label: 'Semi annually'
-		},
-		{
-			value: 'annually',
-			label: 'Annually'
-		},
-		{
-			value: 'on commission',
-			label: 'On Commission'
-		},
-		{
-			value: 'on demand',
-			label: 'On Demand'
-		},
-		{
-			value: 'irregularly',
-			label: 'Irregularly'
-		}
+		{ value: 'per day', label: 'Per Day' },
+		{ value: 'per week', label: 'Per Week' },
+		{ value: 'bi weekly', label: 'Bi Weekly' },
+		{ value: 'per month', label: 'Per Month' },
+		{ value: 'semi monthly', label: 'Semi Monthly' },
+		{ value: 'bi monthly', label: 'Bi Monthly' },
+		{ value: 'quarterly', label: 'Quarterly' },
+		{ value: 'semi annually', label: 'Semi annually' },
+		{ value: 'annually', label: 'Annually' },
+		{ value: 'on commission', label: 'On Commission' },
+		{ value: 'on demand', label: 'On Demand' },
+		{ value: 'irregularly', label: 'Irregularly' }
 	];
-	let dropDown = $state(payTypes[0].value);
+	const states = [
+		{ value: 'alabama', label: 'Alabama' },
+		{ value: 'alaska', label: 'Alaska' },
+		{ value: 'arizona', label: 'Arizona' },
+		{ value: 'arkansas', label: 'Arkansas' },
+		{ value: 'california', label: 'California' },
+		{ value: 'colorado', label: 'Colorado' },
+		{ value: 'connecticut', label: 'Connecticut' },
+		{ value: 'delaware', label: 'Delaware' },
+		{ value: 'florida', label: 'Florida' },
+		{ value: 'georgia', label: 'Georgia' },
+		{ value: 'hawaii', label: 'Hawaii' },
+		{ value: 'idaho', label: 'Idaho' },
+		{ value: 'illinois', label: 'Illinois' },
+		{ value: 'indiana', label: 'Indiana' },
+		{ value: 'iowa', label: 'Iowa' },
+		{ value: 'kansas', label: 'Kansas' },
+		{ value: 'kentucky', label: 'Kentucky' },
+		{ value: 'louisiana', label: 'Louisiana' },
+		{ value: 'maine', label: 'Maine' },
+		{ value: 'maryland', label: 'Maryland' },
+		{ value: 'massachusetts', label: 'Massachusetts' },
+		{ value: 'michigan', label: 'Michigan' },
+		{ value: 'minnesota', label: 'Minnesota' },
+		{ value: 'mississippi', label: 'Mississippi' },
+		{ value: 'missouri', label: 'Missouri' },
+		{ value: 'montana', label: 'Montana' },
+		{ value: 'nebraska', label: 'Nebraska' },
+		{ value: 'nevada', label: 'Nevada' },
+		{ value: 'new-hampshire', label: 'New Hampshire' },
+		{ value: 'new-jersey', label: 'New Jersey' },
+		{ value: 'new-mexico', label: 'New Mexico' },
+		{ value: 'new-york', label: 'New York' },
+		{ value: 'north-carolina', label: 'North Carolina' },
+		{ value: 'north-dakota', label: 'North Dakota' },
+		{ value: 'ohio', label: 'Ohio' },
+		{ value: 'oklahoma', label: 'Oklahoma' },
+		{ value: 'oregon', label: 'Oregon' },
+		{ value: 'pennsylvania', label: 'Pennsylvania' },
+		{ value: 'rhode-island', label: 'Rhode Island' },
+		{ value: 'south-carolina', label: 'South Carolina' },
+		{ value: 'south-dakota', label: 'South Dakota' },
+		{ value: 'tennessee', label: 'Tennessee' },
+		{ value: 'texas', label: 'Texas' },
+		{ value: 'utah', label: 'Utah' },
+		{ value: 'vermont', label: 'Vermont' },
+		{ value: 'virginia', label: 'Virginia' },
+		{ value: 'washington', label: 'Washington' },
+		{ value: 'west-virginia', label: 'West Virginia' },
+		{ value: 'wisconsin', label: 'Wisconsin' },
+		{ value: 'wyoming', label: 'Wyoming' }
+	];
+	let payDropDown = $state(payTypes[0].value);
+	let stateDropDown = $state(states[0].value);
 
 	const { form, reset, isSubmitting, validate } = createForm({
 		initialValues: {
@@ -77,7 +94,10 @@
 			company_email: '',
 			pay: '',
 			position: '',
-			manager_name: ''
+			manager_name: '',
+			company_address: '',
+			company_city: '',
+			company_zip: ''
 		},
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
 		transform: (values) => {
@@ -95,7 +115,8 @@
 		onSubmit: async (values) => {
 			try {
 				console.log(values);
-				console.log(dropDown);
+				console.log(payDropDown);
+				console.log(stateDropDown);
 				console.log(phoneValue);
 				console.log(dateValue);
 				reset();
@@ -160,13 +181,13 @@
 						{@render inputField('Income', 'income', 'off', 'text', true)}
 					</div>
 					<div class="relative col-span-4">
-						<Combobox list={payTypes} bind:result={dropDown} />
+						<Combobox list={payTypes} bind:result={payDropDown} defaultText="Recurring" />
 					</div>
 				</div>
 
 				<div class:hidden={step !== 2} class="grid grid-cols-6 gap-6.5">
 					<div class="col-span-full">
-						{@render inputField('Company Email', 'company_email', 'email', 'email')}
+						{@render inputField('Company Email', 'company_email', 'email', 'email', false, 'email')}
 					</div>
 					<div class="relative col-span-3">
 						<PhoneInput country="US" placeholder="Phone" bind:value={phoneValue} />
@@ -182,6 +203,31 @@
 					</div>
 					<div class="col-span-full">
 						{@render inputField('Managers Name', 'manager_name')}
+					</div>
+					<div class="col-span-full">
+						{@render inputField('Street Address', 'company_address', 'address-line1')}
+					</div>
+					<div class="col-span-full">
+						{@render inputField('City', 'company_city', 'address-level2')}
+					</div>
+					<div class="relative col-span-3">
+						<Combobox
+							list={states}
+							bind:result={stateDropDown}
+							defaultText="States"
+							class="ml-18 w-[56%]"
+						/>
+					</div>
+					<div class="col-span-3">
+						{@render inputField(
+							'Zip Code',
+							'company_zip',
+							'postal-code',
+							'text',
+							false,
+							'numeric',
+							true
+						)}
 					</div>
 				</div>
 

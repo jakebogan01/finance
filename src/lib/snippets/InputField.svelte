@@ -5,7 +5,15 @@
 	export { inputField };
 </script>
 
-{#snippet inputField(placeholder, name, autocomplete = 'off', type = 'text', isCurrency = false)}
+{#snippet inputField(
+	placeholder,
+	name,
+	autocomplete = 'off',
+	type = 'text',
+	isCurrency = false,
+	mode = 'text',
+	zip = false
+)}
 	<div>
 		<label for={name} class="sr-only">{placeholder}</label>
 		{#if isCurrency}
@@ -21,8 +29,19 @@
 				onfocus={unformatCurrency}
 				onblur={formatCurrency}
 			/>
+		{:else if zip}
+			<Input
+				{type}
+				id={name}
+				{name}
+				{placeholder}
+				{autocomplete}
+				inputmode={mode}
+				oninput={onlyNumbers}
+				pattern="[0-9]*"
+			/>
 		{:else}
-			<Input {type} id={name} {name} {placeholder} {autocomplete} />
+			<Input {type} id={name} {name} {placeholder} {autocomplete} inputmode={mode} />
 		{/if}
 		<FieldErrors ref={name} />
 	</div>

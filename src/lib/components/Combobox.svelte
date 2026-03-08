@@ -7,7 +7,7 @@
 	import { cn } from '$lib/utils.js';
 	import { tick } from 'svelte';
 
-	let { list, result = $bindable() } = $props();
+	let { list, result = $bindable(), defaultText, class: className } = $props();
 	let open = $state(false);
 	let value = $derived(list.length > 0 ? list[0].value : '');
 	let triggerRef = $state(null);
@@ -33,13 +33,13 @@
 				role="combobox"
 				aria-expanded={open}
 			>
-				{selectedValue || 'Recurring'}
+				{selectedValue || defaultText}
 				<ChevronsUpDownIcon class="text-grey-200" />
 			</Button>
 		{/snippet}
 	</Popover.Trigger>
-	<Popover.Content class="ml-1 w-[97%] p-0">
-		<Command.Root class="max-h-50">
+	<Popover.Content class={['p-0', className]}>
+		<Command.Root>
 			<Command.Input placeholder="Search..." />
 			<Command.List>
 				<Command.Empty>No results found</Command.Empty>

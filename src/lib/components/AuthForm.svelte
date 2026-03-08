@@ -10,7 +10,7 @@
 
 <form class="space-y-6" use:form>
 	{@render nameField?.()}
-	{@render inputField('Email Address', 'email', 'email', 'email')}
+	{@render inputField('Email Address', 'email', 'email', 'email', false, 'email')}
 	{@render passwordField('Password', 'password', props.useStrongPassword, 'current-password')}
 	{@render passwordConfirmField?.()}
 	<div class="space-y-5">
