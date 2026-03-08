@@ -26,7 +26,10 @@
 		{#snippet child({ props })}
 			<Button
 				{...props}
-				class="h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-5! text-grey-200 md:hover:border-yellow-200"
+				class={[
+					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-5! md:hover:border-yellow-200',
+					selectedValue ? 'text-white-0' : 'text-grey-200'
+				]}
 				role="combobox"
 				aria-expanded={open}
 			>
