@@ -36,6 +36,19 @@ export const incomeSchema = zod.object({
 		})
 		.min(1, { message: '*Required' })
 		.max(1_000_000_000, { message: 'Too large' }),
+	company_email: zod.preprocess(
+		(val) => {
+			if (val === '') return undefined;
+			return val;
+		},
+		zod
+			.string()
+			.trim()
+			.toLowerCase()
+			.max(254, { message: 'Email must be less than 255 characters' })
+			.email({ message: 'Please enter a valid email address' })
+			.optional()
+	),
 	pay: zod.preprocess(
 		(val) => {
 			if (val === '' || val === undefined) return undefined;

@@ -74,6 +74,7 @@
 		initialValues: {
 			company_name: '',
 			income: '',
+			company_email: '',
 			pay: '',
 			position: '',
 			manager_name: ''
@@ -159,6 +160,9 @@
 					</div>
 					<div class="relative col-span-4">
 						<Combobox list={payTypes} bind:result={dropDown} />
+					</div>
+					<div class="col-span-full">
+						{@render inputField('Company Email', 'company_email', 'email', 'email')}
 					</div>
 					<div class="relative col-span-3">
 						<PhoneInput country="US" placeholder="Phone" bind:value={phoneValue} />
