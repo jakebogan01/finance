@@ -104,3 +104,52 @@ export const categories = ['Bill', 'Subscription'].map((s) => ({
 	value: s.toLowerCase().replace(/\s+/g, '-'),
 	label: s
 }));
+
+export const formatDate = (dateStr) => {
+	if (!dateStr) return '';
+	const date = new Date(dateStr);
+	const options = {
+		month: 'short',
+		day: 'numeric',
+		year: 'numeric'
+	};
+	return new Intl.DateTimeFormat('en-US', options).format(date);
+};
+
+export const timeAgo = (dateString) => {
+	try {
+		const date = new Date(dateString);
+		const now = new Date();
+		const seconds = Math.floor((now - date) / 1000);
+		const intervals = {
+			year: 31536000,
+			month: 2592000,
+			week: 604800,
+			day: 86400,
+			hour: 3600,
+			minute: 60,
+			second: 1
+		};
+		for (const [unit, value] of Object.entries(intervals)) {
+			const count = Math.floor(seconds / value);
+			if (count >= 1) {
+				return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+			}
+		}
+		return 'just now';
+	} catch (e) {
+		console.error('Invalid date string passed to timeAgo:', dateString, e);
+		return '';
+	}
+};
+
+export const formatPhone = (value) => {
+	if (!value) return '';
+	const digits = value.replace(/\D/g, '');
+	const normalized = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+	if (normalized.length !== 10) return value;
+	const area = normalized.slice(0, 3);
+	const prefix = normalized.slice(3, 6);
+	const line = normalized.slice(6);
+	return `(${area}) ${prefix}-${line}`;
+};
