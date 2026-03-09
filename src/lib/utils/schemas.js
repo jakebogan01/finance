@@ -73,3 +73,32 @@ export const incomeSchema = zod.object({
 		zod.number().max(1_000_000_000_0, { message: 'Too large' }).optional()
 	)
 });
+
+export const expensesSchema = zod.object({
+	title: zod
+		.string()
+		.trim()
+		.toLowerCase()
+		.min(1, { message: '*Required' })
+		.max(254, { message: 'Max length' }),
+	amount: zod
+		.number({
+			required_error: '*Required',
+			invalid_type_error: '*Required'
+		})
+		.min(1, { message: '*Required' })
+		.max(1_000_000_000, { message: 'Too large' }),
+	account_email: zod.preprocess(
+		(val) => {
+			if (val === '') return undefined;
+			return val;
+		},
+		zod
+			.string()
+			.trim()
+			.toLowerCase()
+			.max(254, { message: 'Email must be less than 255 characters' })
+			.email({ message: 'Please enter a valid email address' })
+			.optional()
+	)
+});
