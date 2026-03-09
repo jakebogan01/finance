@@ -177,3 +177,5 @@ export const calendarDateToISO = (value) => {
 
 	return new Date(value.year, value.month - 1, value.day).toISOString();
 };
+
+export const isEmpty = (obj) => obj && typeof obj === 'object' && Object.keys(obj).length === 0;

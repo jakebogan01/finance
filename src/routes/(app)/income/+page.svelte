@@ -5,6 +5,7 @@
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
+	import { isEmpty } from '$lib/utils/misc.js';
 
 	let { data } = $props();
 	let hasData = $derived(data?.incomeRecords && data?.incomeRecords.length > 0);
@@ -21,11 +22,11 @@
 		<OpenFormButton title="Add Income" schema={incomeSchema} />
 		<RecordList {data} />
 	</section>
-	<section>
-		{#if incomeRecord}
+	{#if !isEmpty(incomeRecord)}
+		<section>
 			<RecordDetails data={incomeRecord} />
-		{/if}
-	</section>
+		</section>
+	{/if}
 {:else}
 	<Skeleton class="absolute inset-0 z-0 animate-none! rounded-2xl bg-grey-700" />
 	<div
