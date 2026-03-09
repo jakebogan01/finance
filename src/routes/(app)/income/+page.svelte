@@ -18,7 +18,7 @@
 </script>
 
 {#if hasData}
-	<section class="flex flex-col space-y-5">
+	<section class="flex flex-col space-y-5 lg:max-h-168">
 		<OpenFormButton title="Add Income" schema={incomeSchema} />
 		<RecordList {data} />
 	</section>

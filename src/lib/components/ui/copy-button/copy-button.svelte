@@ -6,6 +6,7 @@
 	import CopyIcon from '@lucide/svelte/icons/copy';
 	import XIcon from '@lucide/svelte/icons/x';
 	import { scale } from 'svelte/transition';
+	import { toast } from 'svelte-sonner';
 
 	let {
 		ref = $bindable(null),
@@ -42,6 +43,8 @@
 		const status = await clipboard.copy(text);
 
 		onCopy?.(status);
+
+		toast.success('Copied to clipboard');
 	}}
 >
 	{#if clipboard.status === 'success'}

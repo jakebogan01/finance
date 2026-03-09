@@ -105,14 +105,14 @@
 			</div>
 		</dl>
 		<Separator class="my-6" />
-		<dl class="flex flex-wrap space-y-5.5 rounded-2xl border-t border-grey-775 bg-grey-900 p-4">
-			{#each details as item (item.label)}
-				{@render listItem(item)}
+		<dl class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-775 bg-grey-900">
+			{#each details as item, i (item.label)}
+				{@render listItem(item, false, i)}
 			{/each}
 		</dl>
 		{#if address}
 			<Separator class="my-6" />
-			<dl class="flex flex-wrap space-y-6 rounded-2xl border-t border-grey-775 bg-grey-900 p-4">
+			<dl class="flex flex-wrap rounded-2xl border-t border-grey-775 bg-grey-900">
 				{@render listItem(address, true)}
 			</dl>
 		{/if}
