@@ -1,4 +1,6 @@
 <script>
+	import { isEmpty, filterStatus, searchRecords, sortRecords } from '$lib/utils/misc.js';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
@@ -8,15 +10,27 @@
 	import RecordList from '$lib/components/RecordList.svelte';
 	import SearchIcon from '@lucide/svelte/icons/search';
 	import { incomeSchema } from '$lib/utils/schemas.js';
-	import { isEmpty } from '$lib/utils/misc.js';
 
 	let { data } = $props();
-	let hasData = $derived(data?.incomeRecords && data?.incomeRecords.length > 0);
+	let filters = $state({
+		status: 'all',
+		sort: 'latest',
+		search: ''
+	});
+	let dataList = $derived.by(() => {
+		if (!data?.incomeRecords) return [];
+		let list = [...data.incomeRecords];
+		list = filterStatus(list, filters.status);
+		list = searchRecords(list, filters.search);
+		list = sortRecords(list, filters.sort);
+		return list;
+	});
+	let hasData = $derived(dataList && dataList?.length > 0);
 	let incomeRecord = $derived.by(() => {
 		if (!INCOMESLUG.value) return null;
-		if (!data?.incomeRecords || data?.incomeRecords.length === 0) return null;
+		if (!dataList || dataList.length === 0) return null;
 		const slug = INCOMESLUG.value.replace(/#/g, '');
-		return data.incomeRecords.find((item) => item.slug === slug) ?? {};
+		return dataList.find((item) => item.slug === slug) ?? {};
 	});
 </script>
 
@@ -25,13 +39,33 @@
 		<div class="flex items-center justify-between gap-5">
 			<OpenFormButton title="Add Income" schema={incomeSchema} />
 			<div class="flex items-center">
-				<CircleButton Icon={SlidersVerticalIcon} size="6" class="md:mr-5" />
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger>
+						{#snippet child({ props })}
+							<CircleButton {...props} Icon={SlidersVerticalIcon} size="6" class="md:mr-5" />
+						{/snippet}
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content class="w-56">
+						<DropdownMenu.Group>
+							<DropdownMenu.RadioGroup bind:value={filters.status}>
+								<DropdownMenu.RadioItem value="all">Show all</DropdownMenu.RadioItem>
+								<DropdownMenu.RadioItem value="active">Active</DropdownMenu.RadioItem>
+								<DropdownMenu.RadioItem value="inactive">Inactive</DropdownMenu.RadioItem>
+							</DropdownMenu.RadioGroup>
+							<DropdownMenu.Separator />
+							<DropdownMenu.RadioGroup bind:value={filters.sort}>
+								<DropdownMenu.RadioItem value="latest">Latest</DropdownMenu.RadioItem>
+								<DropdownMenu.RadioItem value="income">Highest income</DropdownMenu.RadioItem>
+							</DropdownMenu.RadioGroup>
+						</DropdownMenu.Group>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 				<CircleButton Icon={SearchIcon} size="6" class="hidden md:flex" />
 			</div>
 		</div>
-		<RecordList {data} />
+		<RecordList data={dataList} />
 	</section>
-	{#if !isEmpty(incomeRecord)}
+	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
 		<section>
 			<RecordDetails data={incomeRecord} />
 		</section>

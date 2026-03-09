@@ -179,3 +179,33 @@ export const calendarDateToISO = (value) => {
 };
 
 export const isEmpty = (obj) => obj && typeof obj === 'object' && Object.keys(obj).length === 0;
+
+export const filterStatus = (list, status) => {
+	if (status === 'active') return list.filter((i) => i.status === true);
+	if (status === 'inactive') return list.filter((i) => i.status === false);
+	return list;
+};
+
+export const sortRecords = (list, sort) => {
+	if (sort === 'latest') {
+		return list.toSorted((a, b) => Date.parse(b.updated) - Date.parse(a.updated));
+	}
+
+	if (sort === 'income') {
+		return list.toSorted((a, b) => {
+			const incomeA = Number(a.income) || 0;
+			const incomeB = Number(b.income) || 0;
+			return incomeB - incomeA;
+		});
+	}
+
+	return list;
+};
+
+export const searchRecords = (list, search) => {
+	if (!search) return list;
+
+	const s = search.toLowerCase();
+
+	return list.filter((item) => item.company_name?.toLowerCase().includes(s));
+};

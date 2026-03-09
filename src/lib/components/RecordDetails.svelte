@@ -1,7 +1,7 @@
 <script>
+	import { formatDate, formatPhone, timeAgo, usdFormatter } from '$lib/utils/misc';
 	import BriefcaseBusinessIcon from '@lucide/svelte/icons/briefcase-business';
 	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
-	import { formatDate, formatPhone, timeAgo } from '$lib/utils/misc';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import CircleButton from '$lib/components/CircleButton.svelte';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
@@ -54,7 +54,7 @@
 			},
 			{
 				label: 'Compensation',
-				value: data.pay,
+				value: usdFormatter.format(data.pay),
 				icon: HandCoinsIcon
 			},
 			{
@@ -97,7 +97,9 @@
 			<div class="text-grey-600">
 				<dt class="text-preset-6-medium w-40 truncate">{data?.company_name}</dt>
 				<dd class="text-preset-3-medium">
-					{data?.income}<span class="text-preset-1 text-grey-100">/ {data?.recurring}</span>
+					{usdFormatter.format(data?.income)}<span class="text-preset-1 text-grey-100"
+						>/ {data?.recurring}</span
+					>
 				</dd>
 			</div>
 			<div class="flex-none">
@@ -106,8 +108,8 @@
 		</dl>
 		<Separator class="my-6" />
 		<dl class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-775 bg-grey-900">
-			{#each details as item, i (item.label)}
-				{@render listItem(item, false, i)}
+			{#each details as item (item.label)}
+				{@render listItem(item, false)}
 			{/each}
 		</dl>
 		{#if address}

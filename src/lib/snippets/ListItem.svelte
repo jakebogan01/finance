@@ -4,11 +4,10 @@
 	export { listItem };
 </script>
 
-{#snippet listItem(item, isAddress = false, i)}
+{#snippet listItem(item, isAddress = false)}
 	<div
 		class={[
-			'group flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px]',
-			i % 2 === 1 ? 'bg-[#1b1b1b]' : ''
+			'group flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px] even:bg-[#1b1b1b]'
 		]}
 	>
 		<dt class="flex-none">

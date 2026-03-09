@@ -1,5 +1,6 @@
 <script>
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
+	import { usdFormatter } from '$lib/utils/misc.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
@@ -18,7 +19,7 @@
 	<h3 class="text-preset-2">Income</h3>
 	<div class="flex flex-col overflow-y-auto lg:flex-1">
 		<ul role="list" class="relative space-y-1.5 rounded-2xl bg-grey-400 p-1.5 sm:p-2.5 lg:flex-1">
-			{#each data?.incomeRecords as item (item?.id)}
+			{#each data as item (item?.id)}
 				<li
 					class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 md:transition-colors md:duration-300 {page
 						.url.hash === `#${item?.slug}`
@@ -44,7 +45,7 @@
 								</a>
 							</p>
 							<p>
-								{item?.income}
+								{usdFormatter.format(item?.income)}
 								<span class="text-preset-1 text-grey-50 capitalize">{item?.recurring}</span>
 							</p>
 						</div>
