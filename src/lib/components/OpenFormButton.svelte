@@ -1,6 +1,13 @@
 <script>
+	import {
+		states,
+		payTypes,
+		categories,
+		cleanObject,
+		generateSlug,
+		calendarDateToISO
+	} from '$lib/utils/misc.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
-	import { states, payTypes, categories } from '$lib/utils/misc.js';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import { inputField } from '$lib/snippets/InputField.svelte';
@@ -11,7 +18,10 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
 	import { validator } from '@felte/validator-zod';
+	import { invalidateAll } from '$app/navigation';
 	import reporterDom from '@felte/reporter-dom';
+	import { toast } from 'svelte-sonner';
+	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
 
 	let { title, multiStepForm = true, schema } = $props();
@@ -21,7 +31,7 @@
 		phoneValue: null,
 		dateValue: null,
 		payDropDown: payTypes[0].value,
-		stateDropDown: states[0].value,
+		stateDropDown: '',
 		categoryDropDown: categories[0].value
 	});
 
@@ -56,12 +66,21 @@
 		},
 		onSubmit: async (values) => {
 			try {
-				console.log(values);
-				console.log(formState.payDropDown);
-				console.log(formState.stateDropDown);
-				console.log(formState.categoryDropDown);
-				console.log(formState.phoneValue);
-				console.log(formState.dateValue);
+				// console.log(formState.categoryDropDown);
+
+				values.user_id = pb?.authStore?.record?.id;
+				values.slug = generateSlug(values.company_name);
+				values.status = true;
+				values.recurring = formState.payDropDown;
+				values.company_state = formState.stateDropDown;
+				values.company_phone = formState.phoneValue;
+				values.start_date = calendarDateToISO(formState.dateValue);
+				const filteredValues = cleanObject(values);
+				console.log(filteredValues);
+
+				await pb.collection('income').create(filteredValues);
+				await invalidateAll();
+
 				reset();
 				formState.phoneValue = null;
 				formState.dateValue = null;
@@ -69,6 +88,7 @@
 				formState.step = 1;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
+				toast.error(error?.message ?? 'Could not connect to the server');
 			}
 		}
 	});
@@ -173,7 +193,8 @@
 							<Combobox
 								list={states}
 								bind:result={formState.stateDropDown}
-								defaultText="States"
+								defaultText="State"
+								noValue={true}
 								class="ml-18 w-[56%]"
 							/>
 						</div>

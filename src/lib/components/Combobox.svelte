@@ -7,9 +7,9 @@
 	import { cn } from '$lib/utils.js';
 	import { tick } from 'svelte';
 
-	let { list, result = $bindable(), defaultText, class: className } = $props();
+	let { list, result = $bindable(), defaultText, class: className, noValue = false } = $props();
 	let open = $state(false);
-	let value = $derived(list.length > 0 ? list[0].value : '');
+	let value = $derived(list.length > 0 && !noValue ? list[0].value : '');
 	let triggerRef = $state(null);
 	const selectedValue = $derived(list.find((f) => f.value === value)?.label);
 

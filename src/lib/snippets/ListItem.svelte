@@ -8,7 +8,7 @@
 	<div class="group flex w-full items-center justify-between gap-x-2">
 		<dt class="flex-none">
 			<span class="sr-only">{item.label}</span>
-			<item.icon class="size-3.5" strokeWidth="1.5" />
+			<item.icon class="size-4" strokeWidth="1.5" />
 		</dt>
 		<dd class="text-preset-2 text-right text-grey-50">
 			{#if isAddress}

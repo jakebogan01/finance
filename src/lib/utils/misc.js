@@ -12,6 +12,16 @@ export const authCheck = (status = 303, redirectLink = DASHBOARD, authenticated 
 	}
 };
 
+export const generateSlug = (title) => {
+	return title
+		.toLowerCase()
+		.trim()
+		.replace(/\s+/g, '-') // Replace spaces with hyphens
+		.replace(/[^\w\-]+/g, '') // Remove non-word characters
+		.replace(/\-\-+/g, '-') // Replace multiple hyphens with a single hyphen
+		.replace(/^-+|-+$/g, ''); // Trim hyphens from start and end
+};
+
 export const onlyNumbers = (e) => {
 	e.target.value = e.target.value.replace(/\D/g, '');
 };
@@ -83,7 +93,7 @@ export const states = [
 	'West Virginia',
 	'Wisconsin',
 	'Wyoming'
-].map((s) => ({ value: s.toLowerCase().replace(/\s+/g, '-'), label: s }));
+].map((s) => ({ value: s.replace(/\s+/g, '-'), label: s }));
 
 export const payTypes = [
 	'Per Day',
@@ -98,7 +108,7 @@ export const payTypes = [
 	'On Commission',
 	'On Demand',
 	'Irregularly'
-].map((s) => ({ value: s.toLowerCase().replace(/\s+/g, '-'), label: s }));
+].map((s) => ({ value: s.toLowerCase().replace(/\s+/g, ' '), label: s }));
 
 export const categories = ['Bill', 'Subscription'].map((s) => ({
 	value: s.toLowerCase().replace(/\s+/g, '-'),
@@ -152,4 +162,18 @@ export const formatPhone = (value) => {
 	const prefix = normalized.slice(3, 6);
 	const line = normalized.slice(6);
 	return `(${area}) ${prefix}-${line}`;
+};
+
+export const cleanObject = (obj) => {
+	return Object.fromEntries(
+		Object.entries(obj).filter(
+			([_, value]) => value !== '' && value !== null && value !== undefined
+		)
+	);
+};
+
+export const calendarDateToISO = (value) => {
+	if (!value) return null;
+
+	return new Date(value.year, value.month - 1, value.day).toISOString();
 };
