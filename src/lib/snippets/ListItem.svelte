@@ -6,9 +6,7 @@
 
 {#snippet listItem(item, isAddress = false)}
 	<div
-		class={[
-			'group flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px] even:bg-[#1b1b1b]'
-		]}
+		class={['flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px] even:bg-[#1b1b1b]']}
 	>
 		<dt class="flex-none">
 			<span class="sr-only">{item.label}</span>
@@ -27,10 +25,7 @@
 					class="h-auto! px-0 whitespace-normal!"
 				>
 					{#snippet icon()}
-						<CopyIcon
-							class="size-3.5 opacity-0 md:transition-opacity md:group-hover:opacity-100"
-							strokeWidth="1.5"
-						/>
+						<CopyIcon class="size-3.5" strokeWidth="1.5" />
 					{/snippet}
 					{item.value}
 				</CopyButton>

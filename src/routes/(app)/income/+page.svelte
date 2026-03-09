@@ -48,14 +48,34 @@
 					<DropdownMenu.Content class="w-56">
 						<DropdownMenu.Group>
 							<DropdownMenu.RadioGroup bind:value={filters.status}>
-								<DropdownMenu.RadioItem value="all">Show all</DropdownMenu.RadioItem>
-								<DropdownMenu.RadioItem value="active">Active</DropdownMenu.RadioItem>
-								<DropdownMenu.RadioItem value="inactive">Inactive</DropdownMenu.RadioItem>
+								<DropdownMenu.RadioItem
+									value="all"
+									class={filters.status === 'all' ? 'bg-grey-1000 text-white-0' : ''}
+									>Show all</DropdownMenu.RadioItem
+								>
+								<DropdownMenu.RadioItem
+									value="active"
+									class={filters.status === 'active' ? 'bg-grey-1000 text-white-0' : ''}
+									>Active</DropdownMenu.RadioItem
+								>
+								<DropdownMenu.RadioItem
+									value="inactive"
+									class={filters.status === 'inactive' ? 'bg-grey-1000 text-white-0' : ''}
+									>Inactive</DropdownMenu.RadioItem
+								>
 							</DropdownMenu.RadioGroup>
 							<DropdownMenu.Separator />
 							<DropdownMenu.RadioGroup bind:value={filters.sort}>
-								<DropdownMenu.RadioItem value="latest">Latest</DropdownMenu.RadioItem>
-								<DropdownMenu.RadioItem value="income">Highest income</DropdownMenu.RadioItem>
+								<DropdownMenu.RadioItem
+									value="latest"
+									class={filters.sort === 'latest' ? 'bg-grey-1000 text-white-0' : ''}
+									>Latest</DropdownMenu.RadioItem
+								>
+								<DropdownMenu.RadioItem
+									value="income"
+									class={filters.sort === 'income' ? 'bg-grey-1000 text-white-0' : ''}
+									>Highest income</DropdownMenu.RadioItem
+								>
 							</DropdownMenu.RadioGroup>
 						</DropdownMenu.Group>
 					</DropdownMenu.Content>

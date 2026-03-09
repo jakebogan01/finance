@@ -9,4 +9,5 @@
 	bind:value
 	data-slot="dropdown-menu-radio-group"
 	{...restProps}
+	class="space-y-1"
 />
