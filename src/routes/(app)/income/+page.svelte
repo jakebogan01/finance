@@ -1,7 +1,6 @@
 <script>
 	import { isEmpty, filterStatus, searchRecords, sortRecords } from '$lib/utils/misc.js';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
-	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
+	import FilterDropDown from '$lib/components/FilterDropDown.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
@@ -39,47 +38,7 @@
 		<div class="flex items-center justify-between gap-5">
 			<OpenFormButton title="Add Income" schema={incomeSchema} />
 			<div class="flex items-center">
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger>
-						{#snippet child({ props })}
-							<CircleButton {...props} Icon={SlidersVerticalIcon} size="6" class="md:mr-5" />
-						{/snippet}
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content class="w-56">
-						<DropdownMenu.Group>
-							<DropdownMenu.RadioGroup bind:value={filters.status}>
-								<DropdownMenu.RadioItem
-									value="all"
-									class={filters.status === 'all' ? 'bg-grey-1000 text-white-0' : ''}
-									>Show all</DropdownMenu.RadioItem
-								>
-								<DropdownMenu.RadioItem
-									value="active"
-									class={filters.status === 'active' ? 'bg-grey-1000 text-white-0' : ''}
-									>Active</DropdownMenu.RadioItem
-								>
-								<DropdownMenu.RadioItem
-									value="inactive"
-									class={filters.status === 'inactive' ? 'bg-grey-1000 text-white-0' : ''}
-									>Inactive</DropdownMenu.RadioItem
-								>
-							</DropdownMenu.RadioGroup>
-							<DropdownMenu.Separator />
-							<DropdownMenu.RadioGroup bind:value={filters.sort}>
-								<DropdownMenu.RadioItem
-									value="latest"
-									class={filters.sort === 'latest' ? 'bg-grey-1000 text-white-0' : ''}
-									>Latest</DropdownMenu.RadioItem
-								>
-								<DropdownMenu.RadioItem
-									value="income"
-									class={filters.sort === 'income' ? 'bg-grey-1000 text-white-0' : ''}
-									>Highest income</DropdownMenu.RadioItem
-								>
-							</DropdownMenu.RadioGroup>
-						</DropdownMenu.Group>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
+				<FilterDropDown bind:filters />
 				<CircleButton Icon={SearchIcon} size="6" class="hidden md:flex" />
 			</div>
 		</div>
