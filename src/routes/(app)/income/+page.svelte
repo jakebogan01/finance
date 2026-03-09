@@ -1,9 +1,12 @@
 <script>
+	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+	import CircleButton from '$lib/components/CircleButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
+	import SearchIcon from '@lucide/svelte/icons/search';
 	import { incomeSchema } from '$lib/utils/schemas.js';
 	import { isEmpty } from '$lib/utils/misc.js';
 
@@ -19,7 +22,13 @@
 
 {#if hasData}
 	<section class="flex flex-col space-y-5 lg:max-h-168">
-		<OpenFormButton title="Add Income" schema={incomeSchema} />
+		<div class="flex items-center justify-between gap-5">
+			<OpenFormButton title="Add Income" schema={incomeSchema} />
+			<div class="flex items-center">
+				<CircleButton Icon={SlidersVerticalIcon} size="6" class="md:mr-5" />
+				<CircleButton Icon={SearchIcon} size="6" class="hidden md:flex" />
+			</div>
+		</div>
 		<RecordList {data} />
 	</section>
 	{#if !isEmpty(incomeRecord)}
