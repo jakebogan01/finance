@@ -1,6 +1,10 @@
+import { goto, invalidateAll } from '$app/navigation';
 import { DASHBOARD } from '$lib/utils/constants';
 import { redirect } from '@sveltejs/kit';
+import { toast } from 'svelte-sonner';
+import { resolve } from '$app/paths';
 import pb from '$lib/pocketbase.js';
+import { page } from '$app/state';
 
 export const authCheck = (status = 303, redirectLink = DASHBOARD, authenticated = false) => {
 	if (authenticated) {
@@ -200,4 +204,15 @@ export const sortRecords = (list, sort) => {
 	}
 
 	return list;
+};
+
+export const deleteRecord = async (type, id) => {
+	try {
+		await pb.collection(type.toLowerCase()).delete(id);
+		await invalidateAll();
+		await goto(resolve(page.url.pathname));
+		toast.success(`${type} successfully deleted!`);
+	} catch (error) {
+		console.dir(error?.response, { depth: null });
+	}
 };

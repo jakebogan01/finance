@@ -1,20 +1,24 @@
 <script>
-	import { formatDate, formatPhone, timeAgo, usdFormatter } from '$lib/utils/misc';
+	import { formatDate, formatPhone, timeAgo, usdFormatter, deleteRecord } from '$lib/utils/misc';
 	import BriefcaseBusinessIcon from '@lucide/svelte/icons/briefcase-business';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import CircleButton from '$lib/components/CircleButton.svelte';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
+	import SquarePenIcon from '@lucide/svelte/icons/square-pen';
 	import KeyRoundIcon from '@lucide/svelte/icons/key-round';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import { listItem } from '$lib/snippets/ListItem.svelte';
 	import HistoryIcon from '@lucide/svelte/icons/history';
 	import MapPinIcon from '@lucide/svelte/icons/map-pin';
+	import Trash2Icon from '@lucide/svelte/icons/trash-2';
 	import PhoneIcon from '@lucide/svelte/icons/phone';
 	import MailIcon from '@lucide/svelte/icons/mail';
 	import UserIcon from '@lucide/svelte/icons/user';
 
 	let { data } = $props();
+	let open = $state(false);
 
 	let details = $derived.by(() => {
 		if (!data) return [];
@@ -103,7 +107,28 @@
 				</dd>
 			</div>
 			<div class="flex-none">
-				<CircleButton Icon={SlidersVerticalIcon} size="6" class="md:mr-5" />
+				<DropdownMenu.Root bind:open>
+					<DropdownMenu.Trigger>
+						{#snippet child({ props })}
+							<CircleButton
+								{...props}
+								Icon={SlidersVerticalIcon}
+								size="6"
+								class={['md:mr-5', open ? 'border-yellow-200 text-yellow-200' : '']}
+							/>
+						{/snippet}
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content class="w-56" align="start">
+						<DropdownMenu.Item onSelect={() => console.log('works')}>
+							<SquarePenIcon size="6" strokeWidth="1.5" class="text-current" />
+							Edit
+						</DropdownMenu.Item>
+						<DropdownMenu.Item onSelect={() => deleteRecord('Income', data?.id)}>
+							<Trash2Icon size="6" strokeWidth="1.5" class="text-current" />
+							Delete
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			</div>
 		</dl>
 		<Separator class="my-6" />

@@ -4,12 +4,18 @@
 	import CircleButton from '$lib/components/CircleButton.svelte';
 
 	let { filters } = $props();
+	let open = $state(false);
 </script>
 
-<DropdownMenu.Root>
+<DropdownMenu.Root bind:open>
 	<DropdownMenu.Trigger>
 		{#snippet child({ props })}
-			<CircleButton {...props} Icon={SlidersVerticalIcon} size="6" class="md:mr-5" />
+			<CircleButton
+				{...props}
+				Icon={SlidersVerticalIcon}
+				size="6"
+				class={['md:mr-5', open ? 'border-yellow-200 text-yellow-200' : '']}
+			/>
 		{/snippet}
 	</DropdownMenu.Trigger>
 	<DropdownMenu.Content class="w-56">
