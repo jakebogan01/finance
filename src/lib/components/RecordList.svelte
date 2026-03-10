@@ -23,7 +23,7 @@
 			{#each data as item (item?.id)}
 				<li>
 					<Command.Item
-						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 bg-grey-900 px-4 py-4 text-white-0 sm:px-6 sm:py-5 md:transition-colors md:duration-300 {page
+						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 md:transition-colors md:duration-300 {page
 							.url.hash === `#${item?.slug}`
 							? 'border-yellow-200'
 							: 'border-grey-900 md:hover:border-yellow-100'}"

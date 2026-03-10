@@ -34,7 +34,7 @@
 
 {#if hasData}
 	<section class="lg:max-h-168">
-		<Command.Root class="flex flex-col space-y-5">
+		<Command.Root class="space-y-5 bg-transparent text-white-0">
 			<div class="flex items-center justify-between gap-5">
 				<OpenFormButton title="Add Income" schema={incomeSchema} />
 				<div class="flex items-center">
