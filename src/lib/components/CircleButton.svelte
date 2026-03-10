@@ -7,7 +7,7 @@
 <Button
 	{...props}
 	class={[
-		'size-12.5 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:hover:border-yellow-200 md:hover:text-yellow-200',
+		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:hover:border-yellow-200 md:hover:text-yellow-200',
 		className
 	]}
 >

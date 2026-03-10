@@ -5,10 +5,9 @@
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
-	import CircleButton from '$lib/components/CircleButton.svelte';
+	import SearchExpand from '$lib/components/SearchExpand.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
-	import SearchIcon from '@lucide/svelte/icons/search';
 	import { incomeSchema } from '$lib/utils/schemas.js';
 
 	let { data } = $props();
@@ -34,14 +33,13 @@
 </script>
 
 {#if hasData}
-	<section class="flex flex-col space-y-5 lg:max-h-168">
-		<Command.Root>
+	<section class="lg:max-h-168">
+		<Command.Root class="flex flex-col space-y-5">
 			<div class="flex items-center justify-between gap-5">
 				<OpenFormButton title="Add Income" schema={incomeSchema} />
 				<div class="flex items-center">
 					<FilterDropDown bind:filters />
-					<!--					<CircleButton Icon={SearchIcon} size="6" class="hidden md:flex" />-->
-					<Command.Input placeholder="Search..." />
+					<SearchExpand class="hidden md:flex" />
 				</div>
 			</div>
 			<RecordList data={dataList} />
