@@ -65,9 +65,9 @@
 					<Command.Group>
 						{#each countries.sort(order) as country (country.id)}
 							<Command.Item
-								class="gap-2"
 								value={country.name}
 								onSelect={() => selectCountry(country)}
+								class="relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 outline-hidden select-none aria-selected:bg-grey-1000 aria-selected:text-white-0 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-yellow-100"
 							>
 								<Flag {country} />
 								<span class="flex-1 text-sm">{country.name}</span>

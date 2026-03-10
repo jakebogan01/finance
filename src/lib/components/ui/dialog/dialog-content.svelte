@@ -1,20 +1,20 @@
 <script>
 	import { Dialog as DialogPrimitive } from 'bits-ui';
+	import DialogPortal from './dialog-portal.svelte';
 	import XIcon from '@lucide/svelte/icons/x';
 	import * as Dialog from './index.js';
 	import { cn } from '$lib/utils.js';
-
 	let {
 		ref = $bindable(null),
 		class: className,
 		portalProps,
-		hideClose = false,
 		children,
+		showCloseButton = true,
 		...restProps
 	} = $props();
 </script>
 
-<Dialog.Portal {...portalProps}>
+<DialogPortal {...portalProps}>
 	<Dialog.Overlay />
 	<DialogPrimitive.Content
 		bind:ref
@@ -26,13 +26,13 @@
 		{...restProps}
 	>
 		{@render children?.()}
-		{#if !hideClose}
+		{#if showCloseButton}
 			<DialogPrimitive.Close
 				class="ring-offset-background focus:ring-ring absolute inset-e-6 top-6 cursor-pointer rounded-xs opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6"
 			>
-				<XIcon strokeWidth="1.5" />
+				<XIcon />
 				<span class="sr-only">Close</span>
 			</DialogPrimitive.Close>
 		{/if}
 	</DialogPrimitive.Content>
-</Dialog.Portal>
+</DialogPortal>

@@ -201,11 +201,3 @@ export const sortRecords = (list, sort) => {
 
 	return list;
 };
-
-export const searchRecords = (list, search) => {
-	if (!search) return list;
-
-	const s = search.toLowerCase();
-
-	return list.filter((item) => item.company_name?.toLowerCase().includes(s));
-};

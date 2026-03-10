@@ -1,9 +1,10 @@
 <script>
-	import { isEmpty, filterStatus, searchRecords, sortRecords } from '$lib/utils/misc.js';
+	import { isEmpty, filterStatus, sortRecords } from '$lib/utils/misc.js';
 	import FilterDropDown from '$lib/components/FilterDropDown.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+	import * as Command from '$lib/components/ui/command/index.js';
 	import CircleButton from '$lib/components/CircleButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
@@ -20,7 +21,6 @@
 		if (!data?.incomeRecords) return [];
 		let list = [...data.incomeRecords];
 		list = filterStatus(list, filters.status);
-		list = searchRecords(list, filters.search);
 		list = sortRecords(list, filters.sort);
 		return list;
 	});
@@ -35,14 +35,17 @@
 
 {#if hasData}
 	<section class="flex flex-col space-y-5 lg:max-h-168">
-		<div class="flex items-center justify-between gap-5">
-			<OpenFormButton title="Add Income" schema={incomeSchema} />
-			<div class="flex items-center">
-				<FilterDropDown bind:filters />
-				<CircleButton Icon={SearchIcon} size="6" class="hidden md:flex" />
+		<Command.Root>
+			<div class="flex items-center justify-between gap-5">
+				<OpenFormButton title="Add Income" schema={incomeSchema} />
+				<div class="flex items-center">
+					<FilterDropDown bind:filters />
+					<!--					<CircleButton Icon={SearchIcon} size="6" class="hidden md:flex" />-->
+					<Command.Input placeholder="Search..." />
+				</div>
 			</div>
-		</div>
-		<RecordList data={dataList} />
+			<RecordList data={dataList} />
+		</Command.Root>
 	</section>
 	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
 		<section>
