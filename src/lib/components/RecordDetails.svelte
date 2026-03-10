@@ -59,7 +59,7 @@
 			},
 			{
 				label: 'User',
-				value: data.status,
+				value: data.status ? 'Active' : 'Inactive',
 				icon: KeyRoundIcon
 			}
 		];
