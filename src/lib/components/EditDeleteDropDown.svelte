@@ -7,7 +7,7 @@
 	import SquarePenIcon from '@lucide/svelte/icons/square-pen';
 	import Trash2Icon from '@lucide/svelte/icons/trash-2';
 
-	let { data } = $props();
+	let { data, handleEditRecord } = $props();
 	let open = $state(false);
 	let deleteDialogOpen = $state(false);
 
@@ -30,7 +30,7 @@
 			{/snippet}
 		</DropdownMenu.Trigger>
 		<DropdownMenu.Content class="w-56" align="start">
-			<DropdownMenu.Item onSelect={() => console.log('works')}>
+			<DropdownMenu.Item onSelect={() => handleEditRecord(data)}>
 				<SquarePenIcon size="6" strokeWidth="1.5" class="text-current" />
 				Edit
 			</DropdownMenu.Item>

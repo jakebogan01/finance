@@ -6,11 +6,12 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
-	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import RecordList from '$lib/components/RecordList.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
 
 	let { data } = $props();
+	let handleEditRecord;
 	let filters = $state({
 		status: 'all',
 		sort: 'latest',
@@ -36,7 +37,7 @@
 	<section class="lg:max-h-168">
 		<Command.Root class="space-y-5 bg-transparent text-white-0">
 			<div class="flex items-center justify-between gap-5">
-				<OpenFormButton title="Add Income" schema={incomeSchema} />
+				<OpenFormButton title="Add Income" schema={incomeSchema} bind:handleEditRecord />
 				<div class="flex items-center">
 					<FilterDropDown bind:filters />
 					<SearchExpand class="hidden md:flex" />
@@ -47,7 +48,7 @@
 	</section>
 	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
 		<section>
-			<RecordDetails data={incomeRecord} />
+			<RecordDetails data={incomeRecord} {handleEditRecord} />
 		</section>
 	{/if}
 {:else}

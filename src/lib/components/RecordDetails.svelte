@@ -13,7 +13,7 @@
 	import MailIcon from '@lucide/svelte/icons/mail';
 	import UserIcon from '@lucide/svelte/icons/user';
 
-	let { data } = $props();
+	let { data, handleEditRecord } = $props();
 
 	let details = $derived.by(() => {
 		if (!data) return [];
@@ -94,7 +94,7 @@
 	>
 		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 p-4.25">
 			<div class="text-grey-600">
-				<dt class="text-preset-6-medium w-40 truncate">{data?.company_name}</dt>
+				<dt class="text-preset-6-medium w-50 truncate">{data?.company_name}</dt>
 				<dd class="text-preset-3-medium">
 					{usdFormatter.format(data?.income)}<span class="text-preset-1 text-grey-100"
 						>/ {data?.recurring}</span
@@ -102,7 +102,7 @@
 				</dd>
 			</div>
 			<div class="flex-none">
-				<EditDeleteDropDown />
+				<EditDeleteDropDown {data} {handleEditRecord} />
 			</div>
 		</dl>
 		<Separator class="my-6" />

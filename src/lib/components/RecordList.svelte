@@ -1,6 +1,6 @@
 <script>
 	import * as Command from '$lib/components/ui/command/index.js';
-	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { usdFormatter } from '$lib/utils/misc.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
