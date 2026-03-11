@@ -7,6 +7,7 @@
 		generateSlug,
 		calendarDateToISO
 	} from '$lib/utils/misc.js';
+	import { getLocalTimeZone, fromDate } from '@internationalized/date';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
@@ -127,6 +128,7 @@
 	handleEditRecord = async (data) => {
 		console.log(data);
 		formState.phoneValue = data?.company_phone || null;
+		formState.dateValue = fromDate(new Date(data?.start_date), getLocalTimeZone()) || null;
 		formState.step = 1;
 		open = true;
 		noValue = false;
@@ -150,7 +152,6 @@
 			account_email: data?.account_email || ''
 		});
 		// formState.phoneValue = data?.company_phone || null;
-		// formState.dateValue = data?.start_date || null;
 		formState.payDropDown = payTypes[indexes.pay].value || payTypes[0].value;
 		formState.stateDropDown = states[indexes.state].value || '';
 	};
