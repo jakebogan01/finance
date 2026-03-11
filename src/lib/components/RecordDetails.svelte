@@ -3,6 +3,7 @@
 	import BriefcaseBusinessIcon from '@lucide/svelte/icons/briefcase-business';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import CircleButton from '$lib/components/CircleButton.svelte';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
@@ -19,6 +20,7 @@
 
 	let { data } = $props();
 	let open = $state(false);
+	let deleteDialogOpen = $state(false);
 
 	let details = $derived.by(() => {
 		if (!data) return [];
@@ -90,6 +92,11 @@
 			}
 		};
 	});
+
+	function handleDeleteSelect(e) {
+		e.preventDefault(); // prevent dropdown from auto-closing behavior conflict
+		deleteDialogOpen = true;
+	}
 </script>
 
 <div class="lg:col-start-3 lg:row-end-1">
@@ -107,28 +114,50 @@
 				</dd>
 			</div>
 			<div class="flex-none">
-				<DropdownMenu.Root bind:open>
-					<DropdownMenu.Trigger>
-						{#snippet child({ props })}
-							<CircleButton
-								{...props}
-								Icon={SlidersVerticalIcon}
-								size="6"
-								class={['md:mr-5', open ? 'border-yellow-200 text-yellow-200' : '']}
-							/>
-						{/snippet}
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content class="w-56" align="start">
-						<DropdownMenu.Item onSelect={() => console.log('works')}>
-							<SquarePenIcon size="6" strokeWidth="1.5" class="text-current" />
-							Edit
-						</DropdownMenu.Item>
-						<DropdownMenu.Item onSelect={() => deleteRecord('Income', data?.id)}>
-							<Trash2Icon size="6" strokeWidth="1.5" class="text-current" />
-							Delete
-						</DropdownMenu.Item>
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
+				<AlertDialog.Root bind:open={deleteDialogOpen}>
+					<DropdownMenu.Root bind:open>
+						<DropdownMenu.Trigger>
+							{#snippet child({ props })}
+								<CircleButton
+									{...props}
+									Icon={SlidersVerticalIcon}
+									size="6"
+									class={['md:mr-5', open ? 'border-yellow-200 text-yellow-200' : '']}
+								/>
+							{/snippet}
+						</DropdownMenu.Trigger>
+						<DropdownMenu.Content class="w-56" align="start">
+							<DropdownMenu.Item onSelect={() => console.log('works')}>
+								<SquarePenIcon size="6" strokeWidth="1.5" class="text-current" />
+								Edit
+							</DropdownMenu.Item>
+							<DropdownMenu.Item onSelect={handleDeleteSelect}>
+								<Trash2Icon size="6" strokeWidth="1.5" class="text-current" />
+								Delete
+							</DropdownMenu.Item>
+						</DropdownMenu.Content>
+					</DropdownMenu.Root>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+							<AlertDialog.Description>This action cannot be undone.</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<AlertDialog.Cancel
+								class="h-13 cursor-pointer rounded-lg border border-grey-300 bg-transparent px-6 font-medium text-white-0 md:transition-colors md:hover:bg-grey-900"
+								onclick={() => (deleteDialogOpen = false)}
+							>
+								Cancel
+							</AlertDialog.Cancel>
+							<AlertDialog.Action
+								class="h-13 bg-red-200 px-6 font-semibold text-white-0 md:hover:bg-red-400"
+								onclick={() => deleteRecord('Income', data?.id)}
+							>
+								Delete
+							</AlertDialog.Action>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
 			</div>
 		</dl>
 		<Separator class="my-6" />
