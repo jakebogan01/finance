@@ -1,8 +1,9 @@
 <script>
 	import { DASHBOARD, INCOME, EXPENSES } from '$lib/utils/constants';
+	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import LayoutGridIcon from '@lucide/svelte/icons/layout-grid';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
-	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import TabSwitch from '$lib/components/TabSwitch.svelte';
 	import ReceiptIcon from '@lucide/svelte/icons/receipt';
 	import { active } from '$lib/actions/active.svelte';
@@ -26,7 +27,7 @@
 		{
 			page: 'Expenses',
 			icon: ReceiptIcon,
-			link: EXPENSES
+			link: EXPENSES + `${EXPENSESLUG.value ?? ''}`
 		}
 	]);
 

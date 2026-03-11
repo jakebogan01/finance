@@ -12,8 +12,12 @@ export const load = async () => {
 		const incomeRecords = await pb.collection('income').getFullList({
 			filter: `user_id="${pb?.authStore?.record?.id}"`
 		});
+		const expenseRecords = await pb.collection('expenses').getFullList({
+			filter: `user_id="${pb?.authStore?.record?.id}"`
+		});
 		return {
-			incomeRecords: incomeRecords || []
+			incomeRecords: incomeRecords || [],
+			expenseRecords: expenseRecords || []
 		};
 	} catch (error) {
 		console.dir(error?.response, { depth: null });

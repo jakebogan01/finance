@@ -126,7 +126,6 @@
 	const back = () => (formState.step -= 1);
 
 	handleEditRecord = async (data) => {
-		console.log(data);
 		formState.phoneValue = data?.company_phone || null;
 		formState.dateValue = fromDate(new Date(data?.start_date), getLocalTimeZone()) || null;
 		formState.step = 1;

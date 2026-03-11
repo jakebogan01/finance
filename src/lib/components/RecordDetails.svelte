@@ -3,6 +3,7 @@
 	import BriefcaseBusinessIcon from '@lucide/svelte/icons/briefcase-business';
 	import EditDeleteDropDown from '$lib/components/EditDeleteDropDown.svelte';
 	import { Separator } from '$lib/components/ui/separator/index.js';
+	import CreditCardIcon from '@lucide/svelte/icons/credit-card';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
 	import KeyRoundIcon from '@lucide/svelte/icons/key-round';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
@@ -26,7 +27,7 @@
 			},
 			{
 				label: 'Company email',
-				value: data.company_email,
+				value: data.company_email || data.account_email,
 				icon: MailIcon,
 				copy: true
 			},
@@ -52,8 +53,13 @@
 				icon: HistoryIcon
 			},
 			{
+				label: 'Category',
+				value: data.category.toUpperCase(),
+				icon: CreditCardIcon
+			},
+			{
 				label: 'Compensation',
-				value: usdFormatter.format(data.pay),
+				value: usdFormatter.format(data.pay || data.amount),
 				icon: HandCoinsIcon
 			},
 			{
@@ -94,10 +100,10 @@
 	>
 		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 p-4.25">
 			<div class="text-grey-600">
-				<dt class="text-preset-6-medium w-50 truncate">{data?.company_name}</dt>
+				<dt class="text-preset-6-medium w-50 truncate">{data?.company_name || data?.title}</dt>
 				<dd class="text-preset-3-medium">
-					{usdFormatter.format(data?.income)}<span class="text-preset-1 text-grey-100"
-						>/ {data?.recurring}</span
+					{usdFormatter.format(data?.income || data?.amount)}<span
+						class="text-preset-1 text-grey-100">/ {data?.recurring}</span
 					>
 				</dd>
 			</div>

@@ -14,8 +14,7 @@
 	let handleEditRecord;
 	let filters = $state({
 		status: 'all',
-		sort: 'latest',
-		search: ''
+		sort: 'latest'
 	});
 	let dataList = $derived.by(() => {
 		if (!data?.incomeRecords) return [];
@@ -31,6 +30,8 @@
 		const slug = INCOMESLUG.value.replace(/#/g, '');
 		return dataList.find((item) => item.slug === slug) ?? {};
 	});
+
+	const handleURLSlug = (slug) => (INCOMESLUG.value = slug);
 </script>
 
 {#if hasData}
@@ -43,7 +44,7 @@
 					<SearchExpand class="hidden md:flex" />
 				</div>
 			</div>
-			<RecordList data={dataList} />
+			<RecordList data={dataList} {handleURLSlug} />
 		</Command.Root>
 	</section>
 	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
@@ -58,7 +59,7 @@
 	>
 		<div class="space-y-4">
 			<span class="text-preset-3 block text-grey-50">No records</span>
-			<OpenFormButton title="Add Income" schema={incomeSchema} />
+			<OpenFormButton title="Add Income" schema={incomeSchema} bind:handleEditRecord />
 		</div>
 	</div>
 {/if}

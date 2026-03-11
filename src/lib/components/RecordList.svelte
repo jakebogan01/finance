@@ -1,17 +1,19 @@
 <script>
+	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { usdFormatter } from '$lib/utils/misc.js';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
-	let { data } = $props();
+	let { data, handleURLSlug } = $props();
 
 	onMount(() => {
-		if (page.url.hash && !INCOMESLUG.value) INCOMESLUG.value = page.url.hash;
+		if ((page.url.hash && !INCOMESLUG.value) || (page.url.hash && !EXPENSESLUG.value))
+			handleURLSlug(page.url.hash);
 	});
 
-	const handleSlug = (slug) => (INCOMESLUG.value = `#${slug}`);
+	const handleSlug = (slug) => handleURLSlug(`#${slug}`);
 </script>
 
 <div
@@ -32,7 +34,9 @@
 							<div
 								class="relative flex size-12.5 flex-none items-center justify-center rounded-full bg-yellow-100"
 							>
-								<span class="text-preset-6-bold text-grey-600">{item?.company_name[0]}</span>
+								<span class="text-preset-6-bold text-grey-600"
+									>{item?.company_name?.[0] || item?.title?.[0]}</span
+								>
 								<div
 									class="absolute top-7.5 -right-1.5 flex size-7.5 items-center justify-center rounded-full bg-grey-1100"
 								>
@@ -43,11 +47,11 @@
 								<p class="text-preset-3-medium truncate">
 									<a href={`#${item?.slug}`} onclick={() => handleSlug(item?.slug)}>
 										<span class="absolute inset-x-0 -top-px bottom-0"></span>
-										{item?.company_name}
+										{item?.company_name || item?.title}
 									</a>
 								</p>
 								<p>
-									{usdFormatter.format(item?.income)}
+									{usdFormatter.format(item?.income || item?.amount)}
 									<span class="text-preset-1 text-grey-50 capitalize">{item?.recurring}</span>
 								</p>
 							</div>
