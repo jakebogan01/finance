@@ -1,10 +1,10 @@
 <script>
 	// import CountrySelector from './country-selector.svelte';
-	import { defaultOptions } from './';
-	import { cn } from '$lib/utils.js';
 	// import { normalizedCountries } from 'svelte-tel-input';
 	import { TelInput } from 'svelte-tel-input';
 	import 'svelte-tel-input/styles/flags.css';
+	import { defaultOptions } from './';
+	import { cn } from '$lib/utils.js';
 
 	// const countries = normalizedCountries;
 

@@ -10,15 +10,16 @@
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { inputField } from '$lib/snippets/InputField.svelte';
 	import { PhoneInput } from '$lib/components/ui/phone-input';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import DatePicker from '$lib/components/DatePicker.svelte';
 	import Combobox from '$lib/components/Combobox.svelte';
+	import { goto, invalidateAll } from '$app/navigation';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
 	import { validator } from '@felte/validator-zod';
-	import { goto, invalidateAll } from '$app/navigation';
 	import reporterDom from '@felte/reporter-dom';
 	import { toast } from 'svelte-sonner';
 	import { resolve } from '$app/paths';
@@ -26,7 +27,6 @@
 	import { createForm } from 'felte';
 	import { page } from '$app/state';
 	import { tick } from 'svelte';
-	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 
 	let { title, multiStepForm = true, schema, handleEditRecord = $bindable() } = $props();
 	let open = $state(false);
@@ -126,6 +126,7 @@
 
 	handleEditRecord = async (data) => {
 		console.log(data);
+		formState.phoneValue = data?.company_phone || null;
 		formState.step = 1;
 		open = true;
 		noValue = false;
@@ -156,6 +157,7 @@
 
 	const resetVairables = () => {
 		formState.step = 1;
+		formState.phoneValue = null;
 		noValue = true;
 		indexes.pay = 0;
 		indexes.state = 0;
