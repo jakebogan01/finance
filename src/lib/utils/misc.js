@@ -97,7 +97,7 @@ export const states = [
 	'West Virginia',
 	'Wisconsin',
 	'Wyoming'
-].map((s) => ({ value: s.replace(/\s+/g, '-'), label: s }));
+].map((s) => ({ value: s.replace(/\s+/g, ' '), label: s }));
 
 export const payTypes = [
 	'Per Day',

@@ -30,6 +30,11 @@
 
 	let { title, multiStepForm = true, schema, handleEditRecord = $bindable() } = $props();
 	let open = $state(false);
+	let noValue = $state(false);
+	let indexes = $state({
+		pay: 0,
+		state: 0
+	});
 	let record = $state({
 		id: null,
 		update: false
@@ -121,7 +126,11 @@
 
 	handleEditRecord = async (data) => {
 		console.log(data);
+		formState.step = 1;
 		open = true;
+		noValue = false;
+		indexes.pay = payTypes.findIndex((item) => item.value === data?.recurring);
+		indexes.state = states.findIndex((item) => item.value === data?.company_state);
 		await tick();
 		record.update = true;
 		record.id = data?.id;
@@ -141,8 +150,15 @@
 		});
 		// formState.phoneValue = data?.company_phone || null;
 		// formState.dateValue = data?.start_date || null;
-		// formState.payDropDown = data?.recurring || payTypes[0].value;
-		// 	formState.stateDropDown = data?.company_state || '';
+		formState.payDropDown = payTypes[indexes.pay].value || payTypes[0].value;
+		formState.stateDropDown = states[indexes.state].value || '';
+	};
+
+	const resetVairables = () => {
+		formState.step = 1;
+		noValue = true;
+		indexes.pay = 0;
+		indexes.state = 0;
 	};
 </script>
 
@@ -150,6 +166,7 @@
 	<Dialog.Root bind:open>
 		<Dialog.Trigger
 			type="button"
+			onclick={resetVairables}
 			class="text-grey-0 flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! md:hover:border-yellow-200 md:hover:text-yellow-200"
 			asChild
 		>
@@ -194,6 +211,7 @@
 							<Combobox
 								list={payTypes}
 								bind:result={formState.payDropDown}
+								index={indexes.pay}
 								defaultText="Recurring"
 							/>
 						</div>
@@ -236,7 +254,8 @@
 								list={states}
 								bind:result={formState.stateDropDown}
 								defaultText="State"
-								noValue={true}
+								{noValue}
+								index={indexes.state}
 								class="ml-18 w-[56%]"
 							/>
 						</div>
