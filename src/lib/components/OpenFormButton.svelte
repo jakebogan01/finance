@@ -83,24 +83,30 @@
 				// console.log(formState.categoryDropDown);
 
 				values.user_id = pb?.authStore?.record?.id;
-				values.slug = generateSlug(values.company_name);
+				values.slug = generateSlug(values.company_name || values.title);
 				values.status = true;
 				values.recurring = formState.payDropDown;
 				values.company_state = formState.stateDropDown;
 				values.company_phone = formState.phoneValue;
+				values.category = formState.categoryDropDown;
 				values.start_date = calendarDateToISO(formState.dateValue);
 				const filteredValues = cleanObject(values);
 				console.log(filteredValues);
 
 				if (record.update) {
-					await pb.collection('income').update(record.id, filteredValues);
-					await goto(resolve(`${page.url.pathname}#${filteredValues.slug}`));
-					INCOMESLUG.value = `#${filteredValues.slug}`;
+					if (multiStepForm) {
+						await pb.collection('income').update(record.id, filteredValues);
+						await goto(resolve(`${page.url.pathname}#${filteredValues.slug}`));
+						INCOMESLUG.value = `#${filteredValues.slug}`;
+					}
 				} else {
-					await pb.collection('income').create(filteredValues);
+					if (multiStepForm) {
+						await pb.collection('income').create(filteredValues);
+					} else {
+						await pb.collection('expenses').create(filteredValues);
+					}
 				}
 				await invalidateAll();
-
 				reset();
 				formState.phoneValue = null;
 				formState.dateValue = null;
@@ -278,7 +284,7 @@
 						<div class="col-span-full">
 							{@render inputField('Title', 'title')}
 						</div>
-						<div class="col-span-3">
+						<div class="col-span-full">
 							{@render inputField('Amount', 'amount', 'off', 'text', true)}
 						</div>
 						<div class="relative col-span-3">
@@ -286,6 +292,14 @@
 								list={categories}
 								bind:result={formState.categoryDropDown}
 								defaultText="Category"
+							/>
+						</div>
+						<div class="relative col-span-3">
+							<Combobox
+								list={payTypes}
+								bind:result={formState.payDropDown}
+								index={indexes.pay}
+								defaultText="Recurring"
 							/>
 						</div>
 						<div class="col-span-full">
