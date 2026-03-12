@@ -3,7 +3,7 @@
 	import SlidersVerticalIcon from '@lucide/svelte/icons/sliders-vertical';
 	import CircleButton from '$lib/components/CircleButton.svelte';
 
-	let { filters } = $props();
+	let { filters, sortType } = $props();
 	let open = $state(false);
 </script>
 
@@ -45,8 +45,8 @@
 					>Latest</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem
-					value="income"
-					class={filters.sort === 'income' ? 'bg-grey-1000 text-white-0' : ''}
+					value={sortType}
+					class={filters.sort === sortType ? 'bg-grey-1000 text-white-0' : ''}
 					>Highest amount</DropdownMenu.RadioItem
 				>
 			</DropdownMenu.RadioGroup>

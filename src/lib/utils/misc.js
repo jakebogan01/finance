@@ -203,6 +203,14 @@ export const sortRecords = (list, sort) => {
 		});
 	}
 
+	if (sort === 'amount') {
+		return list.toSorted((a, b) => {
+			const amountA = Number(a.amount) || 0;
+			const amountB = Number(b.amount) || 0;
+			return amountB - amountA;
+		});
+	}
+
 	return list;
 };
 

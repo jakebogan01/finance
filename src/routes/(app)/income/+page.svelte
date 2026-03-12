@@ -40,7 +40,7 @@
 			<div class="flex items-center justify-between gap-5">
 				<OpenFormButton title="Add Income" schema={incomeSchema} bind:handleEditRecord />
 				<div class="flex items-center">
-					<FilterDropDown bind:filters />
+					<FilterDropDown bind:filters sortType="income" />
 					<SearchExpand class="hidden md:flex" />
 				</div>
 			</div>
