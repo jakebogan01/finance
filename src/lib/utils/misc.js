@@ -115,7 +115,7 @@ export const payTypes = [
 ].map((s) => ({ value: s.toLowerCase().replace(/\s+/g, ' '), label: s }));
 
 export const categories = ['Bill', 'Subscription'].map((s) => ({
-	value: s.toLowerCase().replace(/\s+/g, '-'),
+	value: s.replace(/\s+/g, '-'),
 	label: s
 }));
 

@@ -54,7 +54,7 @@
 			},
 			{
 				label: 'Category',
-				value: data.category.toUpperCase(),
+				value: data.category,
 				icon: CreditCardIcon
 			},
 			{
