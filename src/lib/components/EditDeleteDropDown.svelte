@@ -7,7 +7,7 @@
 	import SquarePenIcon from '@lucide/svelte/icons/square-pen';
 	import Trash2Icon from '@lucide/svelte/icons/trash-2';
 
-	let { data, handleEditRecord } = $props();
+	let { data, handleEditRecord, collectionName } = $props();
 	let open = $state(false);
 	let deleteDialogOpen = $state(false);
 
@@ -40,5 +40,5 @@
 			</DropdownMenu.Item>
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
-	<DeleteModal {data} bind:deleteDialogOpen />
+	<DeleteModal {data} bind:deleteDialogOpen {collectionName} />
 </AlertDialog.Root>

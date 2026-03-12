@@ -14,7 +14,7 @@
 	import MailIcon from '@lucide/svelte/icons/mail';
 	import UserIcon from '@lucide/svelte/icons/user';
 
-	let { data, handleEditRecord } = $props();
+	let { data, handleEditRecord, collectionName } = $props();
 
 	let details = $derived.by(() => {
 		if (!data) return [];
@@ -108,7 +108,7 @@
 				</dd>
 			</div>
 			<div class="flex-none">
-				<EditDeleteDropDown {data} {handleEditRecord} />
+				<EditDeleteDropDown {data} {handleEditRecord} {collectionName} />
 			</div>
 		</dl>
 		<Separator class="my-6" />

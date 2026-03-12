@@ -7,7 +7,6 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
-	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import RecordList from '$lib/components/RecordList.svelte';
 	import { expensesSchema } from '$lib/utils/schemas.js';
 
@@ -55,7 +54,7 @@
 	</section>
 	{#if !isEmpty(expenseRecord) && expenseRecord !== null}
 		<section>
-			<RecordDetails data={expenseRecord} {handleEditRecord} />
+			<RecordDetails data={expenseRecord} {handleEditRecord} collectionName="Expenses" />
 		</section>
 	{/if}
 {:else}

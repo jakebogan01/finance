@@ -49,7 +49,7 @@
 	</section>
 	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
 		<section>
-			<RecordDetails data={incomeRecord} {handleEditRecord} />
+			<RecordDetails data={incomeRecord} {handleEditRecord} collectionName="Income" />
 		</section>
 	{/if}
 {:else}
