@@ -6,7 +6,7 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
-	let { data, handleURLSlug } = $props();
+	let { data, handleURLSlug, title } = $props();
 
 	onMount(() => {
 		if ((page.url.hash && !INCOMESLUG.value) || (page.url.hash && !EXPENSESLUG.value))
@@ -19,7 +19,7 @@
 <div
 	class="flex max-h-182 flex-col space-y-4 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:px-4 lg:flex-1"
 >
-	<h3 class="text-preset-2">Income</h3>
+	<h3 class="text-preset-2">{title}</h3>
 	<div class="flex flex-col overflow-y-auto lg:flex-1">
 		<ul role="list" class="relative space-y-1.5 rounded-2xl bg-grey-400 p-1.5 sm:p-2.5 lg:flex-1">
 			{#each data as item (item?.id)}

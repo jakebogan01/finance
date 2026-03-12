@@ -5,6 +5,8 @@ import { toast } from 'svelte-sonner';
 import { resolve } from '$app/paths';
 import pb from '$lib/pocketbase.js';
 import { page } from '$app/state';
+import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
+import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 
 export const authCheck = (status = 303, redirectLink = DASHBOARD, authenticated = false) => {
 	if (authenticated) {
@@ -221,6 +223,8 @@ export const deleteRecord = async (type, id) => {
 		await invalidateAll();
 		await goto(resolve(page.url.pathname));
 		toast.success(`${type} successfully deleted!`);
+		INCOMESLUG.value = null;
+		EXPENSESLUG.value = null;
 	} catch (error) {
 		console.dir(error?.response, { depth: null });
 	}

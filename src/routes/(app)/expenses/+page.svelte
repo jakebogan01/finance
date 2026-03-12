@@ -49,7 +49,7 @@
 					<SearchExpand class="hidden md:flex" />
 				</div>
 			</div>
-			<RecordList data={dataList} {handleURLSlug} />
+			<RecordList data={dataList} {handleURLSlug} title="Expenses" />
 		</Command.Root>
 	</section>
 	{#if !isEmpty(expenseRecord) && expenseRecord !== null}
