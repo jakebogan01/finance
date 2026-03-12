@@ -10,13 +10,13 @@
 	import { getLocalTimeZone, fromDate } from '@internationalized/date';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
-	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
+	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { inputField } from '$lib/snippets/InputField.svelte';
 	import { PhoneInput } from '$lib/components/ui/phone-input';
-	import FormButton from '$lib/components/FormButton.svelte';
 	import DatePicker from '$lib/components/DatePicker.svelte';
+	import FormButton from '$lib/components/FormButton.svelte';
 	import Combobox from '$lib/components/Combobox.svelte';
 	import { goto, invalidateAll } from '$app/navigation';
 	import * as Dialog from '$lib/components/ui/dialog';
@@ -31,17 +31,21 @@
 	import { tick } from 'svelte';
 
 	let { title, multiStepForm = true, schema, handleEditRecord = $bindable() } = $props();
+
 	let open = $state(false);
 	let noValue = $state(false);
+
 	let indexes = $state({
 		pay: 0,
 		state: 0,
 		category: 0
 	});
+
 	let record = $state({
 		id: null,
 		update: false
 	});
+
 	let formState = $state({
 		step: 1,
 		phoneValue: null,
@@ -50,6 +54,63 @@
 		stateDropDown: '',
 		categoryDropDown: categories[0].value
 	});
+
+	const cleanNumber = (v) => {
+		const cleaned = String(v).replace(/\D/g, '');
+		return cleaned ? Number(cleaned) : null;
+	};
+
+	const resetState = () => {
+		formState.step = 1;
+		formState.phoneValue = null;
+		formState.dateValue = null;
+
+		formState.payDropDown = payTypes[0].value;
+		formState.stateDropDown = '';
+		formState.categoryDropDown = categories[0].value;
+
+		indexes.pay = 0;
+		indexes.state = 0;
+		indexes.category = 0;
+
+		record.id = null;
+		record.update = false;
+
+		noValue = true;
+	};
+
+	const buildPayload = (values) => {
+		values.user_id = pb?.authStore?.record?.id;
+		values.slug = generateSlug(values.company_name || values.title);
+		values.status = true;
+
+		values.recurring = formState.payDropDown;
+		values.company_state = formState.stateDropDown;
+		values.company_phone = formState.phoneValue;
+		values.category = formState.categoryDropDown;
+		values.start_date = calendarDateToISO(formState.dateValue);
+
+		return cleanObject(values);
+	};
+
+	const saveRecord = async (values) => {
+		const payload = buildPayload(values);
+		const collection = multiStepForm ? 'income' : 'expenses';
+
+		if (record.update) {
+			await pb.collection(collection).update(record.id, payload);
+
+			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
+
+			if (multiStepForm) {
+				INCOMESLUG.value = `#${payload.slug}`;
+			} else {
+				EXPENSESLUG.value = `#${payload.slug}`;
+			}
+		} else {
+			await pb.collection(collection).create(payload);
+		}
+	};
 
 	const { form, reset, isSubmitting, validate, setFields } = createForm({
 		initialValues: {
@@ -66,58 +127,25 @@
 			amount: '',
 			account_email: ''
 		},
-		extend: [validator({ schema }), reporterDom()],
-		transform: (values) => {
-			const cleanNumber = (v) => {
-				const cleaned = String(v).replace(/\D/g, '');
-				return cleaned ? Number(cleaned) : null;
-			};
 
-			return {
-				...values,
-				income: cleanNumber(values.income),
-				pay: cleanNumber(values.pay),
-				amount: cleanNumber(values.amount)
-			};
-		},
+		extend: [validator({ schema }), reporterDom()],
+
+		transform: (values) => ({
+			...values,
+			income: cleanNumber(values.income),
+			pay: cleanNumber(values.pay),
+			amount: cleanNumber(values.amount)
+		}),
+
 		onSubmit: async (values) => {
 			try {
-				values.user_id = pb?.authStore?.record?.id;
-				values.slug = generateSlug(values.company_name || values.title);
-				values.status = true;
-				values.recurring = formState.payDropDown;
-				values.company_state = formState.stateDropDown;
-				values.company_phone = formState.phoneValue;
-				values.category = formState.categoryDropDown;
-				values.start_date = calendarDateToISO(formState.dateValue);
-				const filteredValues = cleanObject(values);
-				// console.log(filteredValues);
+				await saveRecord(values);
 
-				if (record.update) {
-					if (multiStepForm) {
-						await pb.collection('income').update(record.id, filteredValues);
-						await goto(resolve(`${page.url.pathname}#${filteredValues.slug}`));
-						INCOMESLUG.value = `#${filteredValues.slug}`;
-					} else {
-						await pb.collection('expenses').update(record.id, filteredValues);
-						await goto(resolve(`${page.url.pathname}#${filteredValues.slug}`));
-						EXPENSESLUG.value = `#${filteredValues.slug}`;
-					}
-				} else {
-					if (multiStepForm) {
-						await pb.collection('income').create(filteredValues);
-					} else {
-						await pb.collection('expenses').create(filteredValues);
-					}
-				}
 				await invalidateAll();
+
 				reset();
-				formState.phoneValue = null;
-				formState.dateValue = null;
+				resetState();
 				open = false;
-				formState.step = 1;
-				record.id = null;
-				record.update = false;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');
@@ -127,32 +155,44 @@
 
 	const next = async () => {
 		const result = await validate();
-		const keysToCheck = ['company_name', 'income', 'pay', 'position'];
-		const allEmptyOrNull = keysToCheck.every(
-			(key) => result[key] === null || result[key]?.length === 0
-		);
-		if (allEmptyOrNull) formState.step += 1;
+
+		const keys = ['company_name', 'income', 'pay', 'position'];
+
+		const allEmpty = keys.every((key) => result[key] === null || result[key]?.length === 0);
+
+		if (allEmpty) formState.step += 1;
 	};
-	const back = () => (formState.step -= 1);
+
+	const back = () => {
+		formState.step -= 1;
+	};
 
 	handleEditRecord = async (data) => {
+		open = true;
+		formState.step = 1;
+
 		formState.phoneValue = data?.company_phone || null;
+
 		const startDate = data?.start_date ? new Date(data.start_date) : null;
+
 		formState.dateValue =
 			startDate && !isNaN(startDate.getTime()) ? fromDate(startDate, getLocalTimeZone()) : null;
-		formState.step = 1;
-		open = true;
-		indexes.pay = payTypes.findIndex((item) => item.value === data?.recurring);
-		indexes.category = categories.findIndex((item) => item.value === data?.category);
+
+		indexes.pay = payTypes.findIndex((x) => x.value === data?.recurring);
+		indexes.category = categories.findIndex((x) => x.value === data?.category);
+
 		if (data?.company_state?.length) {
 			noValue = false;
-			indexes.state = states.findIndex((item) => item.value === data?.company_state);
+			indexes.state = states.findIndex((x) => x.value === data?.company_state);
 		} else {
 			noValue = true;
 		}
+
 		await tick();
+
 		record.update = true;
 		record.id = data?.id;
+
 		setFields({
 			company_name: data?.company_name || '',
 			income: data?.income || '',
@@ -167,19 +207,10 @@
 			amount: data?.amount || '',
 			account_email: data?.account_email || ''
 		});
-		formState.payDropDown = payTypes[indexes.pay].value || payTypes[0].value;
-		formState.stateDropDown = states[indexes.state]?.value ?? '';
-		formState.categoryDropDown =
-			categories[indexes.category]?.value ?? (categories.length ? categories[0].value : '');
-	};
 
-	const resetVairables = () => {
-		formState.step = 1;
-		formState.phoneValue = null;
-		noValue = true;
-		indexes.pay = 0;
-		indexes.state = 0;
-		indexes.categories = 0;
+		formState.payDropDown = payTypes[indexes.pay]?.value ?? payTypes[0].value;
+		formState.stateDropDown = states[indexes.state]?.value ?? '';
+		formState.categoryDropDown = categories[indexes.category]?.value ?? categories[0].value;
 	};
 </script>
 
@@ -187,21 +218,23 @@
 	<Dialog.Root bind:open>
 		<Dialog.Trigger
 			type="button"
-			onclick={resetVairables}
+			onclick={resetState}
 			class="text-grey-0 flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! md:hover:border-yellow-200 md:hover:text-yellow-200"
 			asChild
 		>
-			<ArrowRightIcon class="size-6" strokeWidth="1.5" />Add new
+			<ArrowRightIcon class="size-6" strokeWidth="1.5" />
+			Add new
 		</Dialog.Trigger>
 
 		<Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
 			<Dialog.Header class={[multiStepForm ? 'text-center' : 'text-left']}>
-				<Dialog.Title><span class="text-preset-5-semibold">{title}</span></Dialog.Title>
+				<Dialog.Title>
+					<span class="text-preset-5-semibold">{title}</span>
+				</Dialog.Title>
 				{#if !multiStepForm}
 					<Dialog.Description>This can be either a bill or a subscription</Dialog.Description>
 				{/if}
 			</Dialog.Header>
-
 			{#if multiStepForm}
 				<div class="flex items-center justify-center space-x-4">
 					{#each [1, 2] as s, i (i)}
@@ -218,7 +251,6 @@
 					{/each}
 				</div>
 			{/if}
-
 			<form class="space-y-6.5" use:form>
 				{#if multiStepForm}
 					<div class:hidden={formState.step !== 1} class="grid grid-cols-6 gap-6.5">
@@ -243,17 +275,9 @@
 							{@render inputField('Position', 'position')}
 						</div>
 					</div>
-
 					<div class:hidden={formState.step !== 2} class="grid grid-cols-6 gap-6.5">
 						<div class="col-span-full">
-							{@render inputField(
-								'Company Email',
-								'company_email',
-								'email',
-								'email',
-								false,
-								'email'
-							)}
+							{@render inputField('Company Email', 'company_email', 'email', 'email')}
 						</div>
 						<div class="relative col-span-3">
 							<PhoneInput country="US" placeholder="Phone" bind:value={formState.phoneValue} />
@@ -293,7 +317,7 @@
 						</div>
 					</div>
 				{:else}
-					<div class:hidden={formState.step !== 1} class="grid grid-cols-6 gap-6.5">
+					<div class="grid grid-cols-6 gap-6.5">
 						<div class="col-span-full">
 							{@render inputField('Title', 'title')}
 						</div>
@@ -317,18 +341,10 @@
 							/>
 						</div>
 						<div class="col-span-full">
-							{@render inputField(
-								'Account Email (optional)',
-								'account_email',
-								'email',
-								'email',
-								false,
-								'email'
-							)}
+							{@render inputField('Account Email (optional)', 'account_email', 'email', 'email')}
 						</div>
 					</div>
 				{/if}
-
 				<Dialog.Footer>
 					{#if formState.step > 1}
 						<Button
@@ -350,7 +366,7 @@
 					{:else if !multiStepForm}
 						<Dialog.Close
 							type="button"
-							class="h-13 flex-1 cursor-pointer rounded-lg border border-grey-300 bg-transparent px-6 font-medium text-white-0 md:transition-colors md:hover:bg-grey-900"
+							class="h-13 flex-1 cursor-pointer rounded-lg border border-grey-300 bg-transparent px-6 font-medium text-white-0 md:hover:bg-grey-900"
 						>
 							Cancel
 						</Dialog.Close>
