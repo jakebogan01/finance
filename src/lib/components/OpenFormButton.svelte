@@ -9,6 +9,7 @@
 	} from '$lib/utils/misc.js';
 	import { getLocalTimeZone, fromDate } from '@internationalized/date';
 	import { Separator } from '$lib/components/ui/separator/index.js';
+	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
@@ -97,6 +98,10 @@
 						await pb.collection('income').update(record.id, filteredValues);
 						await goto(resolve(`${page.url.pathname}#${filteredValues.slug}`));
 						INCOMESLUG.value = `#${filteredValues.slug}`;
+					} else {
+						await pb.collection('expenses').update(record.id, filteredValues);
+						await goto(resolve(`${page.url.pathname}#${filteredValues.slug}`));
+						EXPENSESLUG.value = `#${filteredValues.slug}`;
 					}
 				} else {
 					if (multiStepForm) {
