@@ -122,6 +122,7 @@ export const categories = ['Bill', 'Subscription'].map((s) => ({
 export const formatDate = (dateStr) => {
 	if (!dateStr) return '';
 	const date = new Date(dateStr);
+	if (isNaN(date.getTime())) return '';
 	const options = {
 		month: 'short',
 		day: 'numeric',

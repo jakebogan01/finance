@@ -34,7 +34,8 @@
 	let noValue = $state(false);
 	let indexes = $state({
 		pay: 0,
-		state: 0
+		state: 0,
+		category: 0
 	});
 	let record = $state({
 		id: null,
@@ -80,8 +81,6 @@
 		},
 		onSubmit: async (values) => {
 			try {
-				// console.log(formState.categoryDropDown);
-
 				values.user_id = pb?.authStore?.record?.id;
 				values.slug = generateSlug(values.company_name || values.title);
 				values.status = true;
@@ -91,7 +90,7 @@
 				values.category = formState.categoryDropDown;
 				values.start_date = calendarDateToISO(formState.dateValue);
 				const filteredValues = cleanObject(values);
-				console.log(filteredValues);
+				// console.log(filteredValues);
 
 				if (record.update) {
 					if (multiStepForm) {
@@ -133,12 +132,19 @@
 
 	handleEditRecord = async (data) => {
 		formState.phoneValue = data?.company_phone || null;
-		formState.dateValue = fromDate(new Date(data?.start_date), getLocalTimeZone()) || null;
+		const startDate = data?.start_date ? new Date(data.start_date) : null;
+		formState.dateValue =
+			startDate && !isNaN(startDate.getTime()) ? fromDate(startDate, getLocalTimeZone()) : null;
 		formState.step = 1;
 		open = true;
-		noValue = false;
 		indexes.pay = payTypes.findIndex((item) => item.value === data?.recurring);
-		indexes.state = states.findIndex((item) => item.value === data?.company_state);
+		indexes.category = categories.findIndex((item) => item.value === data?.category);
+		if (data?.company_state?.length) {
+			noValue = false;
+			indexes.state = states.findIndex((item) => item.value === data?.company_state);
+		} else {
+			noValue = true;
+		}
 		await tick();
 		record.update = true;
 		record.id = data?.id;
@@ -156,9 +162,10 @@
 			amount: data?.amount || '',
 			account_email: data?.account_email || ''
 		});
-		// formState.phoneValue = data?.company_phone || null;
 		formState.payDropDown = payTypes[indexes.pay].value || payTypes[0].value;
-		formState.stateDropDown = states[indexes.state].value || '';
+		formState.stateDropDown = states[indexes.state]?.value ?? '';
+		formState.categoryDropDown =
+			categories[indexes.category]?.value ?? (categories.length ? categories[0].value : '');
 	};
 
 	const resetVairables = () => {
@@ -167,6 +174,7 @@
 		noValue = true;
 		indexes.pay = 0;
 		indexes.state = 0;
+		indexes.categories = 0;
 	};
 </script>
 
@@ -291,6 +299,7 @@
 							<Combobox
 								list={categories}
 								bind:result={formState.categoryDropDown}
+								index={indexes.category}
 								defaultText="Category"
 							/>
 						</div>
