@@ -9,6 +9,7 @@
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
 	import { expensesSchema } from '$lib/utils/schemas.js';
+	import BarChart from '$lib/components/BarChart.svelte';
 
 	let { data } = $props();
 	let handleEditRecord;
@@ -53,8 +54,9 @@
 		</Command.Root>
 	</section>
 	{#if !isEmpty(expenseRecord) && expenseRecord !== null}
-		<section>
+		<section class="space-y-5">
 			<RecordDetails data={expenseRecord} {handleEditRecord} collectionName="Expenses" />
+			<BarChart />
 		</section>
 	{/if}
 {:else}

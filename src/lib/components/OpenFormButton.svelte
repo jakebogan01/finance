@@ -219,7 +219,7 @@
 		<Dialog.Trigger
 			type="button"
 			onclick={resetState}
-			class="text-grey-0 flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! md:hover:border-yellow-200 md:hover:text-yellow-200"
+			class="flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! text-white-0 md:hover:border-yellow-200 md:hover:text-yellow-200"
 			asChild
 		>
 			<ArrowRightIcon class="size-6" strokeWidth="1.5" />
