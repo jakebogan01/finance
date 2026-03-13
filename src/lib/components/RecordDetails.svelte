@@ -93,7 +93,7 @@
 	});
 </script>
 
-<div class="lg:col-start-3 lg:row-end-1">
+<div id={data?.slug} class="lg:col-start-3 lg:row-end-1">
 	<h3 class="sr-only">Details</h3>
 	<div
 		class="overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-30 sm:p-5"
