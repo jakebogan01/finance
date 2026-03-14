@@ -10,6 +10,12 @@
 
 	let expenseHistory = $derived(historyMap?.[expenseId] ?? []);
 	let years = $derived([...new Set(expenseHistory.map((h) => h.year))].sort());
+	let barPadding = $derived.by(() => {
+		if (!chartData || chartData.length === 0) return 0.35; // default
+		if (chartData.length === 1) return 0.7; // more space around single bar
+		if (chartData.length === 2) return 0.5; // optional tweak for 2 bars
+		return 0.35; // normal padding for multiple bars
+	});
 	let activeChart = $state();
 
 	$effect(() => {
@@ -103,7 +109,7 @@
 				<BarChart
 					bind:context
 					data={chartData}
-					xScale={scaleBand().padding(0.35)}
+					xScale={scaleBand().padding(barPadding)}
 					x="month"
 					axis="x"
 					rule={false}
@@ -115,8 +121,8 @@
 							initialY: context?.height,
 							initialHeight: 0,
 							motion: {
-								y: { type: 'tween', duration: 500, easing: cubicInOut },
-								height: { type: 'tween', duration: 500, easing: cubicInOut }
+								y: { type: 'tween', duration: 300, easing: cubicInOut },
+								height: { type: 'tween', duration: 300, easing: cubicInOut }
 							}
 						},
 						highlight: { area: false },
