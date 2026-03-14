@@ -30,10 +30,14 @@
 	import { page } from '$app/state';
 	import { tick } from 'svelte';
 
-	let { title, multiStepForm = true, schema, handleEditRecord = $bindable() } = $props();
+	let { title, multiStepForm = true, schema, handleEditRecord = $bindable(), data } = $props();
 
 	let open = $state(false);
 	let noValue = $state(false);
+
+	const now = new Date();
+	const month = now.getMonth() + 1;
+	const year = now.getFullYear();
 
 	let indexes = $state({
 		pay: 0,
@@ -93,12 +97,40 @@
 		return cleanObject(values);
 	};
 
+	const createExpenseHistory = async (collection, record, amount) => {
+		const history = await pb.collection('expense_history').create({
+			expense: record.id,
+			created_by: pb?.authStore?.record?.id,
+			amount: amount,
+			month: month,
+			year: year
+		});
+
+		await pb.collection(collection).update(record.id, {
+			current_history: history.id
+		});
+	};
+
+	const updateExpenseHistory = async (collection, record, amount) => {
+		const current = data?.expand?.current_history;
+
+		if (current.month === month && current.year === year) {
+			await pb.collection('expense_history').update(current.id, { amount: amount });
+		} else {
+			await createExpenseHistory(collection, record, amount);
+		}
+	};
+
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
 		const collection = multiStepForm ? 'income' : 'expenses';
 
 		if (record.update) {
-			await pb.collection(collection).update(record.id, payload);
+			payload.account_email = payload.account_email || '';
+			const record = await pb.collection(collection).update(data.id, payload);
+			if (collection === 'expenses') {
+				await updateExpenseHistory(collection, record, values.amount);
+			}
 
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 
@@ -108,7 +140,10 @@
 				EXPENSESLUG.value = `#${payload.slug}`;
 			}
 		} else {
-			await pb.collection(collection).create(payload);
+			const record = await pb.collection(collection).create(payload);
+			if (collection === 'expenses') {
+				await createExpenseHistory(collection, record, values.amount);
+			}
 		}
 	};
 
@@ -204,7 +239,7 @@
 			company_city: data?.company_city || '',
 			company_zip: data?.company_zip || '',
 			title: data?.title || '',
-			amount: data?.amount || '',
+			amount: data?.expand?.current_history?.amount || '',
 			account_email: data?.account_email || ''
 		});
 
@@ -268,37 +303,41 @@
 								defaultText="Recurring"
 							/>
 						</div>
-						<div class="col-span-3">
+						<div class="col-span-2">
 							{@render inputField('Pay', 'pay', 'off', 'text', true)}
 						</div>
-						<div class="col-span-3">
+						<div class="col-span-4">
 							{@render inputField('Position', 'position')}
 						</div>
 					</div>
 					<div class:hidden={formState.step !== 2} class="grid grid-cols-6 gap-6.5">
 						<div class="col-span-full">
-							{@render inputField('Company Email', 'company_email', 'email', 'email')}
+							{@render inputField('Company Email (Opt.)', 'company_email', 'email', 'email')}
 						</div>
 						<div class="relative col-span-3">
-							<PhoneInput country="US" placeholder="Phone" bind:value={formState.phoneValue} />
+							<PhoneInput
+								country="US"
+								placeholder="Phone (Opt.)"
+								bind:value={formState.phoneValue}
+							/>
 						</div>
 						<div class="relative col-span-3">
 							<DatePicker bind:value={formState.dateValue} />
 						</div>
 						<div class="col-span-full">
-							{@render inputField('Managers Name', 'manager_name')}
+							{@render inputField('Managers Name (Opt.)', 'manager_name')}
 						</div>
 						<div class="col-span-full">
-							{@render inputField('Street Address', 'company_address', 'address-line1')}
+							{@render inputField('Street Address (Opt.)', 'company_address', 'address-line1')}
 						</div>
 						<div class="col-span-full">
-							{@render inputField('City', 'company_city', 'address-level2')}
+							{@render inputField('City (Opt.)', 'company_city', 'address-level2')}
 						</div>
 						<div class="relative col-span-3">
 							<Combobox
 								list={states}
 								bind:result={formState.stateDropDown}
-								defaultText="State"
+								defaultText="State (Opt.)"
 								{noValue}
 								index={indexes.state}
 								class="ml-18 w-[56%]"
@@ -306,7 +345,7 @@
 						</div>
 						<div class="col-span-3">
 							{@render inputField(
-								'Zip Code',
+								'Zip (Opt.)',
 								'company_zip',
 								'postal-code',
 								'text',
@@ -341,7 +380,7 @@
 							/>
 						</div>
 						<div class="col-span-full">
-							{@render inputField('Account Email (optional)', 'account_email', 'email', 'email')}
+							{@render inputField('Account Email (Opt.)', 'account_email', 'email', 'email')}
 						</div>
 					</div>
 				{/if}

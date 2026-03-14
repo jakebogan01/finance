@@ -13,7 +13,8 @@ export const load = async () => {
 			filter: `user_id="${pb?.authStore?.record?.id}"`
 		});
 		const expenseRecords = await pb.collection('expenses').getFullList({
-			filter: `user_id="${pb?.authStore?.record?.id}"`
+			filter: `user_id="${pb?.authStore?.record?.id}"`,
+			expand: 'current_history'
 		});
 		return {
 			incomeRecords: incomeRecords || [],

@@ -34,7 +34,7 @@
 			<Button
 				{...props}
 				class={[
-					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-5! md:hover:border-yellow-200',
+					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200',
 					selectedValue ? 'text-white-0' : 'text-grey-200'
 				]}
 				role="combobox"

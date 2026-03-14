@@ -49,7 +49,7 @@
 	const activeSeries = $derived(seriesMap[activeChart]);
 </script>
 
-<Card.Root class="space-y-1 bg-linear-to-b from-grey-1000 to-grey-800">
+<Card.Root class="flex flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800">
 	<Card.Header class="flex items-center justify-between px-4">
 		<Card.Title>Payment History</Card.Title>
 		<div class="flex">
@@ -64,8 +64,8 @@
 			{/each}
 		</div>
 	</Card.Header>
-	<Card.Content class="mt-6 px-0!">
-		<Chart.Container config={chartConfig} class="aspect-auto h-49.5 w-full">
+	<Card.Content class="mt-6 flex flex-1 flex-col px-0!">
+		<Chart.Container config={chartConfig} class="aspect-auto w-full flex-1">
 			<BarChart
 				bind:context
 				data={chartData}

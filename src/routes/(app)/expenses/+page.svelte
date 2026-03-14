@@ -44,6 +44,7 @@
 					schema={expensesSchema}
 					bind:handleEditRecord
 					multiStepForm={false}
+					data={expenseRecord}
 				/>
 				<div class="flex items-center">
 					<FilterDropDown bind:filters sortType="amount" />
@@ -54,7 +55,7 @@
 		</Command.Root>
 	</section>
 	{#if !isEmpty(expenseRecord) && expenseRecord !== null}
-		<section class="space-y-5">
+		<section class="flex max-h-168.5 flex-col space-y-5">
 			<RecordDetails data={expenseRecord} {handleEditRecord} collectionName="Expenses" />
 			<BarChart />
 		</section>

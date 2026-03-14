@@ -59,7 +59,7 @@
 			},
 			{
 				label: 'Compensation',
-				value: usdFormatter.format(data.pay || data.amount),
+				value: usdFormatter.format(data.pay || data.expand.current_history.amount),
 				icon: HandCoinsIcon
 			},
 			{
@@ -102,7 +102,7 @@
 			<div class="text-grey-600">
 				<dt class="text-preset-6-medium w-50 truncate">{data?.company_name || data?.title}</dt>
 				<dd class="text-preset-3-medium">
-					{usdFormatter.format(data?.income || data?.amount)}<span
+					{usdFormatter.format(data?.income || data?.expand?.current_history?.amount)}<span
 						class="text-preset-1 text-grey-100">/ {data?.recurring}</span
 					>
 				</dd>

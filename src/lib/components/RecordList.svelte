@@ -51,7 +51,7 @@
 									</a>
 								</p>
 								<p>
-									{usdFormatter.format(item?.income || item?.amount)}
+									{usdFormatter.format(item?.income || item?.expand?.current_history?.amount)}
 									<span class="text-preset-1 text-grey-50 capitalize">{item?.recurring}</span>
 								</p>
 							</div>

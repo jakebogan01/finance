@@ -38,7 +38,12 @@
 	<section class="lg:max-h-168">
 		<Command.Root class="space-y-5 bg-transparent text-white-0">
 			<div class="flex items-center justify-between gap-5">
-				<OpenFormButton title="Add Income" schema={incomeSchema} bind:handleEditRecord />
+				<OpenFormButton
+					title="Add Income"
+					schema={incomeSchema}
+					bind:handleEditRecord
+					data={incomeRecord}
+				/>
 				<div class="flex items-center">
 					<FilterDropDown bind:filters sortType="income" />
 					<SearchExpand class="hidden md:flex" />
