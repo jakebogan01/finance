@@ -57,7 +57,7 @@
 	{#if !isEmpty(expenseRecord) && expenseRecord !== null}
 		<section class="flex max-h-168.5 flex-col space-y-5">
 			<RecordDetails data={expenseRecord} {handleEditRecord} collectionName="Expenses" />
-			<BarChart />
+			<BarChart historyMap={data.expenseHistoryMap} expenseId={expenseRecord.id} />
 		</section>
 	{/if}
 {:else}
