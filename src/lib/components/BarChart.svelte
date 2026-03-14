@@ -1,6 +1,7 @@
 <script>
 	import * as Chart from '$lib/components/ui/chart/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { fillMissingMonths } from '$lib/utils/misc.js';
 	import { BarChart, Highlight } from 'layerchart';
 	import { cubicInOut } from 'svelte/easing';
 	import { scaleBand } from 'd3-scale';
@@ -35,17 +36,17 @@
 	let chartData = $derived.by(() => {
 		if (!activeChart) return [];
 		const activeYear = Number(activeChart.replace('year_', ''));
-		const result = [];
-		for (const record of expenseHistory) {
-			if (record.year !== activeYear) continue;
-			const monthName = months[record.month - 1];
-			result.push({
-				month: monthName,
-				[`year_${record.year}`]: record.amount
-			});
-		}
-		result.sort((a, b) => months.indexOf(a.month) - months.indexOf(b.month));
-		return result;
+		if (!expenseHistory || expenseHistory.length === 0) return [];
+		const yearHistory = expenseHistory.filter((h) => h.year <= activeYear);
+		const filled = fillMissingMonths(yearHistory);
+		const monthsData = filled
+			.filter((h) => h.year === activeYear)
+			.map((h) => ({
+				month: months[h.month - 1],
+				[`year_${h.year}`]: h.amount
+			}));
+		monthsData.sort((a, b) => months.indexOf(a.month) - months.indexOf(b.month));
+		return monthsData;
 	});
 
 	let chartConfig = $derived.by(() => {
