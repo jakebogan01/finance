@@ -95,7 +95,12 @@
 			{#each years as year, i (i)}
 				<button
 					data-active={activeChart === `year_${year}`}
-					class="text-preset-2 cursor-pointer border-s border-grey-775 px-2.5 py-0.5 text-grey-50 capitalize last:rounded-r-md data-[active=true]:border-grey-150 data-[active=true]:bg-grey-750 data-[active=true]:text-white-0 md:transition-colors md:hover:border-grey-150 md:hover:bg-grey-750 md:hover:text-white-0"
+					class={[
+						'text-preset-2 cursor-pointer border-grey-775 px-2.5 py-0.5 text-grey-50 capitalize data-[active=true]:border-grey-150 data-[active=true]:text-white-0 md:transition-colors md:hover:border-grey-150 md:hover:bg-grey-750 md:hover:text-white-0',
+						years?.length > 1
+							? 'border-s last:rounded-r-md data-[active=true]:bg-grey-750'
+							: 'rounded-md'
+					]}
 					onclick={() => (activeChart = `year_${year}`)}
 				>
 					{year}
