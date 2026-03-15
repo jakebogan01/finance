@@ -37,7 +37,7 @@
 </script>
 
 <section class="flex min-w-0 flex-col space-y-5">
-	<Carousel.Root class="space-y-5 ">
+	<Carousel.Root class="space-y-5">
 		<Command.Root class="space-y-5 bg-transparent text-white-0">
 			<div class="flex items-center justify-between gap-5">
 				<OpenFormButton

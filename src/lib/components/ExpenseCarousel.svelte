@@ -37,4 +37,5 @@
 			</Card.Root>
 		</Command.Item>
 	{/each}
+	<Command.Empty class="text-center flex-1">No results found.</Command.Empty>
 </Carousel.Content>
