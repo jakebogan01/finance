@@ -49,8 +49,10 @@
 				/>
 				<div class="flex items-center">
 					{#if dataList?.length > 0}
-						<Carousel.Previous class="mr-5" />
-						<Carousel.Next class="md:mr-5" />
+						{#if dataList.length > 3}
+							<Carousel.Previous class="mr-5" />
+							<Carousel.Next class="md:mr-5" />
+						{/if}
 						<SearchExpand class="hidden md:flex" />
 					{/if}
 				</div>
