@@ -10,7 +10,7 @@
 </script>
 
 <div
-	class="sticky top-0 z-40 flex shrink-0 items-center justify-between rounded-2xl border border-grey-300 bg-grey-1000 px-4 py-4 sm:rounded-20 sm:px-5 1126:static"
+	class="sticky top-0 z-40 flex shrink-0 items-center justify-between rounded-2xl border border-grey-300 bg-grey-1000 px-4 py-4 sm:rounded-20 sm:px-5 xl:static"
 >
 	<div class="flex items-center justify-center space-x-6">
 		<Avatar />
@@ -24,9 +24,9 @@
 		commandfor="sidebar"
 		Icon={MenuIcon}
 		size="6"
-		class="1126:hidden"
+		class="xl:hidden"
 	/>
 	{#if page.url.pathname !== SETTINGS}
-		<CircleButton href={resolve(SETTINGS)} Icon={SettingsIcon} size="6" class="hidden 1126:flex" />
+		<CircleButton href={resolve(SETTINGS)} Icon={SettingsIcon} size="6" class="hidden xl:flex" />
 	{/if}
 </div>

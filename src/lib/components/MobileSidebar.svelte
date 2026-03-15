@@ -11,7 +11,7 @@
 </script>
 
 <el-dialog bind:this={dialogEl}>
-	<dialog id="sidebar" class="backdrop:bg-transparent 1126:hidden">
+	<dialog id="sidebar" class="backdrop:bg-transparent xl:hidden">
 		<el-dialog-backdrop
 			class="fixed inset-0 bg-grey-1100/75 backdrop-blur-3px transition-opacity duration-300 ease-linear data-closed:opacity-0"
 		></el-dialog-backdrop>
@@ -27,7 +27,7 @@
 						size="6"
 						command="close"
 						commandfor="sidebar"
-						class="1126:hidden"
+						class="xl:hidden"
 					/>
 				</div>
 

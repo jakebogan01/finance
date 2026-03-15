@@ -7,6 +7,7 @@
 	import * as Command from '$lib/components/ui/command/index.js';
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
+	import PieChart from '$lib/components/PieChart.svelte';
 	import { expensesSchema } from '$lib/utils/schemas.js';
 	import { SIGNIN } from '$lib/utils/constants';
 	import { onMount } from 'svelte';
@@ -65,5 +66,9 @@
 	{#if data?.expenseHistory?.length > 0}
 		<DashboardBarChart expenseHistory={data?.expenseHistory} budget={2000} />
 	{/if}
+	<div class="flex items-center gap-5">
+		<PieChart />
+		<PieChart />
+	</div>
 </section>
 <section class="flex max-h-168.5 flex-col space-y-5"></section>

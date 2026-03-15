@@ -148,7 +148,10 @@
 </script>
 
 <Card.Root
-	class={['flex flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800', className]}
+	class={[
+		'flex max-h-65 flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800',
+		className
+	]}
 >
 	<Card.Header class="flex items-center justify-between px-4">
 		<div class="flex flex-1 flex-col justify-center gap-1">
@@ -165,7 +168,7 @@
 		</div>
 	</Card.Header>
 	<Card.Content class="mt-6 flex flex-1 flex-col px-0!">
-		<Chart.Container config={chartConfig} class="aspect-auto w-full flex-1">
+		<Chart.Container config={chartConfig} class="aspect-auto min-h-39 w-full flex-1">
 			<BarChart
 				bind:context
 				data={chartData}
