@@ -9,7 +9,16 @@
 	let { historyMap, expenseId, class: className } = $props();
 
 	let expenseHistory = $derived(historyMap?.[expenseId] ?? []);
-	let years = $derived([...new Set(expenseHistory.map((h) => h.year))].sort());
+	let years = $derived.by(() => {
+		if (!expenseHistory.length) return [];
+		const startYear = Math.min(...expenseHistory.map((h) => h.year));
+		const endYear = new Date().getFullYear();
+		const range = [];
+		for (let y = startYear; y <= endYear; y++) {
+			range.push(y);
+		}
+		return range;
+	});
 	let barPadding = $derived.by(() => {
 		if (!chartData || chartData.length === 0) return 0.35; // default
 		if (chartData.length === 1) return 0.7; // more space around single bar

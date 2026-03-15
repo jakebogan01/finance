@@ -1,4 +1,5 @@
 <script>
+	import DashboardBarChart from '$lib/components/DashboardBarChart.svelte';
 	import { authCheck, filterStatus, sortRecords } from '$lib/utils/misc';
 	import ExpenseCarousel from '$lib/components/ExpenseCarousel.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
@@ -33,10 +34,9 @@
 		const slug = EXPENSESLUG.value.replace(/#/g, '');
 		return dataList.find((item) => item.slug === slug) ?? {};
 	});
-	console.log(dataList);
 </script>
 
-<section class="min-w-0 space-y-5">
+<section class="flex min-w-0 flex-col space-y-5">
 	<Carousel.Root class="space-y-5 ">
 		<Command.Root class="space-y-5 bg-transparent text-white-0">
 			<div class="flex items-center justify-between gap-5">
@@ -60,5 +60,6 @@
 			{/if}
 		</Command.Root>
 	</Carousel.Root>
+	<DashboardBarChart />
 </section>
 <section class="flex max-h-168.5 flex-col space-y-5"></section>
