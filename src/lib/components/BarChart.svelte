@@ -6,7 +6,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { scaleBand } from 'd3-scale';
 
-	let { historyMap, expenseId } = $props();
+	let { historyMap, expenseId, class: className } = $props();
 
 	let expenseHistory = $derived(historyMap?.[expenseId] ?? []);
 	let years = $derived([...new Set(expenseHistory.map((h) => h.year))].sort());
@@ -88,7 +88,9 @@
 	);
 </script>
 
-<Card.Root class="flex flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800">
+<Card.Root
+	class={['flex flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800', className]}
+>
 	<Card.Header class="flex items-center justify-between px-4">
 		<Card.Title>Payment History</Card.Title>
 		<div class="flex">

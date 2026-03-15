@@ -261,7 +261,7 @@
 			Add new
 		</Dialog.Trigger>
 
-		<Dialog.Content onOpenAutoFocus={(e) => e.preventDefault()}>
+		<Dialog.Content>
 			<Dialog.Header class={[multiStepForm ? 'text-center' : 'text-left']}>
 				<Dialog.Title>
 					<span class="text-preset-5-semibold">{title}</span>

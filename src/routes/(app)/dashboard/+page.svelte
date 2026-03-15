@@ -33,6 +33,7 @@
 		const slug = EXPENSESLUG.value.replace(/#/g, '');
 		return dataList.find((item) => item.slug === slug) ?? {};
 	});
+	console.log(dataList);
 </script>
 
 <section class="min-w-0 space-y-5">
@@ -47,12 +48,16 @@
 					data={expenseRecord}
 				/>
 				<div class="flex items-center">
-					<Carousel.Previous class="mr-5" />
-					<Carousel.Next class="md:mr-5" />
-					<SearchExpand class="hidden md:flex" />
+					{#if dataList?.length > 0}
+						<Carousel.Previous class="mr-5" />
+						<Carousel.Next class="md:mr-5" />
+						<SearchExpand class="hidden md:flex" />
+					{/if}
 				</div>
 			</div>
-			<ExpenseCarousel {dataList} />
+			{#if dataList?.length > 0}
+				<ExpenseCarousel {dataList} />
+			{/if}
 		</Command.Root>
 	</Carousel.Root>
 </section>
