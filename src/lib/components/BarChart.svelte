@@ -103,7 +103,7 @@
 	<Card.Header class="flex items-center justify-between px-4">
 		<Card.Title>Payment History</Card.Title>
 		<div class="flex">
-			{#each years as year, i (i)}
+			{#each years as year (year)}
 				<button
 					data-active={activeChart === `year_${year}`}
 					class={[
