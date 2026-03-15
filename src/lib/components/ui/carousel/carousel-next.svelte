@@ -21,10 +21,8 @@
 	{size}
 	aria-disabled={!emblaCtx.canScrollNext}
 	class={cn(
-		'absolute size-8 rounded-full',
-		emblaCtx.orientation === 'horizontal'
-			? '-end-12 top-1/2 -translate-y-1/2'
-			: 'start-1/2 -bottom-12 -translate-x-1/2 rotate-90',
+		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200',
+		emblaCtx.orientation === 'horizontal' ? '' : '',
 		className
 	)}
 	onclick={emblaCtx.scrollNext}
@@ -32,6 +30,6 @@
 	bind:ref
 	{...restProps}
 >
-	<ArrowRightIcon class="size-4" />
+	<ArrowRightIcon class="size-6" strokeWidth="1.5" />
 	<span class="sr-only">Next slide</span>
 </Button>

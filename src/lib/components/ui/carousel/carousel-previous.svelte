@@ -21,10 +21,8 @@
 	{size}
 	aria-disabled={!emblaCtx.canScrollPrev}
 	class={cn(
-		'absolute size-8 rounded-full',
-		emblaCtx.orientation === 'horizontal'
-			? '-start-12 top-1/2 -translate-y-1/2'
-			: 'start-1/2 -top-12 -translate-x-1/2 rotate-90',
+		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200',
+		emblaCtx.orientation === 'horizontal' ? '' : '',
 		className
 	)}
 	onclick={emblaCtx.scrollPrev}
@@ -32,6 +30,6 @@
 	{...restProps}
 	bind:ref
 >
-	<ArrowLeftIcon class="size-4" />
+	<ArrowLeftIcon class="size-6" strokeWidth="1.5" />
 	<span class="sr-only">Previous slide</span>
 </Button>
