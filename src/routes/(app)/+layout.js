@@ -32,11 +32,29 @@ export const load = async () => {
 			expenseHistoryMap[record.expense].push(record);
 		}
 
+		const activeIncome = incomeRecords.filter((r) => r.status);
+		const activeExpenses = expenseRecords.filter((r) => r.status);
+		const totalMonthlyIncome = activeIncome.reduce((sum, r) => sum + r.income, 0);
+		const totalMonthlyExpenses = activeExpenses.reduce((sum, r) => {
+			return sum + (r.expand?.current_history?.amount ?? 0);
+		}, 0);
+		const remainingIncome = totalMonthlyIncome - totalMonthlyExpenses;
+		// console.log('Income Records: ', incomeRecords);
+		// console.log('Expense Records: ', expenseRecords);
+		// console.log('Expense History: ', expenseHistory);
+		// console.log('Expense History Map: ', expenseHistoryMap);
+		// console.log('Total Income: ', totalMonthlyIncome);
+		// console.log('Total Expenses: ', totalMonthlyExpenses);
+		// console.log('Remaining Income: ', remainingIncome);
+
 		return {
 			incomeRecords: incomeRecords ?? [],
 			expenseRecords: expenseRecords ?? [],
 			expenseHistory: expenseHistory ?? [],
-			expenseHistoryMap
+			expenseHistoryMap,
+			totalMonthlyIncome: totalMonthlyIncome ?? 0,
+			totalMonthlyExpenses: totalMonthlyExpenses ?? 0,
+			remainingIncome: remainingIncome ?? 0
 		};
 	} catch (error) {
 		console.dir(error?.response, { depth: null });

@@ -60,6 +60,8 @@
 			{/if}
 		</Command.Root>
 	</Carousel.Root>
-	<DashboardBarChart />
+	{#if data?.expenseHistory?.length > 0}
+		<DashboardBarChart expenseHistory={data?.expenseHistory} budget={2000} />
+	{/if}
 </section>
 <section class="flex max-h-168.5 flex-col space-y-5"></section>

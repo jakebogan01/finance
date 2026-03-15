@@ -5,54 +5,146 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { scaleBand } from 'd3-scale';
 
-	let { class: className } = $props();
+	let { expenseHistory = [], budget = 2000, class: className } = $props();
 
-	const chartData = [
-		{ month: 'January', expenses: 1865, budget: 2000 },
-		{ month: 'February', expenses: 1978, budget: 2000 },
-		{ month: 'March', expenses: 1893, budget: 2000 },
-		{ month: 'April', expenses: 2018, budget: 2000 },
-		{ month: 'May', expenses: 1679, budget: 2000 },
-		{ month: 'June', expenses: 1978, budget: 2000 },
-		{ month: 'July', expenses: 2190, budget: 2000 },
-		{ month: 'August', expenses: 1789, budget: 2000 },
-		{ month: 'September', expenses: 1678, budget: 2000 },
-		{ month: 'October', expenses: 1789, budget: 2000 },
-		{ month: 'November', expenses: 1678, budget: 2000 }
+	let context = $state();
+
+	const months = [
+		'January',
+		'February',
+		'March',
+		'April',
+		'May',
+		'June',
+		'July',
+		'August',
+		'September',
+		'October',
+		'November',
+		'December'
 	];
+
+	const currentYear = new Date().getFullYear();
+	const currentMonth = new Date().getMonth() + 1;
+
+	/*
+	Aggregate monthly totals
+	*/
+	let monthlyTotals = $derived.by(() => {
+		const map = {};
+
+		for (const record of expenseHistory) {
+			if (record.year !== currentYear) continue;
+
+			if (!map[record.month]) {
+				map[record.month] = 0;
+			}
+
+			map[record.month] += record.amount;
+		}
+
+		return map;
+	});
+
+	/*
+	Determine chart start month
+	*/
+	let startMonth = $derived.by(() => {
+		const firstExpense = expenseHistory
+			.map((e) => new Date(e.year, e.month - 1))
+			.sort((a, b) => a - b)[0];
+
+		if (!firstExpense) return 1;
+
+		if (firstExpense.getFullYear() < currentYear) {
+			return 1;
+		}
+
+		return firstExpense.getMonth() + 1;
+	});
+
+	/*
+	Build chart data
+	*/
+	let chartData = $derived.by(() => {
+		const data = [];
+
+		for (let m = startMonth; m <= currentMonth; m++) {
+			data.push({
+				month: months[m - 1],
+				expenses: monthlyTotals[m] ?? 0,
+				budget
+			});
+		}
+
+		return data;
+	});
+
+	let budgetStatus = $derived.by(() => {
+		if (!chartData.length) {
+			return {
+				period: 'This month',
+				label: 'No data',
+				color: 'text-grey-50'
+			};
+		}
+
+		const lastEntry = chartData[chartData.length - 1];
+
+		const isCurrentMonth = lastEntry.month === months[currentMonth - 1];
+
+		const period = isCurrentMonth ? 'This month' : 'Last month';
+
+		const diff = lastEntry.expenses - lastEntry.budget;
+
+		if (diff > 0) {
+			return {
+				period,
+				label: `$${diff.toLocaleString()} over budget`,
+				color: 'text-red-400'
+			};
+		}
+
+		if (diff < 0) {
+			return {
+				period,
+				label: `$${Math.abs(diff).toLocaleString()} under budget`,
+				color: 'text-green-200'
+			};
+		}
+
+		return {
+			period,
+			label: 'Exactly on budget',
+			color: 'text-yellow-200'
+		};
+	});
+
+	let barPadding = $derived.by(() => {
+		if (!chartData || chartData.length === 0) return 0.35;
+		if (chartData.length === 1) return 0.7;
+		if (chartData.length === 2) return 0.5;
+		return 0.35;
+	});
 
 	const chartConfig = {
 		expenses: { label: 'expenses', color: 'var(--yellow-200)' },
 		budget: { label: 'budget', color: 'var(--yellow-100)' }
 	};
 
-	let context = $state();
-	let activeChart = $state('both');
-
-	let barPadding = $derived.by(() => {
-		if (!chartData || chartData.length === 0) return 0.35; // default
-		if (chartData.length === 1) return 0.7; // more space around single bar
-		if (chartData.length === 2) return 0.5; // optional tweak for 2 bars
-		return 0.35; // normal padding for multiple bars
-	});
-
-	const seriesMap = {
-		both: [
-			{
-				key: 'expenses',
-				label: 'expenses',
-				color: chartConfig.expenses.color,
-				props: { rounded: 'bottom' }
-			},
-			{
-				key: 'budget',
-				label: 'budget',
-				color: chartConfig.budget.color
-			}
-		]
-	};
-
-	const activeSeries = $derived(seriesMap[activeChart]);
+	const activeSeries = [
+		{
+			key: 'expenses',
+			label: 'expenses',
+			color: chartConfig.expenses.color,
+			props: { rounded: 'bottom' }
+		},
+		{
+			key: 'budget',
+			label: 'budget',
+			color: chartConfig.budget.color
+		}
+	];
 </script>
 
 <Card.Root
@@ -62,8 +154,13 @@
 		<div class="flex flex-1 flex-col justify-center gap-1">
 			<Card.Title>This Year's Expenditures</Card.Title>
 			<Card.Description>
-				<span class="text-preset-2 mt-1 text-grey-50">Last month:</span>
-				<span class="text-preset-2 text-green-200">Under budget</span>
+				<span class="text-preset-2 mt-1 text-grey-50">
+					{budgetStatus.period}:
+				</span>
+
+				<span class={['text-preset-2', budgetStatus.color]}>
+					{budgetStatus.label}
+				</span>
 			</Card.Description>
 		</div>
 	</Card.Header>
