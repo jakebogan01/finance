@@ -1,5 +1,5 @@
 <script>
-	import { isEmpty, filterStatus, sortRecords } from '$lib/utils/misc.js';
+	import { isEmpty, filterStatus, sortRecords, authCheck } from '$lib/utils/misc.js';
 	import FilterDropDown from '$lib/components/FilterDropDown.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
@@ -9,8 +9,13 @@
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import RecordList from '$lib/components/RecordList.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
+	import { SIGNIN } from '$lib/utils/constants.js';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
+
+	onMount(() => authCheck(303, SIGNIN, true));
+
 	let handleEditRecord;
 	let filters = $state({
 		status: 'all',

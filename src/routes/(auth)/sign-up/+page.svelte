@@ -5,13 +5,17 @@
 	import { DASHBOARD, SIGNIN } from '$lib/utils/constants.js';
 	import AuthForm from '$lib/components/AuthForm.svelte';
 	import { validator } from '@felte/validator-zod';
+	import { authCheck } from '$lib/utils/misc.js';
 	import reporterDom from '@felte/reporter-dom';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import { resolve } from '$app/paths';
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
+	import { onMount } from 'svelte';
 	import * as zod from 'zod';
+
+	onMount(() => authCheck());
 
 	let props = {
 		linkText: 'Sign in',
