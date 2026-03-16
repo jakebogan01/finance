@@ -51,10 +51,11 @@ export const load = async () => {
 			incomeRecords: incomeRecords ?? [],
 			expenseRecords: expenseRecords ?? [],
 			expenseHistory: expenseHistory ?? [],
-			expenseHistoryMap,
+			expenseHistoryMap: expenseHistoryMap ?? {},
 			totalMonthlyIncome: totalMonthlyIncome ?? 0,
 			totalMonthlyExpenses: totalMonthlyExpenses ?? 0,
-			remainingIncome: remainingIncome ?? 0
+			remainingIncome: remainingIncome ?? 0,
+			activeExpenses: activeExpenses ?? []
 		};
 	} catch (error) {
 		console.dir(error?.response, { depth: null });

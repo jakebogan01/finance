@@ -120,7 +120,6 @@
 							</div>
 							{#if item.value !== undefined}
 								<span class="text-foreground font-mono font-medium tabular-nums">
-									{console.log(typeof item.value)}
 									{usdFormatter.format(item.value)}
 								</span>
 							{/if}
