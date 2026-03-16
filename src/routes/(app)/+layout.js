@@ -41,6 +41,8 @@ export const load = async () => {
 		const remainingIncome = totalMonthlyIncome - totalMonthlyExpenses;
 		// console.log('Income Records: ', incomeRecords);
 		// console.log('Expense Records: ', expenseRecords);
+		// console.log('Active Income:', activeIncome);
+		// console.log('Active Expenses:', activeExpenses);
 		// console.log('Expense History: ', expenseHistory);
 		// console.log('Expense History Map: ', expenseHistoryMap);
 		// console.log('Total Income: ', totalMonthlyIncome);

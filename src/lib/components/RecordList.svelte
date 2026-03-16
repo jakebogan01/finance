@@ -46,7 +46,7 @@
 								</div>
 							</div>
 							<div class="min-w-0 flex-auto">
-								<p class="text-preset-3-medium truncate">
+								<p class="text-preset-3-medium max-w-50 truncate sm:max-w-full lg:max-w-70">
 									<a href={`#${item?.slug}`} onclick={() => handleSlug(item?.slug)}>
 										<span class="absolute inset-x-0 -top-px bottom-0"></span>
 										{item?.company_name || item?.title}

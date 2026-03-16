@@ -14,6 +14,7 @@
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { inputField } from '$lib/snippets/InputField.svelte';
+	import { Switch } from '$lib/components/ui/switch/index.js';
 	import { PhoneInput } from '$lib/components/ui/phone-input';
 	import DatePicker from '$lib/components/DatePicker.svelte';
 	import FormButton from '$lib/components/FormButton.svelte';
@@ -34,6 +35,7 @@
 
 	let open = $state(false);
 	let noValue = $state(false);
+	let checked = $state(true);
 
 	const now = new Date();
 	const month = now.getMonth() + 1;
@@ -79,6 +81,7 @@
 
 		record.id = null;
 		record.update = false;
+		checked = true;
 
 		noValue = true;
 	};
@@ -86,7 +89,7 @@
 	const buildPayload = (values) => {
 		values.user_id = pb?.authStore?.record?.id;
 		values.slug = generateSlug(values.company_name || values.title);
-		values.status = true;
+		values.status = checked;
 
 		values.recurring = formState.payDropDown;
 		values.company_state = formState.stateDropDown;
@@ -121,12 +124,23 @@
 		}
 	};
 
+	const checkUpdatedValues = (payload) => {
+		payload.account_email = payload.account_email || '';
+		payload.company_address = payload.company_address || '';
+		payload.company_city = payload.company_city || '';
+		payload.company_email = payload.company_email || '';
+		payload.company_phone = payload.company_phone || null;
+		payload.company_zip = payload.company_zip || '';
+		payload.manager_name = payload.manager_name || '';
+		payload.company_state = payload.company_state === 'None' ? '' : payload.company_state;
+	};
+
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
 		const collection = multiStepForm ? 'income' : 'expenses';
 
 		if (record.update) {
-			payload.account_email = payload.account_email || '';
+			checkUpdatedValues(payload);
 			const record = await pb.collection(collection).update(data.id, payload);
 			if (collection === 'expenses') {
 				await updateExpenseHistory(collection, record, values.amount);
@@ -205,6 +219,7 @@
 	handleEditRecord = async (data) => {
 		open = true;
 		formState.step = 1;
+		checked = data?.status;
 
 		formState.phoneValue = data?.company_phone || null;
 
@@ -309,6 +324,10 @@
 						<div class="col-span-4">
 							{@render inputField('Position', 'position')}
 						</div>
+						<div class="col-span-full flex items-center justify-between">
+							<span class="flex grow flex-col text-grey-50">Active Status</span>
+							<Switch bind:checked />
+						</div>
 					</div>
 					<div class:hidden={formState.step !== 2} class="grid grid-cols-6 gap-6.5">
 						<div class="col-span-full">
@@ -381,6 +400,10 @@
 						</div>
 						<div class="col-span-full">
 							{@render inputField('Account Email (Opt.)', 'account_email', 'email', 'email')}
+						</div>
+						<div class="col-span-full flex items-center justify-between">
+							<span class="flex grow flex-col text-grey-50">Active Status</span>
+							<Switch bind:checked />
 						</div>
 					</div>
 				{/if}

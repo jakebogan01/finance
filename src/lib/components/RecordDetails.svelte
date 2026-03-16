@@ -100,7 +100,9 @@
 	>
 		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 p-4.25">
 			<div class="text-grey-600">
-				<dt class="text-preset-6-medium w-50 truncate">{data?.company_name || data?.title}</dt>
+				<dt class="text-preset-6-medium w-58 truncate sm:w-100 lg:w-76 xl:w-71">
+					{data?.company_name || data?.title}
+				</dt>
 				<dd class="text-preset-3-medium">
 					{usdFormatter.format(data?.income || data?.expand?.current_history?.amount)}<span
 						class="text-preset-1 text-grey-100">/ {data?.recurring}</span

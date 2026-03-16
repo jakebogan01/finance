@@ -5,7 +5,7 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { scaleBand } from 'd3-scale';
 
-	let { expenseHistory = [], budget = 2000, class: className } = $props();
+	let { expenseHistory = [], activeExpenses = null, budget = 2000, class: className } = $props();
 
 	let context = $state();
 
@@ -27,13 +27,24 @@
 	const currentYear = new Date().getFullYear();
 	const currentMonth = new Date().getMonth() + 1;
 
+	const activeExpenseIds = $derived.by(() => {
+		if (!activeExpenses) return null;
+		return new Set(activeExpenses.map((e) => e.id));
+	});
+
+	const filteredHistory = $derived.by(() => {
+		if (!activeExpenseIds) return expenseHistory;
+
+		return expenseHistory.filter((h) => activeExpenseIds.has(h.expense));
+	});
+
 	/*
 	Aggregate monthly totals
 	*/
 	let monthlyTotals = $derived.by(() => {
 		const map = {};
 
-		for (const record of expenseHistory) {
+		for (const record of filteredHistory) {
 			if (record.year !== currentYear) continue;
 
 			if (!map[record.month]) {
@@ -50,7 +61,7 @@
 	Determine chart start month
 	*/
 	let startMonth = $derived.by(() => {
-		const firstExpense = expenseHistory
+		const firstExpense = filteredHistory
 			.map((e) => new Date(e.year, e.month - 1))
 			.sort((a, b) => a - b)[0];
 

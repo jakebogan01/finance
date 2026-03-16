@@ -1,10 +1,10 @@
 <script>
 	import { isEmpty, filterStatus, sortRecords, authCheck } from '$lib/utils/misc.js';
+	import DefaultTemplate from '$lib/components/DefaultTemplate.svelte';
 	import FilterDropDown from '$lib/components/FilterDropDown.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
-	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
@@ -17,6 +17,7 @@
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
+	let hasData = $derived(data?.expenseRecords && data?.expenseRecords?.length > 0);
 	let handleEditRecord;
 	let filters = $state({
 		status: 'all',
@@ -29,7 +30,6 @@
 		list = sortRecords(list, filters.sort);
 		return list;
 	});
-	let hasData = $derived(dataList && dataList?.length > 0);
 	let expenseRecord = $derived.by(() => {
 		if (!EXPENSESLUG.value) return null;
 		if (!dataList || dataList.length === 0) return null;
@@ -66,18 +66,12 @@
 		</section>
 	{/if}
 {:else}
-	<Skeleton class="absolute inset-0 z-0 animate-none! rounded-2xl bg-grey-700" />
-	<div
-		class="absolute top-1/2 left-1/2 z-5 flex size-full -translate-1/2 items-center justify-center text-center"
-	>
-		<div class="space-y-4">
-			<span class="text-preset-3 block text-grey-50">No records</span>
-			<OpenFormButton
-				title="Create Expenses"
-				schema={expensesSchema}
-				bind:handleEditRecord
-				multiStepForm={false}
-			/>
-		</div>
-	</div>
+	<DefaultTemplate>
+		<OpenFormButton
+			title="Create Expenses"
+			schema={expensesSchema}
+			bind:handleEditRecord
+			multiStepForm={false}
+		/>
+	</DefaultTemplate>
 {/if}

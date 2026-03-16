@@ -37,6 +37,7 @@
 				reset();
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
+				toast.error(error?.message ?? 'Could not connect to the server');
 			}
 		}
 	});

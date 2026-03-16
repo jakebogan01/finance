@@ -14,9 +14,13 @@
 		</dt>
 		<dd class="text-preset-2 text-right text-grey-50">
 			{#if isAddress}
-				{item.value.address}<br />
-				{item.value.city}
-				{item.value.state}, {item.value.zip}
+				{item.value.address}
+				{#if item.value.address?.length > 0 && (item.value.city?.length > 0 || item.value.state || item.value.zip)}
+					<br />
+				{/if}
+				{item.value.city}{#if item.value.city?.length > 0 && item.value.state},{/if}
+				{item.value.state}
+				{item.value.zip}
 			{:else if item.copy}
 				<CopyButton
 					text={item.value}
