@@ -120,7 +120,7 @@
 		</div>
 	</Card.Header>
 	<Card.Content class="mt-6 flex flex-1 flex-col px-0!">
-		<Chart.Container config={chartConfig} class="aspect-auto min-h-50 w-full flex-1">
+		<Chart.Container config={chartConfig} class="aspect-auto min-h-50 w-full flex-1 lg:min-h-auto">
 			{#if activeSeries.length}
 				<BarChart
 					bind:context
