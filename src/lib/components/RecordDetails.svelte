@@ -104,9 +104,8 @@
 					{data?.company_name || data?.title}
 				</dt>
 				<dd class="text-preset-3-medium">
-					{usdFormatter.format(data?.income || data?.expand?.current_history?.amount)}<span
-						class="text-preset-1 text-grey-100">/ {data?.recurring}</span
-					>
+					{usdFormatter.format(data?.income || data?.expand?.current_history?.amount)}
+					<span class="text-preset-1 text-grey-100">/ per month</span>
 				</dd>
 			</div>
 			<div class="flex-none">

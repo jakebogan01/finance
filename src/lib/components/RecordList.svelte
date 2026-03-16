@@ -54,7 +54,9 @@
 								</p>
 								<p>
 									{usdFormatter.format(item?.income || item?.expand?.current_history?.amount)}
-									<span class="text-preset-1 text-grey-50 capitalize">{item?.recurring}</span>
+									<span class="text-preset-1 text-grey-50 capitalize"
+										>{item?.recurring || 'Per Month'}</span
+									>
 								</p>
 							</div>
 						</div>

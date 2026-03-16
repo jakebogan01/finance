@@ -102,20 +102,10 @@ export const states = [
 	'Wyoming'
 ].map((s) => ({ value: s.replace(/\s+/g, ' '), label: s }));
 
-export const payTypes = [
-	'Per Day',
-	'Per Week',
-	'Bi Weekly',
-	'Per Month',
-	'Semi Monthly',
-	'Bi Monthly',
-	'Quarterly',
-	'Semi annually',
-	'Annually',
-	'On Commission',
-	'On Demand',
-	'Irregularly'
-].map((s) => ({ value: s.toLowerCase().replace(/\s+/g, ' '), label: s }));
+export const payTypes = ['Per Month', 'Bi Weekly', 'Per Week'].map((s) => ({
+	value: s.toLowerCase().replace(/\s+/g, ' '),
+	label: s
+}));
 
 export const categories = ['Bill', 'Subscription'].map((s) => ({
 	value: s.replace(/\s+/g, '-'),

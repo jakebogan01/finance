@@ -188,6 +188,18 @@
 
 		onSubmit: async (values) => {
 			try {
+				let income = values.income;
+
+				if (income) {
+					if (formState.payDropDown === 'per week') {
+						income *= 4;
+					} else if (formState.payDropDown === 'bi weekly') {
+						income *= 2;
+					}
+				}
+
+				values.income = income;
+
 				await saveRecord(values);
 
 				await invalidateAll();
