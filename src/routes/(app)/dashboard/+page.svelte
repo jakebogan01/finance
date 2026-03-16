@@ -68,8 +68,18 @@
 	{/if}
 	<div class="flex items-center gap-5">
 		{#if data?.activeExpenses?.length > 0}
-			<PieChart activeExpenses={data.activeExpenses} />
-			<PieChart activeExpenses={data.activeExpenses} />
+			<PieChart
+				title="Total Expenses"
+				records={data?.activeExpenses}
+				labelKey="title"
+				valueFn={(r) => r.expand?.current_history?.amount ?? 0}
+			/>
+			<PieChart
+				title="Total Income"
+				records={data?.activeIncome}
+				labelKey="company_name"
+				valueKey="income"
+			/>
 		{/if}
 	</div>
 </section>

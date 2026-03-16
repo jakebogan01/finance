@@ -55,7 +55,8 @@ export const load = async () => {
 			totalMonthlyIncome: totalMonthlyIncome ?? 0,
 			totalMonthlyExpenses: totalMonthlyExpenses ?? 0,
 			remainingIncome: remainingIncome ?? 0,
-			activeExpenses: activeExpenses ?? []
+			activeExpenses: activeExpenses ?? [],
+			activeIncome: activeIncome ?? []
 		};
 	} catch (error) {
 		console.dir(error?.response, { depth: null });
