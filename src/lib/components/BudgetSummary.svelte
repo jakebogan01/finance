@@ -45,7 +45,7 @@
 </script>
 
 <Card.Root
-	class="flex flex-1 flex-col justify-between space-y-1 bg-linear-to-b from-grey-1000 to-grey-800 py-4! sm:py-5!"
+	class="flex flex-1 flex-col justify-between space-y-1 rounded-30 border border-grey-300 bg-grey-1000 py-4! sm:py-5!"
 >
 	<Card.Header class="px-4! sm:px-5!">
 		<Card.Title>Budget Summary</Card.Title>
@@ -64,7 +64,7 @@
 			<span
 				class={[
 					'flex flex-1 items-center justify-center',
-					afterBudget > 0 ? 'text-green-200' : 'text-red-200'
+					afterBudget > 0 ? 'text-green-200' : 'text-red-400'
 				]}
 			>
 				<span>{usdFormatter.format(Math.abs(afterBudget))}</span>

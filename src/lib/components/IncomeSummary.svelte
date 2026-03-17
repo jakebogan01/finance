@@ -7,11 +7,11 @@
 </script>
 
 <Card.Root
-	class="flex flex-1 flex-col justify-between space-y-1 bg-linear-to-b from-grey-1000 to-grey-800 py-4! sm:py-5!"
+	class="flex flex-1 flex-col justify-between space-y-1 rounded-30 border border-grey-300 bg-grey-1000 py-4! sm:py-5!"
 >
 	<Card.Header class="px-4! sm:px-5!">
 		<Card.Title>Monthly Summary</Card.Title>
-		<Card.Description class="text-preset-1 mt-1">
+		<Card.Description class="mt-1">
 			<span class="text-grey-50">- {usdFormatter.format(totalMonthlyExpenses)} Expenses</span>
 		</Card.Description>
 	</Card.Header>
@@ -26,7 +26,7 @@
 			<span
 				class={[
 					'flex flex-1 items-center justify-center',
-					remainingIncome > 0 ? 'text-green-200' : 'text-red-200'
+					remainingIncome > 0 ? 'text-green-200' : 'text-red-400'
 				]}
 			>
 				{usdFormatter.format(remainingIncome)}
