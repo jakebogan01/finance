@@ -25,6 +25,10 @@ export const load = async () => {
 			filter: `user_id="${userId}"`,
 			fields: 'amount, id'
 		});
+		const accountHistory = await pb.collection('account_history').getFullList({
+			filter: `user_id="${userId}"`,
+			sort: '-created'
+		});
 
 		const expenseHistoryMap = {};
 
@@ -63,7 +67,8 @@ export const load = async () => {
 			remainingIncome: remainingIncome ?? 0,
 			activeExpenses: activeExpenses ?? [],
 			activeIncome: activeIncome ?? [],
-			currentBudget: currentBudget ?? []
+			currentBudget: currentBudget ?? [],
+			accountHistory: accountHistory ?? []
 		};
 	} catch (error) {
 		console.dir(error?.response, { depth: null });

@@ -111,7 +111,7 @@
 				totalMonthlyExpenses={data?.totalMonthlyExpenses}
 			/>
 		</div>
-		<AccountHistory />
+		<AccountHistory accountHistory={data?.accountHistory} />
 	</section>
 {:else}
 	<DefaultTemplate message="No active data">

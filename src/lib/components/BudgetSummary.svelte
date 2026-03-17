@@ -1,8 +1,8 @@
 <script>
 	import { Separator } from '$lib/components/ui/separator/index.js';
+	import { usdFormatter, logHistory } from '$lib/utils/misc.js';
 	import { Slider } from '$lib/components/ui/slider/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import { usdFormatter } from '$lib/utils/misc.js';
 	import { invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase.js';
@@ -15,13 +15,17 @@
 
 	const handleBudget = async () => {
 		try {
+			const originalValue = currentBudget[0]?.amount || 0;
+
 			if (currentBudget?.length > 0) {
 				await pb.collection('budgets').update(currentBudget[0].id, { amount: budget });
+				await updateHistory(originalValue, budget);
 			} else {
 				await pb.collection('budgets').create({
 					user_id: pb.authStore.record.id,
 					amount: budget
 				});
+				await updateHistory(0, budget);
 			}
 			await invalidateAll();
 			toast.success('Budget successfully updated!');
@@ -29,6 +33,14 @@
 			console.dir(error?.response, { depth: null });
 			toast.error(error?.message ?? 'Could not connect to the server');
 		}
+	};
+
+	const updateHistory = async (old, updated) => {
+		await logHistory({
+			type: 'budget_update',
+			title: `Updated budget from ${usdFormatter.format(old)} to ${usdFormatter.format(updated)}`,
+			meta: { old, updated }
+		});
 	};
 </script>
 

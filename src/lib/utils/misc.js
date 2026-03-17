@@ -267,3 +267,26 @@ export const fillMissingMonths = (history) => {
 export const activeColors = ['bg-yellow-100', 'bg-blue-100', 'bg-green-100', 'bg-red-100'];
 
 export const getAvatarColor = (index) => activeColors[index % activeColors.length];
+
+export const logHistory = async ({ type, title, meta = {} }) => {
+	const user = pb.authStore.record;
+
+	if (!user) return;
+
+	await pb.collection('account_history').create({
+		user_id: pb.authStore.record.id,
+		type,
+		title,
+		meta
+	});
+};
+
+export const getInitials = () => {
+	const user = pb.authStore.record;
+	return user?.name
+		?.split(' ')
+		.map((n) => n[0])
+		.join('')
+		.slice(0, 2)
+		.toUpperCase();
+};
