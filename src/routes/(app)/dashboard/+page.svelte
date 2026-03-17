@@ -76,7 +76,7 @@
 			<DashboardBarChart
 				activeExpenses={data?.activeExpenses}
 				expenseHistory={data?.expenseHistory}
-				budget={2000}
+				budget={data?.currentBudget}
 			/>
 		{/if}
 		<div class="flex items-center gap-5">

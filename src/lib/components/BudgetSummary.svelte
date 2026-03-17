@@ -3,6 +3,7 @@
 	import { Slider } from '$lib/components/ui/slider/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { usdFormatter } from '$lib/utils/misc.js';
+	import { invalidateAll } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase.js';
 
@@ -22,6 +23,7 @@
 					amount: budget
 				});
 			}
+			await invalidateAll();
 			toast.success('Budget successfully updated!');
 		} catch (error) {
 			console.dir(error?.response, { depth: null });
@@ -53,7 +55,7 @@
 					afterBudget > 0 ? 'text-green-200' : 'text-red-200'
 				]}
 			>
-				{usdFormatter.format(afterBudget)}
+				<span>{usdFormatter.format(Math.abs(afterBudget))}</span>
 			</span>
 		</div>
 	</Card.Footer>

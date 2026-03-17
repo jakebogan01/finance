@@ -5,9 +5,10 @@
 	import { cubicInOut } from 'svelte/easing';
 	import { scaleBand } from 'd3-scale';
 
-	let { expenseHistory = [], activeExpenses = null, budget = 2000, class: className } = $props();
+	let { expenseHistory = [], activeExpenses = null, budget = 0, class: className } = $props();
 
 	let context = $state();
+	let currentBudget = $derived(budget[0]?.amount || 0);
 
 	const months = [
 		'January',
@@ -84,7 +85,7 @@
 			data.push({
 				month: months[m - 1],
 				expenses: monthlyTotals[m] ?? 0,
-				budget
+				budget: currentBudget
 			});
 		}
 
@@ -143,19 +144,19 @@
 		budget: { label: 'budget', color: 'var(--yellow-100)' }
 	};
 
-	const activeSeries = [
+	const activeSeries = $derived([
 		{
 			key: 'expenses',
 			label: 'expenses',
 			color: chartConfig.expenses.color,
-			props: { rounded: 'bottom' }
+			props: { rounded: currentBudget === 0 ? 'all' : 'bottom' }
 		},
 		{
 			key: 'budget',
 			label: 'budget',
 			color: chartConfig.budget.color
 		}
-	];
+	]);
 </script>
 
 <Card.Root
@@ -167,15 +168,17 @@
 	<Card.Header class="flex items-center justify-between px-4">
 		<div class="flex flex-1 flex-col justify-center gap-1">
 			<Card.Title>This Year's Expenditures</Card.Title>
-			<Card.Description>
-				<span class="text-preset-2 mt-1 text-grey-50">
-					{budgetStatus.period}:
-				</span>
+			{#if currentBudget !== 0}
+				<Card.Description>
+					<span class="text-preset-2 mt-1 text-grey-50">
+						{budgetStatus.period}:
+					</span>
 
-				<span class={['text-preset-2', budgetStatus.color]}>
-					{budgetStatus.label}
-				</span>
-			</Card.Description>
+					<span class={['text-preset-2', budgetStatus.color]}>
+						{budgetStatus.label}
+					</span>
+				</Card.Description>
+			{/if}
 		</div>
 	</Card.Header>
 	<Card.Content class="mt-6 flex flex-1 flex-col px-0!">
