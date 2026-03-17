@@ -7,7 +7,7 @@
 <div
 	bind:this={ref}
 	data-slot="card"
-	class={cn('flex flex-col rounded-2xl py-4', className)}
+	class={cn('flex flex-col rounded-2xl py-5', className)}
 	{...restProps}
 >
 	{@render children?.()}
