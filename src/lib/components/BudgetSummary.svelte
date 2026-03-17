@@ -3,11 +3,31 @@
 	import { Slider } from '$lib/components/ui/slider/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { usdFormatter } from '$lib/utils/misc.js';
+	import { toast } from 'svelte-sonner';
+	import pb from '$lib/pocketbase.js';
 
-	let { budget, totalMonthlyIncome } = $props();
+	let { totalMonthlyExpenses, currentBudget } = $props();
 
-	let afterBudget = $derived(totalMonthlyIncome - budget);
-	let value = $state(50);
+	let value = $derived((currentBudget[0]?.amount || 0) / 100);
+	let budget = $derived(Math.round(value) * 100);
+	let afterBudget = $derived(budget - totalMonthlyExpenses);
+
+	const handleBudget = async () => {
+		try {
+			if (currentBudget?.length > 0) {
+				await pb.collection('budgets').update(currentBudget[0].id, { amount: budget });
+			} else {
+				await pb.collection('budgets').create({
+					user_id: pb.authStore.record.id,
+					amount: budget
+				});
+			}
+			toast.success('Budget successfully updated!');
+		} catch (error) {
+			console.dir(error?.response, { depth: null });
+			toast.error(error?.message ?? 'Could not connect to the server');
+		}
+	};
 </script>
 
 <Card.Root
@@ -17,7 +37,7 @@
 		<Card.Title>Budget Summary</Card.Title>
 	</Card.Header>
 	<Card.Content>
-		<Slider type="single" bind:value max={100} step={1} />
+		<Slider onValueCommit={handleBudget} type="single" bind:value max={100} step={1} />
 	</Card.Content>
 	<Card.Footer class="px-4! sm:px-5!">
 		<div

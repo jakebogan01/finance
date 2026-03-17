@@ -105,7 +105,10 @@
 				totalMonthlyExpenses={data?.totalMonthlyExpenses}
 				remainingIncome={data?.remainingIncome}
 			/>
-			<BudgetSummary budget={2000} totalMonthlyIncome={data?.totalMonthlyIncome} />
+			<BudgetSummary
+				currentBudget={data?.currentBudget}
+				totalMonthlyExpenses={data?.totalMonthlyExpenses}
+			/>
 		</div>
 	</section>
 {:else}

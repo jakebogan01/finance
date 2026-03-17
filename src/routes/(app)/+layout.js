@@ -21,6 +21,10 @@ export const load = async () => {
 			filter: `created_by="${userId}"`,
 			sort: 'year,month'
 		});
+		const currentBudget = await pb.collection('budgets').getFullList({
+			filter: `user_id="${userId}"`,
+			fields: 'amount, id'
+		});
 
 		const expenseHistoryMap = {};
 
@@ -58,7 +62,8 @@ export const load = async () => {
 			totalMonthlyExpenses: totalMonthlyExpenses ?? 0,
 			remainingIncome: remainingIncome ?? 0,
 			activeExpenses: activeExpenses ?? [],
-			activeIncome: activeIncome ?? []
+			activeIncome: activeIncome ?? [],
+			currentBudget: currentBudget ?? []
 		};
 	} catch (error) {
 		console.dir(error?.response, { depth: null });
