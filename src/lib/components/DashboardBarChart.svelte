@@ -181,7 +181,7 @@
 			{/if}
 		</div>
 	</Card.Header>
-	<Card.Content class="mt-6 flex flex-1 flex-col px-0!">
+	<Card.Content class="mt-2 flex flex-1 flex-col px-0!">
 		<Chart.Container config={chartConfig} class="aspect-auto min-h-39 w-full flex-1">
 			<BarChart
 				bind:context

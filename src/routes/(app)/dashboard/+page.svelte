@@ -4,6 +4,7 @@
 	import ExpenseCarousel from '$lib/components/ExpenseCarousel.svelte';
 	import DefaultTemplate from '$lib/components/DefaultTemplate.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
+	import AccountHistory from '$lib/components/AccountHistory.svelte';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import IncomeSummary from '$lib/components/IncomeSummary.svelte';
 	import BudgetSummary from '$lib/components/BudgetSummary.svelte';
@@ -72,13 +73,6 @@
 				{/if}
 			</Command.Root>
 		</Carousel.Root>
-		{#if data?.expenseHistory?.length > 0 && data?.activeExpenses?.length > 0}
-			<DashboardBarChart
-				activeExpenses={data?.activeExpenses}
-				expenseHistory={data?.expenseHistory}
-				budget={data?.currentBudget}
-			/>
-		{/if}
 		<div class="flex items-center gap-5">
 			{#if data?.activeExpenses?.length > 0}
 				<PieChart
@@ -97,6 +91,13 @@
 				/>
 			{/if}
 		</div>
+		{#if data?.expenseHistory?.length > 0 && data?.activeExpenses?.length > 0}
+			<DashboardBarChart
+				activeExpenses={data?.activeExpenses}
+				expenseHistory={data?.expenseHistory}
+				budget={data?.currentBudget}
+			/>
+		{/if}
 	</section>
 	<section class="flex max-h-168.5 flex-col space-y-5">
 		<div class="flex max-h-46.25 min-h-46.25 flex-1 gap-5">
@@ -110,6 +111,7 @@
 				totalMonthlyExpenses={data?.totalMonthlyExpenses}
 			/>
 		</div>
+		<AccountHistory />
 	</section>
 {:else}
 	<DefaultTemplate message="No active data">
