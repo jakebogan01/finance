@@ -1,11 +1,12 @@
 <script>
-	import { Slider as SliderPrimitive } from "bits-ui";
-	import { cn } from "$lib/utils.js";
+	import EllipsisVerticalIcon from '@lucide/svelte/icons/ellipsis-vertical';
+	import { Slider as SliderPrimitive } from 'bits-ui';
+	import { cn } from '$lib/utils.js';
 
 	let {
 		ref = $bindable(null),
 		value = $bindable(),
-		orientation = "horizontal",
+		orientation = 'horizontal',
 		class: className,
 		...restProps
 	} = $props();
@@ -17,7 +18,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 -->
 <SliderPrimitive.Root
 	bind:ref
-	bind:value={value}
+	bind:value
 	data-slot="slider"
 	{orientation}
 	class={cn(
@@ -31,13 +32,13 @@ get along, so we shut typescript up by casting `value` to `never`.
 			data-orientation={orientation}
 			data-slot="slider-track"
 			class={cn(
-				'relative grow overflow-hidden rounded-full bg-grey-600 data-[orientation=horizontal]:h-6.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
+				'relative grow overflow-hidden rounded-full bg-grey-600 data-[orientation=horizontal]:h-4 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5'
 			)}
 		>
 			<SliderPrimitive.Range
 				data-slot="slider-range"
 				class={cn(
-					'absolute bg-grey-0 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
+					'absolute bg-yellow-100 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
 				)}
 			/>
 		</span>
@@ -45,8 +46,10 @@ get along, so we shut typescript up by casting `value` to `never`.
 			<SliderPrimitive.Thumb
 				data-slot="slider-thumb"
 				index={thumb}
-				class="flex size-10.5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-grey-1100 ring-yellow-200 transition-[color] focus-visible:text-yellow-200 focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 md:hover:ring-1"
-			/>
+				class="flex size-6.5 shrink-0 cursor-pointer items-center justify-center rounded-full border border-yellow-100 bg-grey-900 ring-yellow-200 transition-[color] focus-visible:text-yellow-200 focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 md:hover:ring-1"
+			>
+				<EllipsisVerticalIcon class="size-4 text-yellow-100" />
+			</SliderPrimitive.Thumb>
 		{/each}
 	{/snippet}
 </SliderPrimitive.Root>

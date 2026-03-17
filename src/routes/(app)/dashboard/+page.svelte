@@ -5,7 +5,8 @@
 	import DefaultTemplate from '$lib/components/DefaultTemplate.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
-	import IncomeSummary from "$lib/components/IncomeSummary.svelte";
+	import IncomeSummary from '$lib/components/IncomeSummary.svelte';
+	import BudgetSummary from '$lib/components/BudgetSummary.svelte';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
@@ -98,13 +99,13 @@
 		</div>
 	</section>
 	<section class="flex max-h-168.5 flex-col space-y-5">
-		<div class="flex flex-1 gap-5 min-h-60 lg:min-h-46.25 max-h-46.25">
+		<div class="flex max-h-46.25 min-h-46.25 flex-1 gap-5">
 			<IncomeSummary
 				totalMonthlyIncome={data?.totalMonthlyIncome}
 				totalMonthlyExpenses={data?.totalMonthlyExpenses}
 				remainingIncome={data?.remainingIncome}
 			/>
-			<IncomeSummary />
+			<BudgetSummary budget={2000} totalMonthlyIncome={data?.totalMonthlyIncome} />
 		</div>
 	</section>
 {:else}

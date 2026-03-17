@@ -240,7 +240,7 @@
 		formState.dateValue =
 			startDate && !isNaN(startDate.getTime()) ? fromDate(startDate, getLocalTimeZone()) : null;
 
-		indexes.pay = payTypes.findIndex((x) => x.value === data?.recurring);
+		indexes.pay = 0;
 		indexes.category = categories.findIndex((x) => x.value === data?.category);
 
 		if (data?.company_state?.length) {
