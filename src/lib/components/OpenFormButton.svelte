@@ -5,7 +5,9 @@
 		categories,
 		cleanObject,
 		generateSlug,
-		calendarDateToISO
+		calendarDateToISO,
+		logHistory,
+		usdFormatter
 	} from '$lib/utils/misc.js';
 	import { getLocalTimeZone, fromDate } from '@internationalized/date';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -138,14 +140,14 @@
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
 		const collection = multiStepForm ? 'income' : 'expenses';
-
 		if (record.update) {
+			const type = collection === 'expenses' ? 'expense_update' : 'income_update';
 			checkUpdatedValues(payload);
 			const record = await pb.collection(collection).update(data.id, payload);
 			if (collection === 'expenses') {
 				await updateExpenseHistory(collection, record, values.amount);
 			}
-
+			await updateHistory(type, 'Updated', payload?.company_name || payload?.title, collection);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 
 			if (multiStepForm) {
@@ -154,11 +156,21 @@
 				EXPENSESLUG.value = `#${payload.slug}`;
 			}
 		} else {
+			const type = collection === 'expenses' ? 'expense_create' : 'income_create';
 			const record = await pb.collection(collection).create(payload);
+			await updateHistory(type, 'Created', payload?.company_name || payload?.title, collection);
 			if (collection === 'expenses') {
 				await createExpenseHistory(collection, record, values.amount);
 			}
 		}
+	};
+
+	const updateHistory = async (type, method, title, collection) => {
+		await logHistory({
+			type: type,
+			title: `${method} ${title} ${collection === 'expenses' ? 'expense' : 'income'}`,
+			meta: { title }
+		});
 	};
 
 	const { form, reset, isSubmitting, validate, setFields } = createForm({
@@ -281,7 +293,7 @@
 		<Dialog.Trigger
 			type="button"
 			onclick={resetState}
-			class="flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! text-white-0 md:hover:border-yellow-200 md:hover:text-yellow-200"
+			class="flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! whitespace-nowrap text-white-0 md:hover:border-yellow-200 md:hover:text-yellow-200"
 			asChild
 		>
 			<ArrowRightIcon class="size-6" strokeWidth="1.5" />

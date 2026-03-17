@@ -208,9 +208,14 @@ export const sortRecords = (list, sort) => {
 	return list;
 };
 
-export const deleteRecord = async (type, id) => {
+export const deleteRecord = async (type, id, title) => {
 	try {
 		await pb.collection(type.toLowerCase()).delete(id);
+		await logHistory({
+			type: type === 'Expenses' ? 'expense_delete' : 'income_delete',
+			title: `Deleted ${title} ${type === 'Expenses' ? 'expense' : 'income'}`,
+			meta: { title }
+		});
 		await invalidateAll();
 		await goto(resolve(page.url.pathname));
 		toast.success(`${type} successfully deleted!`);

@@ -16,7 +16,7 @@
 	<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
 		<Topbar />
 
-		<main class="relative grid flex-1 gap-5 lg:grid-cols-[9fr_8fr]">
+		<main class="relative grid flex-1 gap-5 lg:grid-cols-[10fr_8fr]">
 			{@render children?.()}
 		</main>
 	</div>

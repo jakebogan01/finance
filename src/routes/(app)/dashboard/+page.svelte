@@ -1,6 +1,6 @@
 <script>
+	import { authCheck, filterStatus, formatDate, sortRecords } from '$lib/utils/misc';
 	import DashboardBarChart from '$lib/components/DashboardBarChart.svelte';
-	import { authCheck, filterStatus, sortRecords } from '$lib/utils/misc';
 	import ExpenseCarousel from '$lib/components/ExpenseCarousel.svelte';
 	import DefaultTemplate from '$lib/components/DefaultTemplate.svelte';
 	import OpenFormButton from '$lib/components/OpenFormButton.svelte';
@@ -13,6 +13,7 @@
 	import SearchExpand from '$lib/components/SearchExpand.svelte';
 	import PieChart from '$lib/components/PieChart.svelte';
 	import { expensesSchema } from '$lib/utils/schemas.js';
+	import HistoryIcon from '@lucide/svelte/icons/history';
 	import { SIGNIN } from '$lib/utils/constants';
 	import { onMount } from 'svelte';
 
@@ -51,13 +52,23 @@
 		<Carousel.Root class="space-y-5">
 			<Command.Root class="space-y-5 bg-transparent text-white-0">
 				<div class="flex items-center justify-between gap-5">
-					<OpenFormButton
-						title="Create Expenses"
-						schema={expensesSchema}
-						bind:handleEditRecord
-						multiStepForm={false}
-						data={expenseRecord}
-					/>
+					<div class="flex items-center gap-5">
+						<OpenFormButton
+							title="Create Expenses"
+							schema={expensesSchema}
+							bind:handleEditRecord
+							multiStepForm={false}
+							data={expenseRecord}
+						/>
+						{#if data?.accountHistory?.length > 0}
+							<div
+								class="hidden h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! whitespace-nowrap text-white-0 sm:flex"
+							>
+								<HistoryIcon class="size-6" strokeWidth="1.5" />
+								{formatDate(data?.accountHistory[0].created)}
+							</div>
+						{/if}
+					</div>
 					<div class="flex items-center">
 						{#if dataList?.length > 0}
 							<Carousel.Previous class="mr-5 {checkNumOfExpenses}" />
@@ -100,7 +111,7 @@
 		{/if}
 	</section>
 	<section class="flex max-h-168.5 flex-col space-y-5">
-		<div class="flex max-h-46.25 min-h-46.25 flex-1 gap-5">
+		<div class="flex max-h-46.25 min-h-58 flex-1 gap-5">
 			<IncomeSummary
 				totalMonthlyIncome={data?.totalMonthlyIncome}
 				totalMonthlyExpenses={data?.totalMonthlyExpenses}

@@ -19,7 +19,7 @@
 		</AlertDialog.Cancel>
 		<AlertDialog.Action
 			class="h-13 bg-red-200 px-6 font-semibold text-white-0 md:hover:bg-red-400"
-			onclick={() => deleteRecord(collectionName, data?.id)}
+			onclick={() => deleteRecord(collectionName, data?.id, data?.company_name || data?.title)}
 		>
 			Delete
 		</AlertDialog.Action>

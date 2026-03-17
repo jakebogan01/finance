@@ -1,5 +1,5 @@
 <script>
-	import { usdFormatter, getAvatarColor } from '$lib/utils/misc.js';
+	import { usdFormatter, getAvatarColor, getInitials } from '$lib/utils/misc.js';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
@@ -36,13 +36,13 @@
 									i
 								)}"
 							>
-								<span class="text-preset-6-bold text-grey-600"
+								<span class="text-preset-6-bold text-grey-600 uppercase"
 									>{item?.company_name?.[0] || item?.title?.[0]}</span
 								>
 								<div
 									class="absolute top-7.5 -right-1.5 flex size-7.5 items-center justify-center rounded-full bg-grey-1100"
 								>
-									<span class="text-preset-1 text-white-0">JB</span>
+									<span class="text-preset-1 text-white-0">{getInitials()}</span>
 								</div>
 							</div>
 							<div class="min-w-0 flex-auto">

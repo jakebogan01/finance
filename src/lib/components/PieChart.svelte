@@ -50,8 +50,8 @@
 	<Card.Header class="w-full flex-1 p-0! text-center sm:text-left">
 		<Card.Title>{title}</Card.Title>
 		<Card.Description class="text-xs text-grey-50">
-			<span class="text-sm">Highest expense:</span><br />
-			{largest?.title}<br />({usdFormatter.format(largest?.amount ?? 0)})
+			<span class="text-sm">Top Expense:</span><br />
+			{largest?.title} - {usdFormatter.format(largest?.amount ?? 0)}
 		</Card.Description>
 	</Card.Header>
 	<Card.Content class="w-full min-w-28 flex-1 pt-5 pr-0 pl-0 sm:pt-0 sm:pl-2.5">
