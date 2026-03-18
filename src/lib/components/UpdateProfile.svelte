@@ -61,7 +61,7 @@
 </script>
 
 <div
-	class="grid flex-1 gap-10 rounded-30 border border-grey-300 bg-grey-1000 p-5 lg:grid-cols-[3fr_4fr]"
+	class="grid flex-1 gap-10 rounded-30 border border-grey-300 bg-grey-1000 p-5 sm:grid-cols-[3fr_4fr]"
 >
 	<div>
 		<h3 class="text-preset-5-semibold">Personal Information</h3>
@@ -74,7 +74,7 @@
 			{@render inputField('Update Name', 'name', 'name')}
 			{@render inputField('Update Email Address', 'email', 'email', 'email', false, 'email')}
 			<div class="flex justify-end">
-				<FormButton disableButton={$isSubmitting}>
+				<FormButton disableButton={$isSubmitting} class="w-full sm:w-auto">
 					{#if $isSubmitting}
 						<Spinner />
 						Validating...

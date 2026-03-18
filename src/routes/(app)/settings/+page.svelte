@@ -20,7 +20,7 @@
 	<UpdateProfile />
 	<UpdatePassword />
 	<div
-		class="grid flex-1 gap-10 rounded-30 border border-grey-300 bg-grey-1000 p-5 lg:grid-cols-[4fr_3fr]"
+		class="grid flex-1 gap-10 rounded-30 border border-grey-300 bg-grey-1000 p-5 sm:grid-cols-[4fr_3fr]"
 	>
 		<div>
 			<h3 class="text-preset-5-semibold">Delete Account</h3>
@@ -32,7 +32,7 @@
 			<Button
 				onclick={() => (deleteDialogOpen = true)}
 				type="button"
-				class="h-13 bg-red-200 px-6 font-medium md:hover:bg-red-100"
+				class="h-13 w-full bg-red-200 px-6 font-medium sm:w-auto md:hover:bg-red-100"
 			>
 				Yes, delete my account
 			</Button>
