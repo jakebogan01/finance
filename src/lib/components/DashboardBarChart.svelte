@@ -161,7 +161,7 @@
 
 <Card.Root
 	class={[
-		'flex max-h-65 flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800',
+		'lex max-h-65 flex-1 flex-col space-y-1 rounded-30 bg-linear-to-b from-grey-1000 to-grey-800',
 		className
 	]}
 >

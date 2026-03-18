@@ -96,7 +96,7 @@
 <div id={data?.slug} class="lg:col-start-3 lg:row-end-1">
 	<h3 class="sr-only">Details</h3>
 	<div
-		class="overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-30 sm:p-5"
+		class="overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-20 sm:p-5"
 	>
 		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 p-4.25">
 			<div class="text-grey-600">

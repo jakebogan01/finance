@@ -98,7 +98,10 @@
 </script>
 
 <Card.Root
-	class={['flex flex-1 flex-col space-y-1 bg-linear-to-b from-grey-1000 to-grey-800', className]}
+	class={[
+		'flex flex-1 flex-col space-y-1 rounded-20 bg-linear-to-b from-grey-1000 to-grey-800',
+		className
+	]}
 >
 	<Card.Header class="flex items-center justify-between">
 		<Card.Title>Payment History</Card.Title>

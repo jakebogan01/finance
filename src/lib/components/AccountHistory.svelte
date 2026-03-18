@@ -5,7 +5,7 @@
 </script>
 
 <div
-	class="flex max-h-182 flex-col space-y-4 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:px-4 lg:flex-1"
+	class="flex max-h-182 flex-col space-y-4 overflow-hidden rounded-30 border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:px-4 lg:flex-1"
 >
 	<h3 class="text-preset-2">Account History</h3>
 	<div
