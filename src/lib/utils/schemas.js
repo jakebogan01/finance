@@ -5,12 +5,12 @@ export const authSchema = zod.object({
 		.string()
 		.trim()
 		.toLowerCase()
-		.max(254, { message: 'Email must be less than 255 characters' })
+		.max(254, { message: 'Must be less than 255 characters' })
 		.email({ message: 'Please enter a valid email address' }),
 	password: zod
 		.string()
-		.min(8, { message: 'Password must be at least 8 characters long' })
-		.max(71, { message: 'Password must be less than 71 characters' })
+		.min(8, { message: 'Must be at least 8 characters long' })
+		.max(71, { message: 'Must be less than 71 characters' })
 });
 
 export const nameSchema = zod.object({
@@ -19,7 +19,7 @@ export const nameSchema = zod.object({
 		.trim()
 		.toLowerCase()
 		.min(1, { message: 'Name is required' })
-		.max(254, { message: 'Name must be less than 255 characters' })
+		.max(254, { message: 'Must be less than 255 characters' })
 });
 
 export const incomeSchema = zod.object({
@@ -58,7 +58,7 @@ export const incomeSchema = zod.object({
 			.string()
 			.trim()
 			.toLowerCase()
-			.max(254, { message: 'Email must be less than 255 characters' })
+			.max(254, { message: 'Must be less than 255 characters' })
 			.email({ message: 'Please enter a valid email address' })
 			.optional()
 	),
@@ -97,7 +97,7 @@ export const expensesSchema = zod.object({
 			.string()
 			.trim()
 			.toLowerCase()
-			.max(254, { message: 'Email must be less than 255 characters' })
+			.max(254, { message: 'Must be less than 255 characters' })
 			.email({ message: 'Please enter a valid email address' })
 			.optional()
 	)
