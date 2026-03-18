@@ -102,3 +102,32 @@ export const expensesSchema = zod.object({
 			.optional()
 	)
 });
+
+export const profileSchema = zod.object({
+	email: zod.preprocess(
+		(val) => {
+			if (val === '') return undefined;
+			return val;
+		},
+		zod
+			.string()
+			.trim()
+			.toLowerCase()
+			.max(254, { message: 'Must be less than 255 characters' })
+			.email({ message: 'Please enter a valid email address' })
+			.optional()
+	),
+	name: zod
+		.string()
+		.trim()
+		.toLowerCase()
+		.max(254, { message: 'Must be less than 255 characters' })
+		.optional()
+});
+
+export const updatePasswordSchema = zod.object({
+	password: zod
+		.string()
+		.min(8, { message: 'Must be at least 8 characters long' })
+		.max(71, { message: 'Must be less than 71 characters' })
+});

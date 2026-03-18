@@ -1,9 +1,9 @@
 <script>
 	import { passwordField } from '$lib/snippets/PasswordField.svelte';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
-	import { authSchema, nameSchema } from '$lib/utils/schemas.js';
+	import { updatePasswordSchema } from '$lib/utils/schemas.js';
 	import FormButton from '$lib/components/FormButton.svelte';
-	import { DASHBOARD } from '$lib/utils/constants.js';
+	import { SIGNIN } from '$lib/utils/constants.js';
 	import { validator } from '@felte/validator-zod';
 	import reporterDom from '@felte/reporter-dom';
 	import { goto } from '$app/navigation';
@@ -13,8 +13,7 @@
 	import { createForm } from 'felte';
 	import * as zod from 'zod';
 
-	const schema = authSchema
-		.merge(nameSchema)
+	const schema = updatePasswordSchema
 		.extend({
 			passwordConfirm: zod.string()
 		})
@@ -23,18 +22,34 @@
 			path: ['passwordConfirm']
 		});
 
-	const { form, reset, isSubmitting } = createForm({
+	const { form, isSubmitting } = createForm({
 		initialValues: {
-			email: '',
-			password: ''
+			password: '',
+			passwordConfirm: ''
 		},
-		extend: [validator({ schema: authSchema }), reporterDom()],
+		extend: [validator({ schema }), reporterDom()],
 		onSubmit: async (values) => {
 			try {
-				await pb.collection('users').authWithPassword(values.email, values.password);
-				await goto(resolve(DASHBOARD));
-				toast.success('Successfully signed in!');
-				reset();
+				const res = await fetch('/api/account/update-password', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						userId: pb.authStore.record.id,
+						password: values.password,
+						passwordConfirm: values.passwordConfirm
+					})
+				});
+
+				const result = await res.json();
+				if (res.ok) {
+					pb.authStore.clear();
+					await goto(resolve(SIGNIN));
+					toast.success('Successfully updated password!');
+				} else {
+					console.error('Failed to update password:', result.error);
+				}
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');
@@ -57,7 +72,7 @@
 			{@render passwordField('Password', 'password', true, 'current-password')}
 			{@render passwordField('Confirm Password', 'passwordConfirm', false, 'current-password')}
 			<div class="flex justify-end">
-				<FormButton {$isSubmitting}>
+				<FormButton disableButton={$isSubmitting}>
 					{#if $isSubmitting}
 						<Spinner />
 						Validating...

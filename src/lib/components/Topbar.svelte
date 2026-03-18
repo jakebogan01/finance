@@ -1,12 +1,12 @@
 <script>
 	import CircleButton from '$lib/components/CircleButton.svelte';
+	import { USERNAME } from '$lib/stores/userName.svelte.js';
 	import SettingsIcon from '@lucide/svelte/icons/settings';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import MenuIcon from '@lucide/svelte/icons/menu';
 	import { SETTINGS } from '$lib/utils/constants';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
-	import pb from '$lib/pocketbase';
 </script>
 
 <div
@@ -16,7 +16,7 @@
 		<Avatar />
 		<div>
 			<p class="text-preset-2">Welcome!</p>
-			<p class="text-preset-5-medium sm:text-3xl">{pb?.authStore?.record?.name || 'User'}</p>
+			<p class="text-preset-5-medium sm:text-3xl">{USERNAME.value}</p>
 		</div>
 	</div>
 	<CircleButton
