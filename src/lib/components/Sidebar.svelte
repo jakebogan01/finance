@@ -1,10 +1,11 @@
 <script>
-	import { DASHBOARD, INCOME, EXPENSES } from '$lib/utils/constants';
+	import { DASHBOARD, INCOME, EXPENSES, SETTINGS } from '$lib/utils/constants';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import LayoutGridIcon from '@lucide/svelte/icons/layout-grid';
 	import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
 	import TabSwitch from '$lib/components/TabSwitch.svelte';
+	import SettingsIcon from '@lucide/svelte/icons/settings';
 	import ReceiptIcon from '@lucide/svelte/icons/receipt';
 	import { active } from '$lib/actions/active.svelte';
 	import logo from '$lib/assets/graphics/logo.svg';
@@ -62,6 +63,19 @@
 							</a>
 						</li>
 					{/each}
+					{#if mobile}
+						<li>
+							<a
+								href={resolve(SETTINGS)}
+								onclick={handleClick}
+								class="text-preset-4-semibold flex items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 data-[active=true]:bg-yellow-100 data-[active=true]:text-grey-600 md:transition-colors md:data-[active=false]:hover:text-white-0"
+								use:active
+							>
+								<SettingsIcon class="size-5 shrink-0" strokeWidth="1.5" />
+								Settings
+							</a>
+						</li>
+					{/if}
 				</ul>
 			</li>
 			<li class="mt-auto">
