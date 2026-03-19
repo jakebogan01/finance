@@ -2,9 +2,11 @@
 	import CircleButton from '$lib/components/CircleButton.svelte';
 	import { USERNAME } from '$lib/stores/userName.svelte.js';
 	import SettingsIcon from '@lucide/svelte/icons/settings';
+	import { LOGOUT, SETTINGS } from '$lib/utils/constants';
+	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import MenuIcon from '@lucide/svelte/icons/menu';
-	import { SETTINGS } from '$lib/utils/constants';
+	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import pb from '$lib/pocketbase.js';
 	import { page } from '$app/state';
@@ -43,6 +45,13 @@
 					class="hidden xl:flex"
 				/>
 			{/if}
+		{:else}
+			<CircleButton
+				onclick={() => goto(resolve(LOGOUT))}
+				Icon={LogOutIcon}
+				size="6"
+				class="hidden xl:flex"
+			/>
 		{/if}
 		<CircleButton
 			command="show-modal"

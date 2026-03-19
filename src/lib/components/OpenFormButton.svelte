@@ -90,6 +90,7 @@
 	const buildPayload = (values) => {
 		values.original_user_id = pb?.authStore?.record?.id;
 		values.user_id = pb?.authStore?.record?.id;
+		values.created_by = pb?.authStore?.record?.name;
 		values.slug = generateSlug(values.company_name || values.title);
 		values.status = checked;
 
