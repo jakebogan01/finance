@@ -437,7 +437,7 @@
 						<Button
 							type="button"
 							onclick={back}
-							class="h-13 flex-1 border border-grey-300 bg-transparent px-6 font-medium md:hover:bg-grey-900"
+							class="h-13 flex-1 border border-grey-300 bg-transparent px-6 font-medium md:hover:bg-grey-900 md:dark:hover:bg-gray-200"
 						>
 							Back
 						</Button>
@@ -446,14 +446,14 @@
 						<Button
 							type="button"
 							onclick={next}
-							class="h-13 flex-1 border border-grey-300 bg-transparent px-6 font-medium md:hover:bg-grey-900"
+							class="h-13 flex-1 border border-grey-300 bg-transparent px-6 font-medium md:hover:bg-grey-900 md:dark:hover:bg-gray-200"
 						>
 							Continue
 						</Button>
 					{:else if !multiStepForm}
 						<Dialog.Close
 							type="button"
-							class="h-13 flex-1 cursor-pointer rounded-lg border border-grey-300 bg-transparent px-6 font-medium text-white-0 md:hover:bg-grey-900"
+							class="h-13 flex-1 cursor-pointer rounded-lg border border-grey-300 bg-transparent px-6 font-medium text-white-0 md:hover:bg-grey-900 md:dark:hover:bg-gray-200"
 						>
 							Cancel
 						</Dialog.Close>

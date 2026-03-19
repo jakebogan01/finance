@@ -20,7 +20,7 @@
 		)}
 	>
 		<div
-			class="absolute inset-0 flex items-center justify-center bg-grey-1100/70 text-gray-300 opacity-0 md:transition-opacity md:group-hover:opacity-100"
+			class="absolute inset-0 flex items-center justify-center bg-grey-1100/70 text-gray-300 opacity-0 md:transition-opacity md:group-hover:opacity-100 dark:text-black"
 		>
 			<SquarePenIcon class="size-4" />
 		</div>

@@ -269,7 +269,12 @@ export const fillMissingMonths = (history) => {
 	return filled;
 };
 
-export const activeColors = ['bg-yellow-100', 'bg-blue-100', 'bg-green-100', 'bg-red-100'];
+export const activeColors = [
+	'bg-yellow-100',
+	'bg-blue-100 dark:bg-blue-400',
+	'bg-green-100 dark:bg-green-400',
+	'bg-red-100 dark:bg-red-400'
+];
 
 export const getAvatarColor = (index) => activeColors[index % activeColors.length];
 

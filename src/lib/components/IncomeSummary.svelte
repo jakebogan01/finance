@@ -26,7 +26,9 @@
 			<span
 				class={[
 					'flex flex-1 items-center justify-center',
-					remainingIncome > 0 ? 'text-green-200' : 'text-red-400'
+					remainingIncome > 0
+						? 'text-green-200 dark:text-green-700'
+						: 'text-red-400 dark:text-red-500'
 				]}
 			>
 				{usdFormatter.format(remainingIncome)}

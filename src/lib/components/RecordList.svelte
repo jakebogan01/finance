@@ -20,15 +20,17 @@
 	class="flex max-h-182 flex-col space-y-4 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:rounded-20 sm:px-4 lg:flex-1"
 >
 	<h3 class="text-preset-2">{title}</h3>
-	<div class="flex flex-col overflow-y-auto rounded-2xl bg-grey-400 p-1.5 sm:p-2.5 lg:flex-1">
+	<div
+		class="flex flex-col overflow-y-auto rounded-2xl bg-grey-400 p-1.5 sm:p-2.5 lg:flex-1 dark:bg-gray-300"
+	>
 		<ul role="list" class="relative space-y-1.5 lg:flex-1">
 			{#each data as item, i (item?.id)}
 				<li>
 					<Command.Item
-						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 md:transition-colors md:duration-300 {page
+						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 md:transition-colors md:duration-300 dark:bg-white {page
 							.url.hash === `#${item?.slug}`
 							? 'border-yellow-200'
-							: 'border-grey-900 md:hover:border-yellow-100'}"
+							: 'border-grey-900 md:hover:border-yellow-100 dark:border-gray-400/60'}"
 					>
 						<div class="flex min-w-0 gap-x-4 sm:gap-x-7">
 							<div
@@ -62,8 +64,8 @@
 						</div>
 						<div
 							class="flex size-3 flex-none shrink-0 flex-col items-end rounded-full {item?.status
-								? 'bg-green-200'
-								: 'bg-red-200'}"
+								? 'bg-green-200 dark:bg-green-600'
+								: 'bg-red-200 dark:bg-red-600'}"
 						></div>
 					</Command.Item>
 				</li>

@@ -33,7 +33,7 @@
 			<Button
 				onclick={() => (deleteDialogOpen = true)}
 				type="button"
-				class="h-13 w-full bg-red-200 px-6 font-medium sm:w-auto md:hover:bg-red-100"
+				class="h-13 w-full bg-red-200 px-6 font-medium sm:w-auto md:hover:bg-red-100 dark:bg-red-500 dark:text-white md:dark:hover:bg-red-400"
 			>
 				Yes, delete my account
 			</Button>

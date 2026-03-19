@@ -56,7 +56,7 @@
 					{#snippet icon()}
 						<CopyIcon class="size-3" strokeWidth="1.5" />
 					{/snippet}
-					<span class="text-gray-300">
+					<span class="text-gray-300 dark:text-gray-500">
 						{pb?.authStore?.record?.invite_code}
 					</span>
 				</CopyButton>
@@ -73,7 +73,7 @@
 			class="flex flex-col overflow-y-auto rounded-2xl p-1.5 sm:p-2.5 lg:flex-1 {accountHistory?.length >
 			0
 				? 'bg-grey-400'
-				: 'bg-grey-800'}"
+				: 'bg-grey-800 dark:bg-gray-300'}"
 		>
 			<ul role="list" class="relative min-h-32 space-y-1.5 lg:flex-1">
 				{#each invites as invite, i (invite?.id)}

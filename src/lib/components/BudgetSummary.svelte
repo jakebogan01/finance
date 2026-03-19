@@ -65,7 +65,7 @@
 			<span
 				class={[
 					'flex flex-1 items-center justify-center',
-					afterBudget > 0 ? 'text-green-200' : 'text-red-400'
+					afterBudget > 0 ? 'text-green-200 dark:text-green-700' : 'text-red-400 dark:text-red-500'
 				]}
 			>
 				<span>{usdFormatter.format(Math.abs(afterBudget))}</span>

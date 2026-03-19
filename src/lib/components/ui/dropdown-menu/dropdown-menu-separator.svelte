@@ -8,6 +8,6 @@
 <DropdownMenuPrimitive.Separator
 	bind:ref
 	data-slot="dropdown-menu-separator"
-	class={cn('-mx-1 my-1 h-px bg-grey-775', className)}
+	class={cn('-mx-1 my-1 h-px bg-grey-775 dark:bg-gray-300', className)}
 	{...restProps}
 />

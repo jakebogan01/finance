@@ -41,7 +41,7 @@
 				onkeydown={(e) => e.key === 'Escape' && close()}
 				onblur={close}
 				class={cn(
-					'mb-0 flex h-13 w-full min-w-0 rounded-full border border-grey-300 bg-grey-900 pr-4 pl-8 ring-offset-yellow-100 outline-none selection:bg-yellow-100 selection:text-grey-1100 placeholder:text-grey-200 focus-visible:border-yellow-100 focus-visible:ring-[3px] focus-visible:ring-yellow-200/500 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-200 aria-invalid:ring-red-100/20 md:transition-colors md:hover:border-yellow-200',
+					'mb-0 flex h-13 w-full min-w-0 rounded-full border border-grey-300 bg-grey-900 pr-4 pl-8 ring-offset-yellow-100 outline-none selection:bg-yellow-100 selection:text-grey-1100 placeholder:text-grey-200 focus-visible:border-yellow-100 focus-visible:ring-[3px] focus-visible:ring-yellow-200/500 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-200 aria-invalid:ring-red-100/20 md:transition-colors md:hover:border-yellow-200 dark:bg-grey-800',
 					open
 						? 'pointer-events-auto translate-x-0 opacity-100'
 						: 'pointer-events-none translate-x-2 opacity-0',

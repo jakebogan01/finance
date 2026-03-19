@@ -11,14 +11,14 @@
 	<div
 		class="flex flex-col overflow-y-auto rounded-2xl p-1.5 sm:p-2.5 lg:flex-1 {accountHistory?.length >
 		0
-			? 'bg-grey-400'
-			: 'bg-grey-800'}"
+			? 'bg-grey-400 dark:bg-gray-300'
+			: 'bg-grey-800 dark:bg-gray-300'}"
 	>
 		<ul role="list" class="relative space-y-1.5 lg:flex-1">
 			{#each accountHistory as item, i (item?.id)}
 				<li>
 					<div
-						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 border-grey-900 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5"
+						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 border-grey-900 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 dark:border-gray-400/60 dark:bg-white"
 					>
 						<div class="flex min-w-0 flex-1 items-center gap-x-4">
 							<div

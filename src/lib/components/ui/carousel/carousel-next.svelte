@@ -21,7 +21,7 @@
 	{size}
 	aria-disabled={!emblaCtx.canScrollNext}
 	class={cn(
-		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200',
+		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200 dark:bg-grey-800',
 		emblaCtx.orientation === 'horizontal' ? '' : '',
 		className
 	)}

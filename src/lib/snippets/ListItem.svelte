@@ -6,7 +6,9 @@
 
 {#snippet listItem(item, isAddress = false)}
 	<div
-		class={['flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px] even:bg-[#1b1b1b]']}
+		class={[
+			'flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px] even:bg-[#1b1b1b] dark:even:bg-gray-300'
+		]}
 	>
 		<dt class="flex-none">
 			<span class="sr-only">{item.label}</span>

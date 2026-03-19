@@ -5,7 +5,7 @@
 </script>
 
 <Skeleton
-	class="absolute inset-0 z-0 max-h-[calc(100%-20px)] animate-none! rounded-2xl bg-grey-700 sm:max-h-full"
+	class="absolute inset-0 z-0 max-h-[calc(100%-20px)] animate-none! rounded-2xl bg-grey-700 sm:max-h-full dark:bg-gray-200"
 />
 <div
 	class="absolute top-1/2 left-1/2 z-5 flex size-full -translate-1/2 items-center justify-center text-center"

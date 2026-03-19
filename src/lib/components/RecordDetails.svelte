@@ -105,7 +105,7 @@
 				</dt>
 				<dd class="text-preset-3-medium">
 					{usdFormatter.format(data?.income || data?.expand?.current_history?.amount)}
-					<span class="text-preset-1 text-grey-100">/ per month</span>
+					<span class="text-preset-1 text-grey-100 dark:text-white">/ per month</span>
 				</dd>
 			</div>
 			<div class="flex-none">
@@ -113,7 +113,9 @@
 			</div>
 		</dl>
 		<Separator class="my-6" />
-		<dl class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-775 bg-grey-900">
+		<dl
+			class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-775 bg-grey-900 dark:border-gray-400 dark:bg-gray-200"
+		>
 			{#each details as item (item.label)}
 				{@render listItem(item, false)}
 			{/each}

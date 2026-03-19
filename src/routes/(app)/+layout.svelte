@@ -1,5 +1,6 @@
 <script>
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
+	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
 
@@ -8,7 +9,12 @@
 
 <MobileSidebar />
 
-<div class="relative mx-auto flex w-full max-w-367.5 flex-1 flex-col px-4 py-5 sm:px-5">
+<div
+	class={[
+		'relative mx-auto flex w-full max-w-367.5 flex-1 flex-col px-4 py-5 sm:px-5',
+		darkMode.status ? 'dark' : ''
+	]}
+>
 	<div class="hidden xl:fixed xl:inset-y-5 xl:z-50 xl:flex xl:w-66 xl:flex-col">
 		<Sidebar />
 	</div>

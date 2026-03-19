@@ -1,7 +1,8 @@
 <script>
-	import { onMount } from 'svelte';
+	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import MoonIcon from '@lucide/svelte/icons/moon';
 	import SunIcon from '@lucide/svelte/icons/sun';
+	import { onMount } from 'svelte';
 
 	let { tabItems, showIcons, currentTab = $bindable() } = $props();
 	let positions = $state([]);
@@ -51,6 +52,26 @@
 		indicatorEl.style.transform = `translateX(${left}px)`;
 		indicatorEl.style.width = `${width}px`;
 	});
+
+	const changeTheme = () => {
+		if (!document.startViewTransition) {
+			updateTheme();
+			return;
+		}
+		document.startViewTransition(() => {
+			updateTheme();
+		});
+	};
+
+	const updateTheme = () => {
+		darkMode.status = !darkMode.status;
+		let el = document.getElementsByTagName('HTML')[0];
+		if (darkMode.status) {
+			el.classList.add('dark');
+		} else {
+			el.classList.remove('dark');
+		}
+	};
 </script>
 
 <ul
@@ -75,11 +96,14 @@
 						top: 0,
 						behavior: 'smooth'
 					});
+					setTimeout(() => {
+						changeTheme();
+					}, 200);
 				}}
 				aria-current={active ? `${item} page` : 'About page'}
 				class="disable relative z-10 flex h-full w-full cursor-pointer items-center justify-center gap-x-1.5 transition-colors duration-200 ease-in-out select-none {active ===
 				item
-					? 'text-grey-1100'
+					? 'text-grey-1100 dark:text-white'
 					: 'text-grey-50 not-hover:duration-200 md:hover:text-white-0'}"
 			>
 				{#if showIcons}
