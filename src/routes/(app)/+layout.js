@@ -47,15 +47,6 @@ export const load = async () => {
 			return sum + (r.expand?.current_history?.amount ?? 0);
 		}, 0);
 		const remainingIncome = totalMonthlyIncome - totalMonthlyExpenses;
-		// console.log('Income Records: ', incomeRecords);
-		// console.log('Expense Records: ', expenseRecords);
-		// console.log('Active Income:', activeIncome);
-		// console.log('Active Expenses:', activeExpenses);
-		// console.log('Expense History: ', expenseHistory);
-		// console.log('Expense History Map: ', expenseHistoryMap);
-		// console.log('Total Income: ', totalMonthlyIncome);
-		// console.log('Total Expenses: ', totalMonthlyExpenses);
-		// console.log('Remaining Income: ', remainingIncome);
 
 		return {
 			incomeRecords: incomeRecords ?? [],

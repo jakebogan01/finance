@@ -16,7 +16,7 @@
 	onMount(() => authCheck(303, SIGNIN, true));
 </script>
 
-<section class="flex min-w-0 flex-col space-y-5">
+<section class="flex min-w-0 max-h-168.5 flex-col space-y-5">
 	<UpdateProfile />
 	<UpdatePassword />
 	<div
