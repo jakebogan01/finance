@@ -22,6 +22,7 @@
 				await updateHistory(originalValue, budget);
 			} else {
 				await pb.collection('budgets').create({
+					original_user_id: pb.authStore.record.id,
 					user_id: pb.authStore.record.id,
 					amount: budget
 				});

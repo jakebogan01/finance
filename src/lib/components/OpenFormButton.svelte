@@ -6,8 +6,7 @@
 		cleanObject,
 		generateSlug,
 		calendarDateToISO,
-		logHistory,
-		usdFormatter
+		logHistory
 	} from '$lib/utils/misc.js';
 	import { getLocalTimeZone, fromDate } from '@internationalized/date';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -89,6 +88,7 @@
 	};
 
 	const buildPayload = (values) => {
+		values.original_user_id = pb?.authStore?.record?.id;
 		values.user_id = pb?.authStore?.record?.id;
 		values.slug = generateSlug(values.company_name || values.title);
 		values.status = checked;
@@ -104,6 +104,7 @@
 
 	const createExpenseHistory = async (collection, record, amount) => {
 		const history = await pb.collection('expense_history').create({
+			original_user_id: pb?.authStore?.record?.id,
 			expense: record.id,
 			created_by: pb?.authStore?.record?.id,
 			amount: amount,

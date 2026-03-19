@@ -279,16 +279,18 @@ export const logHistory = async ({ type, title, meta = {} }) => {
 	if (!user) return;
 
 	await pb.collection('account_history').create({
+		original_user_id: pb.authStore.record.id,
 		user_id: pb.authStore.record.id,
+		made_by: pb.authStore.record.name,
 		type,
 		title,
 		meta
 	});
 };
 
-export const getInitials = () => {
-	const user = pb.authStore.record;
-	return user?.name
+export const getInitials = (name) => {
+	const user = name || pb.authStore.record.name;
+	return user
 		?.split(' ')
 		.map((n) => n[0])
 		.join('')

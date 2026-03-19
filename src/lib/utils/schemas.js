@@ -131,3 +131,11 @@ export const updatePasswordSchema = zod.object({
 		.min(8, { message: 'Must be at least 8 characters long' })
 		.max(71, { message: 'Must be less than 71 characters' })
 });
+
+export const inviteSchema = zod.object({
+	invite_code: zod
+		.string()
+		.trim()
+		.min(1, { message: 'Code is required' })
+		.max(15, { message: 'Must be less than 15 characters' })
+});

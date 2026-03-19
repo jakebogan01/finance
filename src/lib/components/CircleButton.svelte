@@ -14,6 +14,6 @@
 	{#if Icon}
 		<Icon class="size-{size}" strokeWidth="1.5" />
 	{:else}
-		{content}
+		{@html content}
 	{/if}
 </Button>

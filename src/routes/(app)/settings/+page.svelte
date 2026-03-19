@@ -3,6 +3,7 @@
 	import UpdatePassword from '$lib/components/UpdatePassword.svelte';
 	import AccountHistory from '$lib/components/AccountHistory.svelte';
 	import UpdateProfile from '$lib/components/UpdateProfile.svelte';
+	import AccountAccess from '$lib/components/AccountAccess.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import DeleteUser from '$lib/components/DeleteUser.svelte';
 	import { SIGNIN } from '$lib/utils/constants.js';
@@ -16,7 +17,7 @@
 	onMount(() => authCheck(303, SIGNIN, true));
 </script>
 
-<section class="flex min-w-0 max-h-168.5 flex-col space-y-5">
+<section class="flex max-h-168.5 min-w-0 flex-col space-y-5">
 	<UpdateProfile />
 	<UpdatePassword />
 	<div
@@ -40,6 +41,7 @@
 	</div>
 </section>
 <section class="flex max-h-168.5 flex-col space-y-5">
+	<AccountAccess invites={data?.sharedInvites} />
 	<AccountHistory accountHistory={data?.accountHistory} />
 </section>
 

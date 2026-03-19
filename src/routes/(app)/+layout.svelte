@@ -3,7 +3,7 @@
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
 
-	let { children } = $props();
+	let { children, data } = $props();
 </script>
 
 <MobileSidebar />
@@ -14,7 +14,7 @@
 	</div>
 
 	<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
-		<Topbar />
+		<Topbar invites={data?.sharedInvites} />
 
 		<main class="relative grid flex-1 gap-5 lg:grid-cols-[10fr_8fr]">
 			{@render children?.()}
