@@ -69,7 +69,7 @@
 							</div>
 						{/if}
 					</div>
-					<div class="flex items-center">
+					<div class="mr-4 flex items-center sm:mr-0">
 						{#if dataList?.length > 0}
 							<Carousel.Previous class="mr-5 {checkNumOfExpenses}" />
 							<Carousel.Next class="md:mr-5 {checkNumOfExpenses}" />
@@ -84,7 +84,7 @@
 				{/if}
 			</Command.Root>
 		</Carousel.Root>
-		<div class="flex items-center gap-5">
+		<div class="flex flex-col items-center gap-5 sm:flex-row">
 			{#if data?.activeExpenses?.length > 0}
 				<PieChart
 					title="Total Expenses"
@@ -110,8 +110,8 @@
 			/>
 		{/if}
 	</section>
-	<section class="flex max-h-168.5 flex-col space-y-5">
-		<div class="flex max-h-46.25 min-h-58 flex-1 gap-5">
+	<section class="flex flex-col space-y-5 lg:max-h-168.5">
+		<div class="flex min-h-58 flex-1 flex-col gap-5 sm:flex-row lg:max-h-46.25">
 			<IncomeSummary
 				totalMonthlyIncome={data?.totalMonthlyIncome}
 				totalMonthlyExpenses={data?.totalMonthlyExpenses}

@@ -61,10 +61,10 @@
 </script>
 
 <div
-	class="grid flex-1 gap-10 rounded-30 border border-grey-300 bg-grey-1000 p-5 sm:grid-cols-[3fr_4fr]"
+	class="grid flex-1 gap-10 rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:grid-cols-[3fr_4fr] sm:rounded-30 sm:p-5"
 >
 	<div>
-		<h3 class="text-preset-5-semibold">Personal Information</h3>
+		<h3 class="text-preset-4-semibold sm:text-preset-5-semibold">Personal Information</h3>
 		<p class="text-preset-2 mt-2 text-grey-50">
 			Manage how information is displayed on your account.
 		</p>

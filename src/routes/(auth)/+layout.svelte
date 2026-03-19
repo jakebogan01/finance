@@ -36,5 +36,5 @@
 
 {#snippet layoutHeading(title, description)}
 	<h2 class="text-preset-8-bold">{title}</h2>
-	<p>{description}</p>
+	<p class="text-grey-50">{description}</p>
 {/snippet}

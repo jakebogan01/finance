@@ -7,7 +7,7 @@
 </script>
 
 <Card.Root
-	class="flex flex-1 flex-col justify-between space-y-1 rounded-30 border border-grey-300 bg-grey-1000 py-4! sm:py-5!"
+	class="flex min-h-50 flex-1 flex-col justify-between space-y-1 rounded-2xl border border-grey-300 bg-grey-1000 py-4! sm:rounded-30 sm:py-5!"
 >
 	<Card.Header class="px-4! sm:px-5!">
 		<Card.Title>Monthly Summary</Card.Title>

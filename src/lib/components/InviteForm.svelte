@@ -68,7 +68,7 @@
 		<Dialog.Title class="text-preset-5-semibold">Share Account</Dialog.Title>
 	</Dialog.Header>
 	<form class="space-y-6.5" use:form>
-		{@render inputField('Invite Code', 'invite_code')}
+		{@render inputField('Code', 'invite_code')}
 		<Dialog.Footer>
 			<Dialog.Close
 				type="button"

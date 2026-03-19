@@ -161,11 +161,11 @@
 
 <Card.Root
 	class={[
-		'lex max-h-65 flex-1 flex-col space-y-1 rounded-30 bg-linear-to-b from-grey-1000 to-grey-800',
+		'lex max-h-65 flex-1 flex-col space-y-1 rounded-2xl bg-linear-to-b from-grey-1000 to-grey-800 py-4! sm:rounded-30 sm:py-5!',
 		className
 	]}
 >
-	<Card.Header class="flex items-center justify-between px-4">
+	<Card.Header class="flex items-center justify-between px-4 sm:px-5">
 		<div class="flex flex-1 flex-col justify-center gap-1">
 			<Card.Title>This Year's Expenditures</Card.Title>
 			{#if currentBudget !== 0}

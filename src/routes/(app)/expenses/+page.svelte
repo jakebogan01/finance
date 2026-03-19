@@ -51,7 +51,7 @@
 					multiStepForm={false}
 					data={expenseRecord}
 				/>
-				<div class="flex items-center">
+				<div class="mr-4 flex items-center sm:mr-0">
 					<FilterDropDown bind:filters sortType="amount" />
 					<SearchExpand class="hidden md:flex" />
 				</div>

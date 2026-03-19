@@ -45,20 +45,17 @@
 </script>
 
 <Card.Root
-	class="flex flex-1 flex-col items-start rounded-30 border border-grey-300 bg-grey-1000 p-5 sm:flex-row"
+	class="flex w-full flex-1 flex-row items-start rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-30 sm:p-5"
 >
-	<Card.Header class="w-full flex-1 p-0! text-center sm:text-left">
+	<Card.Header class="w-full flex-1 p-0! text-left">
 		<Card.Title>{title}</Card.Title>
 		<Card.Description class="text-xs text-grey-50">
 			<span class="text-sm">Top Expense:</span><br />
 			{largest?.title} - {usdFormatter.format(largest?.amount ?? 0)}
 		</Card.Description>
 	</Card.Header>
-	<Card.Content class="w-full min-w-28 flex-1 pt-5 pr-0 pl-0 sm:pt-0 sm:pl-2.5">
-		<Chart.Container
-			config={chartConfig}
-			class="mx-auto aspect-square max-h-26 sm:mr-px sm:ml-auto"
-		>
+	<Card.Content class="w-full min-w-28 flex-1 pt-0 pr-0 pl-2.5">
+		<Chart.Container config={chartConfig} class="mr-px ml-auto aspect-square max-h-26">
 			<PieChart
 				data={chartData}
 				key="browser"

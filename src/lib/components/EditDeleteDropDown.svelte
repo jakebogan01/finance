@@ -25,7 +25,7 @@
 					{...props}
 					Icon={SlidersVerticalIcon}
 					size="6"
-					class={['md:mr-5', open ? 'border-yellow-200 text-yellow-200' : '']}
+					class={['', open ? 'border-yellow-200 text-yellow-200' : '']}
 				/>
 			{/snippet}
 		</DropdownMenu.Trigger>

@@ -5,9 +5,9 @@
 </script>
 
 <div
-	class="flex max-h-182 flex-col space-y-4 overflow-hidden rounded-30 border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:px-4 lg:flex-1"
+	class="dm:rounded-30 flex max-h-182 flex-col space-y-4 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:px-4 lg:flex-1"
 >
-	<h3 class="text-preset-5-semibold">Account History</h3>
+	<h3 class="text-preset-4-semibold sm:text-preset-5-semibold">Account History</h3>
 	<div
 		class="flex flex-col overflow-y-auto rounded-2xl p-1.5 sm:p-2.5 lg:flex-1 {accountHistory?.length >
 		0

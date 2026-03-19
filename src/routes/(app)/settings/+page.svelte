@@ -17,14 +17,14 @@
 	onMount(() => authCheck(303, SIGNIN, true));
 </script>
 
-<section class="flex max-h-168.5 min-w-0 flex-col space-y-5">
+<section class="flex min-w-0 flex-col space-y-5 sm:max-h-168.5">
 	<UpdateProfile />
 	<UpdatePassword />
 	<div
-		class="grid flex-1 gap-10 rounded-30 border border-grey-300 bg-grey-1000 p-5 sm:grid-cols-[4fr_3fr]"
+		class="grid flex-1 gap-10 rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:grid-cols-[4fr_3fr] sm:rounded-30 sm:p-5"
 	>
 		<div>
-			<h3 class="text-preset-5-semibold">Delete Account</h3>
+			<h3 class="text-preset-4-semibold sm:text-preset-5-semibold">Delete Account</h3>
 			<p class="text-preset-2 mt-2 text-grey-50">
 				No longer want to use our service? You can delete your account here.
 			</p>
@@ -40,7 +40,7 @@
 		</div>
 	</div>
 </section>
-<section class="flex max-h-168.5 flex-col space-y-5">
+<section class="flex flex-col space-y-5 sm:max-h-168.5">
 	<AccountAccess invites={data?.sharedInvites} />
 	<AccountHistory accountHistory={data?.accountHistory} />
 </section>

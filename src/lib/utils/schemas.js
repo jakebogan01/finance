@@ -137,5 +137,5 @@ export const inviteSchema = zod.object({
 		.string()
 		.trim()
 		.min(1, { message: 'Code is required' })
-		.max(15, { message: 'Must be less than 15 characters' })
+		.max(6, { message: 'Must be less than 6 characters' })
 });
