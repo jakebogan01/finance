@@ -1,42 +1,84 @@
-# sv
+# 💸 Finance
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A simple, collaborative finance tracking app designed to help you stay on top of your money without the clutter.
 
-## Creating a project
+---
 
-If you're seeing this, you've probably already done this step. Congrats!
+## ✨ Overview
 
-```sh
-# create a new project
-npx sv create my-app
-```
+**Finance** is a lightweight web app that allows users to manually track their income, expenses, and budget in one clean dashboard.
 
-To recreate this project with the same configuration:
+Built with simplicity in mind, it gives you just what you need—no unnecessary complexity, no overwhelming features.
 
-```sh
-# recreate this project
-npx sv@0.12.5 create --template minimal --no-types --add prettier eslint tailwindcss="plugins:typography,forms" --install npm finance
-```
+---
 
-## Developing
+## 🚀 Features
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### 📊 Dashboard
 
-```sh
+- Clean, intuitive overview of your finances
+- Track total income, expenses, and remaining budget
+- Visual insights to understand your spending at a glance
+
+### 💰 Income Tracking
+
+- Add and manage income entries
+- Update values as needed over time
+
+### 💸 Expense Tracking
+
+- Log and categorize expenses
+- Edit or remove entries anytime
+
+### 🧾 Budget Management
+
+- Set a basic budget
+- Monitor how close you are to your limit
+
+### 🤝 Shared Accounts (Core Feature)
+
+- Invite other users to your account
+- Collaborate in real-time
+- Shared users can:
+  - View all financial data
+  - Add/edit/delete income
+  - Add/edit/delete expenses
+  - Update the budget
+
+> Perfect for couples, roommates, or teams managing shared finances.
+
+---
+
+## 🧠 Philosophy
+
+This app is intentionally **manual and minimal**.
+
+- No bank integrations
+- No automation
+- No hidden complexity
+
+Just full control over your financial data, the way you want it.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** SvelteKit (Svelte 5)
+- **Styling:** Tailwind CSS
+- **Backend / DB:** PocketBase
+- **UI Components:** Custom + shadcn-inspired patterns
+
+---
+
+## 📦 Getting Started
+
+```bash
+# Clone the repo
+git clone https://github.com/your-username/finance.git
+
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
-
-## Building
-
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.

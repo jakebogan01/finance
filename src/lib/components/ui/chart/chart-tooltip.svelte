@@ -2,7 +2,7 @@
 	import { cn } from '$lib/utils.js';
 	import { getPayloadConfigFromPayload, useChart } from './chart-utils.js';
 	import { getTooltipContext, Tooltip as TooltipPrimitive } from 'layerchart';
-	import { usdFormatter } from '$lib/utils/misc.js';
+	import { usdFormatter } from '$lib/utils/functions.js';
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function defaultFormatter(value, _payload) {
 		return `${value}`;

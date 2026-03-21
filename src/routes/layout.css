@@ -8,25 +8,29 @@
 	font-family: 'Poppins';
 	font-style: normal;
 	font-weight: 400;
-	src: url('/fonts/poppins/static/Poppins-Regular.ttf') format('truetype');
+	src: url('/fonts/poppins/static/poppins-v24-latin-regular.woff2') format('truetype');
+	font-display: swap;
 }
 @font-face {
 	font-family: 'Poppins';
 	font-style: normal;
 	font-weight: 500;
-	src: url('/fonts/poppins/static/Poppins-Medium.ttf') format('truetype');
+	src: url('/fonts/poppins/static/poppins-v24-latin-500.woff2') format('truetype');
+	font-display: swap;
 }
 @font-face {
 	font-family: 'Poppins';
 	font-style: normal;
 	font-weight: 600;
-	src: url('/fonts/poppins/static/Poppins-SemiBold.ttf') format('truetype');
+	src: url('/fonts/poppins/static/poppins-v24-latin-600.woff2') format('truetype');
+	font-display: swap;
 }
 @font-face {
 	font-family: 'Poppins';
 	font-style: normal;
 	font-weight: 700;
-	src: url('/fonts/poppins/static/Poppins-Bold.ttf') format('truetype');
+	src: url('/fonts/poppins/static/poppins-v24-latin-700.woff2') format('truetype');
+	font-display: swap;
 }
 
 :root {
@@ -77,29 +81,29 @@
 
 .dark {
 	--white-0: #000000;
-	--yellow-100: oklch(58.5% 0.233 277.117);
-	--yellow-200: oklch(51.1% 0.262 276.966);
-	--grey-50: oklch(55.1% 0.027 264.364);
-	--grey-100: oklch(60.32% 0 0);
-	--grey-150: oklch(46.94% 0.003 17.25);
-	--grey-200: oklch(44.95% 0 0);
-	--grey-300: #d8d8d8;
-	--grey-400: oklch(37.15% 0 0);
-	--grey-500: oklch(34.37% 0.004 17.36);
-	--grey-550: oklch(32.11% 0 0);
-	--grey-600: oklch(92.8% 0.006 264.531);
-	--grey-700: oklch(28.09% 0 0);
-	--grey-750: oklch(26.25% 0.003 17.35);
-	--grey-775: oklch(27.27% 0 0);
-	--grey-800: #faf5f6;
-	--grey-900: oklch(23.08% 0 0);
-	--grey-1000: #ffffff;
-	--grey-1100: oklch(70.7% 0.022 261.325);
-	--blue-100: oklch(90.35% 0.047 228.18);
-	--green-100: oklch(91.1% 0.107 131.53);
-	--green-200: #72d021;
-	--red-100: oklch(90.65% 0.048 18.08);
-	--red-200: oklch(61.29% 0.217 26.5);
+	--yellow-100: #000000;
+	--yellow-200: #000000;
+	--grey-50: #000000;
+	--grey-100: #000000;
+	--grey-150: #000000;
+	--grey-200: #000000;
+	--grey-300: #000000;
+	--grey-400: #000000;
+	--grey-500: #000000;
+	--grey-550: #000000;
+	--grey-600: #000000;
+	--grey-700: #000000;
+	--grey-750: #000000;
+	--grey-775: #000000;
+	--grey-800: #000000;
+	--grey-900: #000000;
+	--grey-1000: #000000;
+	--grey-1100: #000000;
+	--blue-100: #000000;
+	--green-100: #000000;
+	--green-200: #000000;
+	--red-100: #000000;
+	--red-200: #000000;
 }
 
 @theme {
@@ -108,7 +112,6 @@
 	--radius-20: 1.25rem;
 	--radius-30: 1.875rem;
 	--blur-3px: 3px;
-	--breakpoint-1126: 70.375rem;
 }
 
 @theme inline {
@@ -143,7 +146,7 @@
 		@apply min-h-screen scroll-smooth;
 	}
 	body {
-		@apply flex min-h-screen flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased dark:bg-grey-800 dark:text-black;
+		@apply flex min-h-screen flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased;
 	}
 }
 
@@ -221,38 +224,23 @@ body.auth-bg {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-	/* We want a view transition between pages */
 	@view-transition {
 		navigation: auto;
 	}
-	/* Note that the animation duration in here dictates
-       how long it takes to actually "do" the navigation to
-       the second page, so it really ought to agree with the
-       duration of ::view-transition-new below so when the
-       incoming animation finishes, the navigation happens. */
 	::view-transition-group(root) {
 		animation-duration: 1.5s;
 	}
-
-	/* To animate the value of a custom property, you
-       have to declare it with @property.
-       Our var(--time) will range between 0 and 1 */
 	@property --time {
 		syntax: '<number>';
 		initial-value: 0;
 		inherits: true;
 	}
-
-	/* A do-nothing animation for the outgoing page */
 	@keyframes move-out {
 		from {
 		}
 		to {
 		}
 	}
-
-	/* actually animate time from a bit before 0 to a bit after 1,
-       so that the wave appears a bit above the screen and ends a bit after */
 	@keyframes move-in {
 		from {
 			--time: -0.1;
@@ -261,35 +249,14 @@ body.auth-bg {
 			--time: 1.1;
 		}
 	}
-
-	/* The old page has to have some transition animation defined,
-          or it gets the default fade. */
 	::view-transition-old(root) {
 		animation: 2s ease-in both move-out;
 	}
-
-	/* The new page appears with our wave effect */
 	::view-transition-new(root) {
-		--humps: 1.5; /* the number of "waves" in the wave effect */
-		--pi: 3.14; /* half of tau */
-		--lr: calc(var(--humps) * pi); /* the amout of radians from left to right */
-		--time: 0; /* how far we are through the animation */
-
-		/* The wave is:
-           --humps number of humps from left to right
-           vertically positioned at 100% * --time (so it
-              goes from top to bottom)
-           horizontally offset (scrolled) by --time so that
-              the wave fronts move left to right
-           And we manually create a sine wave (well, technically a cosine wave)
-              by calculating the height of each bit of the clip path every 10%
-              of the way from left to right of the screen
-           This seems close enough for government work, but people with sharp eyes
-              might think the wave is not smooth enough, in which case add more lines
-              to the clip path. The first number (10%) is the position of a point from
-              left to right across the screen, and the second is the position of that
-              point up and down; note that the 0.1 in the cos needs to agree with the 10%
-              l-r position. */
+		--humps: 1.5;
+		--pi: 3.14;
+		--lr: calc(var(--humps) * pi);
+		--time: 0;
 		clip-path: polygon(
 			0% 0%,
 			0% calc(cos(calc(0 + var(--time)) * var(--lr)) * 10% + calc(100% * var(--time))),
@@ -305,7 +272,6 @@ body.auth-bg {
 			100% calc(cos(calc(1 + var(--time)) * var(--lr)) * 10% + calc(100% * var(--time))),
 			100% 0%
 		);
-		/* And declare the animation, which is what moves the wave */
 		animation: 1.5s ease-in both move-in;
 	}
 }
