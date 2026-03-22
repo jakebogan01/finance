@@ -10,7 +10,7 @@
 <Head page_title="Finance | {page.status}" description={page.error.message} />
 
 <DefaultLayout>
-	{#snippet content()}
+	<div class="space-y-2">
 		<span class="text-grey-50">{page.status}</span>
 		<h2 class="text-preset-8-bold">{page.error.message}</h2>
 		{#if page.status === 404}
@@ -24,5 +24,5 @@
 			<MoveLeftIcon class="size-4" />
 			Back to home
 		</a>
-	{/snippet}
+	</div>
 </DefaultLayout>

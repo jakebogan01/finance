@@ -6,3 +6,8 @@
 	page_title="Finance | Sign up"
 	description="Create your Finance account to start tracking income, expenses, and budgets in a simple, collaborative dashboard built for full control over your finances."
 />
+
+<div class="space-y-2">
+	<h2 class="text-preset-8-bold">Sign up</h2>
+	<p class="text-grey-50">Keeping track of your finances starts here.</p>
+</div>
