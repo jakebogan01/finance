@@ -1,17 +1,16 @@
 <script>
-	import AuthForm from "$lib/components/AuthForm.svelte";
-	// import { DASHBOARD } from '$lib/utils/constants.js';
+	import AuthForm from '$lib/components/AuthForm.svelte';
+	import { DASHBOARD } from '$lib/utils/constants.js';
 	import { authCheck } from '$lib/utils/functions.js';
 	import { authSchema } from '$lib/utils/schemas.js';
 	import { SIGNUP } from '$lib/utils/constants.js';
 	import { validator } from '@felte/validator-zod';
 	import Head from '$lib/components/Head.svelte';
 	import reporterDom from '@felte/reporter-dom';
-	// import { goto } from '$app/navigation';
-	// import { resolve } from '$app/paths';
-	// import pb from '$lib/pocketbase.js';
+	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
-	import { resolve } from "$app/paths";
+	import { resolve } from '$app/paths';
+	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
 	import { onMount } from 'svelte';
 
@@ -19,7 +18,7 @@
 
 	let props = {
 		buttonText: 'Sign in',
-		useStrongPassword: false
+		strongPassword: false
 	};
 
 	const { form, reset, isSubmitting } = createForm({
@@ -30,11 +29,10 @@
 		extend: [validator({ schema: authSchema }), reporterDom()],
 		onSubmit: async (values) => {
 			try {
-				console.log(values);
-				// await pb.collection('users').authWithPassword(values.email, values.password);
-				// await goto(resolve(DASHBOARD));
-				// toast.success('Successfully signed in!');
-				// reset();
+				await pb.collection('users').authWithPassword(values.email, values.password);
+				await goto(resolve(DASHBOARD));
+				await toast.success('Successfully signed in!');
+				reset();
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');
@@ -54,10 +52,8 @@
 </div>
 
 <AuthForm {form} disableButton={$isSubmitting} {...props}>
-	{#snippet bellowFormButton()}
+	{#snippet belowFormButton()}
 		Don't have an account?
-		<a href={resolve(SIGNUP)} class="md:transition-colors md:hover:text-yellow-200">
-			Sign up
-		</a>
+		<a href={resolve(SIGNUP)} class="md:transition-colors md:hover:text-yellow-200"> Sign up </a>
 	{/snippet}
 </AuthForm>
