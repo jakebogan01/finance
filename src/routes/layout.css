@@ -80,23 +80,23 @@
 }
 
 .dark {
-	--white-0: #000000;
+	--white-0: oklch(100% 0 0);
 	--yellow-100: #000000;
-	--yellow-200: #000000;
+	--yellow-200: oklch(45.7% 0.24 277.023);
 	--grey-50: #000000;
 	--grey-100: #000000;
 	--grey-150: #000000;
-	--grey-200: #000000;
-	--grey-300: #000000;
+	--grey-200: oklch(92.8% 0.006 264.531);
+	--grey-300: oklch(87.2% 0.01 258.338);
 	--grey-400: #000000;
-	--grey-500: #000000;
+	--grey-500: oklch(55.1% 0.027 264.364);
 	--grey-550: #000000;
 	--grey-600: #000000;
 	--grey-700: #000000;
 	--grey-750: #000000;
 	--grey-775: #000000;
 	--grey-800: #000000;
-	--grey-900: #000000;
+	--grey-900: oklch(21% 0.034 264.665);
 	--grey-1000: #000000;
 	--grey-1100: #000000;
 	--blue-100: #000000;
@@ -143,10 +143,10 @@
 
 @layer base {
 	html {
-		@apply min-h-screen scroll-smooth;
+		@apply min-h-dvh scroll-smooth;
 	}
 	body {
-		@apply flex min-h-screen flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased;
+		@apply flex min-h-dvh flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased dark:bg-grey-200 dark:text-grey-900;
 	}
 }
 
