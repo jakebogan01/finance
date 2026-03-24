@@ -1,8 +1,7 @@
 <script>
-	import * as Avatar from '../avatar';
-	import SquarePenIcon from '@lucide/svelte/icons/square-pen';
 	import { useImageCropperPreview } from './image-cropper.svelte.js';
 	import UploadIcon from '@lucide/svelte/icons/upload';
+	import * as Avatar from '../avatar';
 	import { cn } from '$lib/utils.js';
 
 	let { child, class: className } = $props();
@@ -20,9 +19,9 @@
 		)}
 	>
 		<div
-			class="absolute inset-0 flex items-center justify-center bg-grey-1100/70 text-gray-300 opacity-0 md:transition-opacity md:group-hover:opacity-100 dark:text-black"
+			class="absolute inset-0 flex items-center justify-center bg-grey-1100/70 text-gray-300 opacity-0 md:transition-opacity md:group-hover:opacity-100 dark:bg-grey-200/70 dark:text-grey-900"
 		>
-			<SquarePenIcon class="size-4" />
+			<UploadIcon class="size-4" />
 		</div>
 		<Avatar.Image src={previewState.rootState.src} />
 		<Avatar.Fallback>

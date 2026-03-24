@@ -59,10 +59,7 @@
 								class="text-preset-4-semibold flex items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 data-[active=true]:bg-yellow-100 data-[active=true]:text-grey-600 md:transition-colors md:data-[active=false]:hover:text-white-0 dark:text-grey-900 dark:data-[active=true]:bg-yellow-200 dark:data-[active=true]:text-white-0 dark:md:data-[active=false]:hover:text-yellow-200"
 								use:active
 							>
-								<Icon
-									class={['size-5 shrink-0', i === 0 && 'fill-grey-600 dark:fill-white-0']}
-									strokeWidth="1.5"
-								/>
+								<Icon class={['size-5 shrink-0', i === 0 && 'fill-grey-600 dark:fill-white-0']} />
 								{page}
 							</a>
 						</li>

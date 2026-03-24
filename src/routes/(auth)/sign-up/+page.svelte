@@ -70,7 +70,15 @@
 <AuthForm {form} disableButton={$isSubmitting} {...props}>
 	{#snippet nameField()}
 		<FormField id="name" name="name" label="Name">
-			<Input type="text" id="name" name="name" placeholder="Name" autocomplete="name" />
+			<Input
+				type="text"
+				id="name"
+				name="name"
+				placeholder="Name"
+				autocomplete="name"
+				maxLength="255"
+				minLength="1"
+			/>
 		</FormField>
 	{/snippet}
 	{#snippet passwordConfirmField()}
@@ -81,6 +89,8 @@
 					name="passwordConfirm"
 					placeholder="Confirm Password"
 					autocomplete="new-password"
+					maxLength="71"
+					minLength="1"
 				>
 					<Password.ToggleVisibility />
 				</Password.Input>

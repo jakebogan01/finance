@@ -18,7 +18,16 @@
 <form class="space-y-6" use:form>
 	{@render nameField?.()}
 	<FormField id="email" name="email" label="Email Address">
-		<Input type="email" id="email" name="email" placeholder="Email Address" autocomplete="email" />
+		<Input
+			type="email"
+			id="email"
+			name="email"
+			placeholder="Email Address"
+			autocomplete="email"
+			maxLength="255"
+			minLength="1"
+			inputmode="email"
+		/>
 	</FormField>
 	<FormField id="password" name="password" label="Password">
 		<Password.Root>
@@ -27,6 +36,8 @@
 				name="password"
 				placeholder="Password"
 				autocomplete={strongPassword ? 'new-password' : 'current-password'}
+				maxLength="71"
+				minLength="1"
 			>
 				<Password.ToggleVisibility />
 			</Password.Input>
