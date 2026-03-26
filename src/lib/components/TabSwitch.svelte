@@ -37,7 +37,7 @@
 <ul
 	bind:this={containerEl}
 	role="tablist"
-	class="text-preset-2-medium relative flex h-10.5 w-full items-center justify-center overflow-hidden rounded-10 bg-grey-600 dark:bg-grey-200"
+	class="text-preset-2-medium relative flex h-11 w-full items-center justify-center overflow-hidden rounded-10 bg-grey-600 dark:bg-grey-200"
 >
 	{#each tabItems as item, i (i)}
 		<li role="listitem" class="h-full flex-1">
@@ -49,7 +49,7 @@
 				aria-label={item}
 				role="tab"
 				aria-selected={active === item}
-				class="btn disable relative z-10 flex h-full w-full cursor-pointer items-center justify-center gap-x-1.5 transition-colors delay-100 duration-200 select-none after:absolute after:z-0 after:h-full after:w-full after:rounded-lg after:content-[''] {active ===
+				class="btn disable after: relative z-10 flex h-full w-full transform cursor-pointer items-center justify-center gap-x-1.5 transition-colors delay-100 duration-200 select-none after:absolute after:z-0 after:h-full after:w-full after:rounded-lg after:content-[''] {active ===
 				item
 					? 'text-grey-1100 after:scale-x-92 after:scale-y-82 after:bg-yellow-200 dark:text-white-0'
 					: 'text-grey-50 not-hover:delay-0 not-hover:duration-200 after:scale-x-0 after:scale-y-0 after:bg-transparent md:hover:text-white-0 dark:text-grey-500 dark:md:hover:text-grey-900'}"

@@ -9,7 +9,9 @@
 	import dark_logo from '$lib/assets/graphics/dark_logo.svg';
 	import TabSwitch from '$lib/components/TabSwitch.svelte';
 	import SettingsIcon from '@lucide/svelte/icons/settings';
+	import LogOutIcon from '@lucide/svelte/icons/log-out';
 	import { active } from '$lib/actions/active.svelte';
+	import { logout } from '$lib/utils/functions.js';
 	import { resolve } from '$app/paths';
 
 	let { mobile = false, onAction = () => {} } = $props();
@@ -72,9 +74,20 @@
 								class="text-preset-4-semibold flex items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 data-[active=true]:bg-yellow-100 data-[active=true]:text-grey-600 md:transition-colors md:data-[active=false]:hover:text-white-0 dark:text-grey-900 dark:data-[active=true]:bg-yellow-200 dark:data-[active=true]:text-white-0 dark:md:data-[active=false]:hover:text-yellow-200"
 								use:active
 							>
-								<SettingsIcon class="size-5 shrink-0" strokeWidth="1.5" />
+								<SettingsIcon class="size-5 shrink-0" />
 								Settings
 							</a>
+						</li>
+						<li>
+							<button
+								type="button"
+								onclick={logout}
+								aria-label="Logout"
+								class="text-preset-4-semibold flex w-full cursor-pointer items-center gap-x-4.5 rounded-lg bg-transparent p-4 text-grey-50 md:transition-colors md:hover:text-white-0 dark:text-grey-900"
+							>
+								<LogOutIcon class="size-5 shrink-0" />
+								Sign out
+							</button>
 						</li>
 					{/if}
 				</ul>

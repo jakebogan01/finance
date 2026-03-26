@@ -1,4 +1,5 @@
 <script>
+	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
 	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
@@ -6,7 +7,7 @@
 	let { children } = $props();
 </script>
 
-{@render children?.()}
+<MobileSidebar />
 
 <div
 	class={[
