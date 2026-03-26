@@ -27,3 +27,13 @@ export const logout = async () => {
 	await goto(resolve(SIGNIN));
 	await toast.success('Successfully logged out!');
 };
+
+export const generateSlug = (title) => {
+	return title
+		.toLowerCase()
+		.trim()
+		.replace(/\s+/g, '-') // Replace spaces with hyphens
+		.replace(/[^\w\-]+/g, '') // Remove non-word characters
+		.replace(/\-\-+/g, '-') // Replace multiple hyphens with a single hyphen
+		.replace(/^-+|-+$/g, ''); // Trim hyphens from start and end
+};

@@ -7,7 +7,7 @@
 <div
 	bind:this={ref}
 	data-slot="dialog-footer"
-	class={cn('flex justify-end gap-x-6.5', className)}
+	class={cn('flex items-center gap-x-6.5', className)}
 	{...restProps}
 >
 	{@render children?.()}
