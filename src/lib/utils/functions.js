@@ -37,3 +37,18 @@ export const generateSlug = (title) => {
 		.replace(/\-\-+/g, '-') // Replace multiple hyphens with a single hyphen
 		.replace(/^-+|-+$/g, ''); // Trim hyphens from start and end
 };
+
+export const onlyNumbers = (e) => (e.target.value = e.target.value.replace(/\D/g, ''));
+
+export const unformatCurrency = (e) => (e.target.value = e.target.value.replace(/\D/g, ''));
+
+export const formatCurrency = (e) => {
+	const value = e.target.value.replace(/\D/g, '');
+	if (!value) return;
+	e.target.value = usdFormatter.format(Number(value));
+};
+
+export const cleanNumber = (v) => {
+	const cleaned = String(v).replace(/\D/g, '');
+	return cleaned ? Number(cleaned) : null;
+};

@@ -22,3 +22,18 @@ export const nameSchema = zod.object({
 		.nonempty({ message: 'Name is required' })
 		.max(MAX_CHARACTER_LENGTH, { message: 'Must be less than 255 characters' })
 });
+
+export const incomeSchema = zod.object({
+	name: zod
+		.string()
+		.trim()
+		.nonempty({ message: 'Name is required' })
+		.max(255, { message: 'Must be less than 255 characters' }),
+	amount: zod
+		.number({
+			required_error: 'Amount is required',
+			invalid_type_error: 'Amount is required'
+		})
+		.min(1, { message: 'Amount is required' })
+		.max(1_000_000_000, { message: 'Amount is too large' })
+});

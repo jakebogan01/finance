@@ -8,7 +8,10 @@
 <Button
 	type="submit"
 	disabled={disableButton}
-	class={['h-13 bg-yellow-200 px-6 font-medium text-grey-800 md:hover:bg-yellow-100', className]}
+	class={[
+		'h-13 bg-yellow-200 px-6 font-medium text-grey-800 md:hover:bg-yellow-100 dark:text-white-0',
+		className
+	]}
 >
 	{#if disableButton}
 		<Spinner />
