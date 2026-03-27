@@ -52,3 +52,8 @@ export const cleanNumber = (v) => {
 	const cleaned = String(v).replace(/\D/g, '');
 	return cleaned ? Number(cleaned) : null;
 };
+
+export const payTypes = ['Per Month', 'Bi Weekly', 'Per Week'].map((s) => ({
+	value: s.toLowerCase().replace(/\s+/g, ' '),
+	label: s
+}));

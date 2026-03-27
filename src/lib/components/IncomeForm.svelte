@@ -1,15 +1,8 @@
 <script>
-	import {
-		generateSlug,
-		onlyNumbers,
-		unformatCurrency,
-		formatCurrency,
-		cleanNumber
-	} from '$lib/utils/functions.js';
+	import { generateSlug, cleanNumber, payTypes } from '$lib/utils/functions.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import FormField from '$lib/components/FormField.svelte';
+	import PartOne from '$lib/components/PartOne.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { validator } from '@felte/validator-zod';
@@ -18,8 +11,15 @@
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
 
+	let indexes = $state({
+		pay: 0,
+		state: 0,
+		category: 0
+	});
+
 	let formState = $state({
-		step: 1
+		step: 1,
+		payDropDown: payTypes[0].value
 	});
 
 	const { form, reset, isSubmitting } = createForm({
@@ -47,26 +47,7 @@
 
 <FormLayout step={formState.step}>
 	<form class="space-y-6.5" use:form>
-		<div class:hidden={formState.step !== 1} class="grid grid-cols-6 gap-6.5">
-			<FormField id="name" name="name" label="Name" class="col-span-full">
-				<Input type="text" id="name" name="name" placeholder="Name" maxLength="255" minLength="1" />
-			</FormField>
-			<FormField id="amount" name="amount" label="Amount" class="col-span-3">
-				<Input
-					type="text"
-					id="amount"
-					name="amount"
-					placeholder="Amount"
-					maxLength="255"
-					minLength="1"
-					inputmode="numeric"
-					pattern="[0-9]*"
-					oninput={onlyNumbers}
-					onfocus={unformatCurrency}
-					onblur={formatCurrency}
-				/>
-			</FormField>
-		</div>
+		<PartOne pay={indexes.pay} {...formState} />
 		<Dialog.Footer>
 			<FormButton disableButton={$isSubmitting} text="Submit" class="w-full" />
 		</Dialog.Footer>
