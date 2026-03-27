@@ -8,7 +8,7 @@
 </script>
 
 <div class:hidden={step !== 1} class="grid grid-cols-6 gap-6.5">
-	<FormField id="name" name="name" label="Name" class="col-span-full">
+	<FormField id="name" name="name" label="Name">
 		<Input type="text" id="name" name="name" placeholder="Name" maxLength="255" minLength="1" />
 	</FormField>
 	<div class="col-span-3">

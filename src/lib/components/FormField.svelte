@@ -1,7 +1,7 @@
 <script>
 	import FieldErrors from '$lib/components/FieldErrors.svelte';
 
-	let { children, id, name, label, class: className } = $props();
+	let { children, id, name, label, class: className = 'col-span-full' } = $props();
 </script>
 
 <div class={className}>

@@ -20,11 +20,13 @@
 
 	let formState = $state({
 		step: 1,
+		phoneValue: null,
 		payDropDown: payTypes[0].value
 	});
 
 	const resetState = () => {
 		formState.step = 1;
+		formState.phoneValue = null;
 		formState.payDropDown = payTypes[0].value;
 		indexes.pay = 0;
 	};
@@ -33,12 +35,14 @@
 		values.user = pb.authStore.record?.id;
 		values.slug = generateSlug(values.name);
 		values.pay_frequency = formState.payDropDown;
+		values.phone = formState.phoneValue;
 		return cleanObject(values);
 	};
 
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
-		await pb.collection('incomes').create(payload);
+		console.log(payload);
+		// await pb.collection('incomes').create(payload);
 	};
 
 	const { form, reset, isSubmitting, validate } = createForm({
@@ -86,7 +90,12 @@
 <FormLayout step={formState.step}>
 	<form class="space-y-6.5" use:form>
 		<PartOne pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
-		<PartTwo pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
+		<PartTwo
+			pay={indexes.pay}
+			step={formState.step}
+			bind:payDropDown={formState.payDropDown}
+			bind:phoneValue={formState.phoneValue}
+		/>
 		<Dialog.Footer>
 			{#if formState.step > 1}
 				<Button
