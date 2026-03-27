@@ -12,7 +12,7 @@
 		buttonVariants({ variant: 'ghost' }),
 		'flex size-(--cell-size) flex-col items-center justify-center gap-1 p-0 leading-none font-normal whitespace-nowrap select-none',
 		'[&[data-today]:not([data-selected])]:bg-accent [&[data-today]:not([data-selected])]:text-accent-foreground [&[data-today][data-disabled]]:text-muted-foreground',
-		'data-selected:bg-primary data-selected:text-primary-foreground dark:data-selected:hover:bg-grey-200',
+		'data-selected:bg-grey-500 data-selected:text-white-0 dark:data-selected:bg-grey-400',
 		// Outside months
 		'[&[data-outside-month]:not([data-selected])]:text-muted-foreground [&[data-outside-month]:not([data-selected])]:hover:text-white-0',
 		// Disabled

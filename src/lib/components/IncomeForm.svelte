@@ -1,17 +1,23 @@
 <script>
-	import { generateSlug, cleanNumber, payTypes, cleanObject } from '$lib/utils/functions.js';
+	import {
+		generateSlug,
+		cleanNumber,
+		payTypes,
+		cleanObject,
+		calendarDateToISO
+	} from '$lib/utils/functions.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
 	import PartOne from '$lib/components/PartOne.svelte';
 	import { incomeSchema } from '$lib/utils/schemas.js';
+	import PartTwo from '$lib/components/PartTwo.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { validator } from '@felte/validator-zod';
 	import reporterDom from '@felte/reporter-dom';
 	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
-	import PartTwo from '$lib/components/PartTwo.svelte';
 
 	let { open = $bindable() } = $props();
 	let indexes = $state({
@@ -21,12 +27,14 @@
 	let formState = $state({
 		step: 1,
 		phoneValue: null,
+		dateValue: null,
 		payDropDown: payTypes[0].value
 	});
 
 	const resetState = () => {
 		formState.step = 1;
 		formState.phoneValue = null;
+		formState.dateValue = null;
 		formState.payDropDown = payTypes[0].value;
 		indexes.pay = 0;
 	};
@@ -36,6 +44,7 @@
 		values.slug = generateSlug(values.name);
 		values.pay_frequency = formState.payDropDown;
 		values.phone = formState.phoneValue;
+		values.date = calendarDateToISO(formState.dateValue);
 		return cleanObject(values);
 	};
 
@@ -95,6 +104,7 @@
 			step={formState.step}
 			bind:payDropDown={formState.payDropDown}
 			bind:phoneValue={formState.phoneValue}
+			bind:dateValue={formState.dateValue}
 		/>
 		<Dialog.Footer>
 			{#if formState.step > 1}

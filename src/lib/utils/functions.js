@@ -43,6 +43,20 @@ export const usdFormatter = new Intl.NumberFormat('en-US', {
 });
 
 /**
+ * Converts calendar date object to ISO string
+ * @param {{ year: number, month: number, day: number }} value
+ * @returns {string|null}
+ */
+export const calendarDateToISO = (value) => {
+	if (!value) return null;
+
+	const { year, month, day } = value;
+	if (!year || !month || !day) return null;
+
+	return new Date(year, month - 1, day).toISOString();
+};
+
+/**
  * ----------------------------------------
  * Navigation / Auth Actions
  * ----------------------------------------
