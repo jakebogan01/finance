@@ -20,15 +20,19 @@
 	import { createForm } from 'felte';
 
 	let { open = $bindable() } = $props();
+
+	let noValue = $state(true);
 	let indexes = $state({
-		pay: 0
+		pay: 0,
+		state: 0
 	});
 
 	let formState = $state({
 		step: 1,
 		phoneValue: null,
 		dateValue: null,
-		payDropDown: payTypes[0].value
+		payDropDown: payTypes[0].value,
+		stateDropDown: ''
 	});
 
 	const resetState = () => {
@@ -36,7 +40,9 @@
 		formState.phoneValue = null;
 		formState.dateValue = null;
 		formState.payDropDown = payTypes[0].value;
+		formState.stateDropDown = '';
 		indexes.pay = 0;
+		noValue = true;
 	};
 
 	const buildPayload = (values) => {
@@ -44,6 +50,7 @@
 		values.slug = generateSlug(values.name);
 		values.pay_frequency = formState.payDropDown;
 		values.phone = formState.phoneValue;
+		values.state = formState.stateDropDown;
 		values.date = calendarDateToISO(formState.dateValue);
 		return cleanObject(values);
 	};
@@ -100,11 +107,12 @@
 	<form class="space-y-6.5" use:form>
 		<PartOne pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
 		<PartTwo
-			pay={indexes.pay}
+			{noValue}
+			state={indexes.state}
 			step={formState.step}
-			bind:payDropDown={formState.payDropDown}
 			bind:phoneValue={formState.phoneValue}
 			bind:dateValue={formState.dateValue}
+			bind:stateDropDown={formState.stateDropDown}
 		/>
 		<Dialog.Footer>
 			{#if formState.step > 1}

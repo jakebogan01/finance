@@ -12,7 +12,7 @@
 		<Input type="text" id="name" name="name" placeholder="Name" maxLength="255" minLength="1" />
 	</FormField>
 	<div class="col-span-3">
-		<DropDown list={payTypes} bind:result={payDropDown} index={pay} defaultText="Recurring" />
+		<DropDown list={payTypes} bind:result={payDropDown} index={pay} defaultText="Pay Frequency" />
 	</div>
 	<FormField id="amount" name="amount" label="Amount" class="col-span-3">
 		<Input

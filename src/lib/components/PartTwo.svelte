@@ -4,11 +4,12 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import FormField from '$lib/components/FormField.svelte';
 	import DropDown from '$lib/components/DropDown.svelte';
-	import { payTypes } from '$lib/utils/functions.js';
+	import { formatCurrency, onlyNumbers, states, unformatCurrency } from '$lib/utils/functions.js';
 
 	let {
-		pay,
-		payDropDown = $bindable(),
+		state,
+		noValue,
+		stateDropDown = $bindable(),
 		phoneValue = $bindable(),
 		dateValue = $bindable(),
 		step
@@ -34,7 +35,49 @@
 	<div class="relative col-span-3">
 		<DatePicker bind:value={dateValue} />
 	</div>
-	<!--	<div class="col-span-3">-->
-	<!--		<DropDown list={payTypes} bind:result={payDropDown} index={pay} defaultText="Recurring" />-->
-	<!--	</div>-->
+	<FormField id="address" name="address" label="Street Address">
+		<Input
+			type="text"
+			id="address"
+			name="address"
+			placeholder="Street Address"
+			autoComplete="shipping street-address"
+			maxLength="255"
+			minLength="1"
+		/>
+	</FormField>
+	<FormField id="city" name="city" label="City">
+		<Input
+			type="text"
+			id="city"
+			name="city"
+			placeholder="City"
+			autoComplete="shipping street-address"
+			maxLength="255"
+			minLength="1"
+		/>
+	</FormField>
+	<div class="col-span-3">
+		<DropDown
+			list={states}
+			bind:result={stateDropDown}
+			{noValue}
+			index={state}
+			defaultText="State"
+		/>
+	</div>
+	<FormField id="zip" name="zip" label="Zip Code" class="col-span-3">
+		<Input
+			type="text"
+			id="zip"
+			name="zip"
+			placeholder="Zip Code"
+			maxLength="5"
+			minLength="1"
+			autocomplete="postal-code"
+			inputmode="numeric"
+			pattern="[0-9]*"
+			oninput={onlyNumbers}
+		/>
+	</FormField>
 </div>

@@ -9,9 +9,7 @@
 
 	const id = $props.id();
 	let open = $state(false);
-	let dateValue = $derived(
-		value ? value.toDate(getLocalTimeZone()).toLocaleDateString() : 'Start Date'
-	);
+	let dateValue = $derived(value ? value.toDate(getLocalTimeZone()).toLocaleDateString() : 'Date');
 </script>
 
 <div class="flex flex-col gap-3">
@@ -32,7 +30,7 @@
 				</Button>
 			{/snippet}
 		</Popover.Trigger>
-		<Popover.Content class="w-auto overflow-hidden p-0" align="start">
+		<Popover.Content class="w-auto overflow-hidden p-0" align="end">
 			<Calendar
 				type="single"
 				bind:value
