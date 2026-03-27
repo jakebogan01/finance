@@ -7,10 +7,10 @@
 
 <Dialog.Content showCloseButton={false}>
 	<Dialog.Header class="text-center">
-		<Dialog.Title class="text-preset-5-semibold">Add Income</Dialog.Title>
-		<Dialog.Description class="dark:text-grey-600"
-			>This can be either a bill or a subscription</Dialog.Description
-		>
+		<Dialog.Title class="text-preset-5-semibold">
+			{step !== 2 ? 'Add Income' : 'Additional Information'}
+			<br /><span class="text-preset-3 text-grey-50">{step === 2 ? '(optional)' : ''}</span>
+		</Dialog.Title>
 	</Dialog.Header>
 	{#if isMultiStepForm}
 		<div class="flex items-center justify-center space-x-4">
