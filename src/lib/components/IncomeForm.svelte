@@ -1,5 +1,6 @@
 <script>
 	import { generateSlug, cleanNumber, payTypes, cleanObject } from '$lib/utils/functions.js';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
 	import PartOne from '$lib/components/PartOne.svelte';
@@ -10,6 +11,7 @@
 	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
+	import PartTwo from '$lib/components/PartTwo.svelte';
 
 	let { open = $bindable() } = $props();
 	let indexes = $state({
@@ -39,7 +41,7 @@
 		await pb.collection('incomes').create(payload);
 	};
 
-	const { form, reset, isSubmitting } = createForm({
+	const { form, reset, isSubmitting, validate } = createForm({
 		initialValues: {
 			name: '',
 			amount: ''
@@ -70,13 +72,41 @@
 			}
 		}
 	});
+
+	const next = async () => {
+		const result = await validate();
+		const keys = ['name', 'amount'];
+		const allEmpty = keys.every((key) => result[key] === null || result[key]?.length === 0);
+		if (allEmpty) formState.step += 1;
+	};
+
+	const back = () => (formState.step -= 1);
 </script>
 
 <FormLayout step={formState.step}>
 	<form class="space-y-6.5" use:form>
 		<PartOne pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
+		<PartTwo pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
 		<Dialog.Footer>
-			<FormButton disableButton={$isSubmitting} text="Submit" class="w-full" />
+			{#if formState.step > 1}
+				<Button
+					type="button"
+					onclick={back}
+					class="h-13 flex-1 border border-grey-300 bg-transparent px-6 font-medium md:hover:bg-grey-900 md:dark:hover:bg-gray-200"
+				>
+					Back
+				</Button>
+			{/if}
+			{#if formState.step < 2}
+				<Button
+					type="button"
+					onclick={next}
+					class="h-13 flex-1 border border-grey-300 bg-transparent px-6 font-medium md:hover:bg-grey-900 md:dark:hover:bg-gray-200"
+				>
+					Continue
+				</Button>
+			{/if}
+			<FormButton disableButton={$isSubmitting} text="Submit" class="flex-1" />
 		</Dialog.Footer>
 	</form>
 </FormLayout>
