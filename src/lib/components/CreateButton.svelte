@@ -2,8 +2,7 @@
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import * as Dialog from '$lib/components/ui/dialog';
 
-	let { children } = $props();
-	let open = $state(false);
+	let { children, open = $bindable() } = $props();
 </script>
 
 <Dialog.Root bind:open>

@@ -18,6 +18,7 @@
 	let open = $state(false);
 	let value = $derived(list.length > 0 && !noValue ? list[index].value : '');
 	let triggerRef = $state(null);
+
 	const selectedValue = $derived(list.find((f) => f.value === value)?.label);
 
 	const closeAndFocusTrigger = () => {

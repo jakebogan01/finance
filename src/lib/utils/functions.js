@@ -118,11 +118,30 @@ export const cleanNumber = (value) => {
 
 /**
  * ----------------------------------------
+ * Object Utilities
+ * ----------------------------------------
+ */
+/**
+ * Removes empty values from an object
+ * (filters out: '', null, undefined)
+ * @param {Object} obj
+ * @returns {Object}
+ */
+export const cleanObject = (obj = {}) => {
+	return Object.fromEntries(
+		Object.entries(obj).filter(
+			([_, value]) => value !== '' && value !== null && value !== undefined
+		)
+	);
+};
+
+/**
+ * ----------------------------------------
  * Constants
  * ----------------------------------------
  */
 export const payTypes = [
-	{ value: 'per_month', label: 'Per Month' },
-	{ value: 'bi_weekly', label: 'Bi Weekly' },
-	{ value: 'per_week', label: 'Per Week' }
+	{ value: 'per month', label: 'Per Month' },
+	{ value: 'bi weekly', label: 'Bi Weekly' },
+	{ value: 'per week', label: 'Per Week' }
 ];

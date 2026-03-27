@@ -1,5 +1,5 @@
 <script>
-	import { generateSlug, cleanNumber, payTypes } from '$lib/utils/functions.js';
+	import { generateSlug, cleanNumber, payTypes, cleanObject } from '$lib/utils/functions.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
 	import PartOne from '$lib/components/PartOne.svelte';
@@ -11,16 +11,33 @@
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
 
+	let { open = $bindable() } = $props();
 	let indexes = $state({
-		pay: 0,
-		state: 0,
-		category: 0
+		pay: 0
 	});
 
 	let formState = $state({
 		step: 1,
 		payDropDown: payTypes[0].value
 	});
+
+	const resetState = () => {
+		formState.step = 1;
+		formState.payDropDown = payTypes[0].value;
+		indexes.pay = 0;
+	};
+
+	const buildPayload = (values) => {
+		values.user = pb.authStore.record?.id;
+		values.slug = generateSlug(values.name);
+		values.pay_frequency = formState.payDropDown;
+		return cleanObject(values);
+	};
+
+	const saveRecord = async (values) => {
+		const payload = buildPayload(values);
+		await pb.collection('incomes').create(payload);
+	};
 
 	const { form, reset, isSubmitting } = createForm({
 		initialValues: {
@@ -34,9 +51,19 @@
 		}),
 		onSubmit: async (values) => {
 			try {
-				values.slug = generateSlug(values.name);
-				await pb.collection('incomes').create(values);
+				let amount = values.amount;
+				if (amount) {
+					if (formState.payDropDown === 'per week') {
+						amount *= 4;
+					} else if (formState.payDropDown === 'bi weekly') {
+						amount *= 2;
+					}
+				}
+				values.amount = amount;
+				await saveRecord(values);
 				reset();
+				resetState();
+				open = false;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');
@@ -47,7 +74,7 @@
 
 <FormLayout step={formState.step}>
 	<form class="space-y-6.5" use:form>
-		<PartOne pay={indexes.pay} step={formState.step} payDropDown={formState.payDropDown} />
+		<PartOne pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
 		<Dialog.Footer>
 			<FormButton disableButton={$isSubmitting} text="Submit" class="w-full" />
 		</Dialog.Footer>

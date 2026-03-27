@@ -8,6 +8,8 @@
 	import { onMount } from 'svelte';
 
 	onMount(() => authCheck(303, SIGNIN, true));
+
+	let open = $state(false);
 </script>
 
 <Head
@@ -18,8 +20,8 @@
 <section class="bg-purple-500 dark:bg-transparent">
 	<Command.Root>
 		<div class="flex items-center justify-between gap-5 bg-yellow-500 dark:bg-transparent">
-			<CreateButton>
-				<IncomeForm />
+			<CreateButton bind:open>
+				<IncomeForm bind:open />
 			</CreateButton>
 		</div>
 	</Command.Root>
