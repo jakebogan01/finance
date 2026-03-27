@@ -4,6 +4,11 @@ const MAX_CHARACTER_LENGTH = 255;
 const MAX_AMOUNT = 1_000_000_000;
 
 /**
+ * Helpers
+ */
+const emptyToUndefined = (val) => (val === '' ? undefined : val);
+
+/**
  * Reusable field schemas
  */
 const emailField = z
@@ -13,6 +18,8 @@ const emailField = z
 	.max(MAX_CHARACTER_LENGTH, { message: `Must be less than ${MAX_CHARACTER_LENGTH} characters` })
 	.pipe(z.string().email({ message: 'Please enter a valid email address' }));
 
+const optionalEmailField = z.preprocess(emptyToUndefined, emailField.optional());
+
 const passwordField = z
 	.string()
 	.min(8, { message: 'Must be at least 8 characters long' })
@@ -21,8 +28,18 @@ const passwordField = z
 const nameField = z
 	.string()
 	.trim()
-	.min(1, { message: 'Name is required' }) // better than nonempty for trimmed values
+	.min(1, { message: 'Name is required' })
 	.max(MAX_CHARACTER_LENGTH, { message: `Must be less than ${MAX_CHARACTER_LENGTH} characters` });
+
+const optionalStringField = z.preprocess(
+	emptyToUndefined,
+	z
+		.string()
+		.trim()
+		.toLowerCase()
+		.max(MAX_CHARACTER_LENGTH, { message: `Must be less than ${MAX_CHARACTER_LENGTH} characters` })
+		.optional()
+);
 
 /**
  * Handles both string + number inputs (form-safe)
@@ -34,6 +51,15 @@ const amountField = z.coerce
 	})
 	.min(1, { message: 'Amount is required' })
 	.max(MAX_AMOUNT, { message: 'Amount is too large' });
+
+const zipField = z.preprocess(
+	(val) => (val === '' ? undefined : val),
+	z
+		.string()
+		.trim()
+		.regex(/^\d{5}$/, { message: 'Invalid zip format' })
+		.optional()
+);
 
 /**
  * Schemas
@@ -49,5 +75,9 @@ export const nameSchema = z.object({
 
 export const incomeSchema = z.object({
 	name: nameField,
-	amount: amountField
+	amount: amountField,
+	email: optionalEmailField,
+	address: optionalStringField,
+	city: optionalStringField,
+	zip: zipField
 });

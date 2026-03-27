@@ -1,10 +1,10 @@
 <script>
+	import { onlyNumbers, states } from '$lib/utils/functions.js';
 	import { PhoneInput } from '$lib/components/ui/phone-input';
 	import DatePicker from '$lib/components/DatePicker.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import FormField from '$lib/components/FormField.svelte';
 	import DropDown from '$lib/components/DropDown.svelte';
-	import { formatCurrency, onlyNumbers, states, unformatCurrency } from '$lib/utils/functions.js';
 
 	let {
 		state,
@@ -41,7 +41,7 @@
 			id="address"
 			name="address"
 			placeholder="Street Address"
-			autoComplete="shipping street-address"
+			autoComplete="address-line1"
 			maxLength="255"
 			minLength="1"
 		/>
@@ -52,7 +52,7 @@
 			id="city"
 			name="city"
 			placeholder="City"
-			autoComplete="shipping street-address"
+			autoComplete="saddress-level2"
 			maxLength="255"
 			minLength="1"
 		/>

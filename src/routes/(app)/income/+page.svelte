@@ -10,6 +10,8 @@
 	onMount(() => authCheck(303, SIGNIN, true));
 
 	let open = $state(false);
+	let resetForm = $state(false);
+	let handleReset = $state(null);
 </script>
 
 <Head
@@ -20,8 +22,8 @@
 <section class="bg-purple-500 dark:bg-transparent">
 	<Command.Root>
 		<div class="flex items-center justify-between gap-5 bg-yellow-500 dark:bg-transparent">
-			<CreateButton bind:open>
-				<IncomeForm bind:open />
+			<CreateButton bind:handleReset bind:open>
+				<IncomeForm bind:handleReset {resetForm} bind:open />
 			</CreateButton>
 		</div>
 	</Command.Root>

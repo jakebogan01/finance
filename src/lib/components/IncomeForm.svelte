@@ -19,9 +19,10 @@
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
 
-	let { open = $bindable() } = $props();
+	let { handleReset = $bindable(), open = $bindable() } = $props();
 
 	let noValue = $state(true);
+	let checked = $state(true);
 	let indexes = $state({
 		pay: 0,
 		state: 0
@@ -42,6 +43,8 @@
 		formState.payDropDown = payTypes[0].value;
 		formState.stateDropDown = '';
 		indexes.pay = 0;
+		indexes.state = 0;
+		checked = true;
 		noValue = true;
 	};
 
@@ -52,19 +55,23 @@
 		values.phone = formState.phoneValue;
 		values.state = formState.stateDropDown;
 		values.date = calendarDateToISO(formState.dateValue);
+		values.status = checked;
 		return cleanObject(values);
 	};
 
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
-		console.log(payload);
-		// await pb.collection('incomes').create(payload);
+		await pb.collection('incomes').create(payload);
 	};
 
 	const { form, reset, isSubmitting, validate } = createForm({
 		initialValues: {
 			name: '',
-			amount: ''
+			amount: '',
+			email: '',
+			address: '',
+			city: '',
+			zip: ''
 		},
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
 		transform: (values) => ({
@@ -101,6 +108,8 @@
 	};
 
 	const back = () => (formState.step -= 1);
+
+	handleReset = () => resetState();
 </script>
 
 <FormLayout step={formState.step}>
