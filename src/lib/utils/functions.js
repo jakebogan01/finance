@@ -5,55 +5,124 @@ import { toast } from 'svelte-sonner';
 import { resolve } from '$app/paths';
 import pb from '$lib/pocketbase.js';
 
-export const authCheck = (status = 303, redirectLink = DASHBOARD, authenticated = false) => {
-	if (authenticated) {
-		if (!pb.authStore.isValid && !pb.authStore.token && !pb.authStore?.record?.id)
-			redirect(status, redirectLink);
-	} else {
-		if (pb.authStore.isValid && pb.authStore.token && pb.authStore?.record?.id)
-			redirect(status, redirectLink);
+/**
+ * ----------------------------------------
+ * Auth Helpers
+ * ----------------------------------------
+ */
+const isAuthenticated = () =>
+	pb.authStore.isValid && !!pb.authStore.token && !!pb.authStore?.record?.id;
+
+/**
+ * Handles route protection
+ * @param {number} status
+ * @param {string} redirectLink
+ * @param {boolean} requireAuth - true = must be logged in, false = must be logged out
+ */
+export const authCheck = (status = 303, redirectLink = DASHBOARD, requireAuth = false) => {
+	const authed = isAuthenticated();
+
+	if (requireAuth && !authed) {
+		redirect(status, redirectLink);
+	}
+
+	if (!requireAuth && authed) {
+		redirect(status, redirectLink);
 	}
 };
 
+/**
+ * ----------------------------------------
+ * Formatters
+ * ----------------------------------------
+ */
 export const usdFormatter = new Intl.NumberFormat('en-US', {
 	style: 'currency',
 	currency: 'USD',
 	maximumFractionDigits: 0
 });
 
+/**
+ * ----------------------------------------
+ * Navigation / Auth Actions
+ * ----------------------------------------
+ */
 export const logout = async () => {
-	pb.authStore.clear();
-	document.documentElement.classList.remove('dark');
-	await goto(resolve(SIGNIN));
-	await toast.success('Successfully logged out!');
+	try {
+		pb.authStore.clear();
+
+		// reset theme (if applicable)
+		document.documentElement.classList.remove('dark');
+
+		await goto(resolve(SIGNIN));
+		toast.success('Successfully logged out!');
+	} catch (err) {
+		console.error('Logout failed:', err);
+		toast.error('Failed to log out. Please try again.');
+	}
 };
 
-export const generateSlug = (title) => {
-	return title
+/**
+ * ----------------------------------------
+ * String Utilities
+ * ----------------------------------------
+ */
+export const generateSlug = (value = '') => {
+	return String(value)
+		.normalize('NFKD') // handle accented characters
 		.toLowerCase()
 		.trim()
-		.replace(/\s+/g, '-') // Replace spaces with hyphens
-		.replace(/[^\w\-]+/g, '') // Remove non-word characters
-		.replace(/\-\-+/g, '-') // Replace multiple hyphens with a single hyphen
-		.replace(/^-+|-+$/g, ''); // Trim hyphens from start and end
+		.replace(/\s+/g, '-')
+		.replace(/[^\w-]+/g, '')
+		.replace(/--+/g, '-')
+		.replace(/^-+|-+$/g, '');
 };
 
-export const onlyNumbers = (e) => (e.target.value = e.target.value.replace(/\D/g, ''));
+/**
+ * ----------------------------------------
+ * Input Helpers
+ * ----------------------------------------
+ */
+const stripNonDigits = (value) => String(value).replace(/\D/g, '');
 
-export const unformatCurrency = (e) => (e.target.value = e.target.value.replace(/\D/g, ''));
+export const onlyNumbers = (e) => {
+	if (!e?.target) return;
+	e.target.value = stripNonDigits(e.target.value);
+};
+
+export const unformatCurrency = (e) => {
+	if (!e?.target) return;
+	e.target.value = stripNonDigits(e.target.value);
+};
 
 export const formatCurrency = (e) => {
-	const value = e.target.value.replace(/\D/g, '');
-	if (!value) return;
-	e.target.value = usdFormatter.format(Number(value));
+	if (!e?.target) return;
+
+	const raw = stripNonDigits(e.target.value);
+	if (!raw) {
+		e.target.value = '';
+		return;
+	}
+
+	e.target.value = usdFormatter.format(Number(raw));
 };
 
-export const cleanNumber = (v) => {
-	const cleaned = String(v).replace(/\D/g, '');
+/**
+ * Safely converts input to a number
+ * @returns {number|null}
+ */
+export const cleanNumber = (value) => {
+	const cleaned = stripNonDigits(value);
 	return cleaned ? Number(cleaned) : null;
 };
 
-export const payTypes = ['Per Month', 'Bi Weekly', 'Per Week'].map((s) => ({
-	value: s.toLowerCase().replace(/\s+/g, ' '),
-	label: s
-}));
+/**
+ * ----------------------------------------
+ * Constants
+ * ----------------------------------------
+ */
+export const payTypes = [
+	{ value: 'per_month', label: 'Per Month' },
+	{ value: 'bi_weekly', label: 'Bi Weekly' },
+	{ value: 'per_week', label: 'Per Week' }
+];

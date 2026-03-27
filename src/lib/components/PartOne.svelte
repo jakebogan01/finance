@@ -4,10 +4,10 @@
 	import FormField from '$lib/components/FormField.svelte';
 	import DropDown from '$lib/components/DropDown.svelte';
 
-	let { pay, ...formState } = $props();
+	let { pay, payDropDown = $bindable(), step } = $props();
 </script>
 
-<div class:hidden={formState.step !== 1} class="grid grid-cols-6 gap-6.5">
+<div class:hidden={step !== 1} class="grid grid-cols-6 gap-6.5">
 	<FormField id="name" name="name" label="Name" class="col-span-full">
 		<Input type="text" id="name" name="name" placeholder="Name" maxLength="255" minLength="1" />
 	</FormField>
@@ -27,11 +27,6 @@
 		/>
 	</FormField>
 	<div class="col-span-3">
-		<DropDown
-			list={payTypes}
-			bind:result={formState.payDropDown}
-			index={pay}
-			defaultText="Recurring"
-		/>
+		<DropDown list={payTypes} bind:result={payDropDown} index={pay} defaultText="Recurring" />
 	</div>
 </div>

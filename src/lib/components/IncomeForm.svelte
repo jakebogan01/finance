@@ -47,7 +47,7 @@
 
 <FormLayout step={formState.step}>
 	<form class="space-y-6.5" use:form>
-		<PartOne pay={indexes.pay} {...formState} />
+		<PartOne pay={indexes.pay} step={formState.step} payDropDown={formState.payDropDown} />
 		<Dialog.Footer>
 			<FormButton disableButton={$isSubmitting} text="Submit" class="w-full" />
 		</Dialog.Footer>

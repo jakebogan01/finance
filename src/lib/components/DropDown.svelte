@@ -33,15 +33,17 @@
 		{#snippet child({ props })}
 			<Button
 				{...props}
-				class={[
-					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200 dark:bg-gray-200',
-					selectedValue ? 'text-white-0 dark:text-black' : 'text-grey-200'
-				]}
+				type="button"
 				role="combobox"
 				aria-expanded={open}
+				aria-haspopup="listbox"
+				class={[
+					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200 dark:border-grey-400 dark:bg-gray-300',
+					selectedValue ? 'text-white-0 dark:text-black' : 'text-grey-200'
+				]}
 			>
 				{selectedValue || defaultText}
-				<ChevronsUpDownIcon class="text-grey-200" />
+				<ChevronsUpDownIcon class="text-grey-200 dark:text-grey-500" />
 			</Button>
 		{/snippet}
 	</Popover.Trigger>
@@ -59,9 +61,13 @@
 								result = value;
 								closeAndFocusTrigger();
 							}}
-							class="relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 outline-hidden select-none aria-selected:bg-grey-1000 aria-selected:text-white-0 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-yellow-100"
+							class="group relative flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1.5 outline-hidden select-none aria-selected:bg-grey-1000 aria-selected:text-white-0 data-disabled:pointer-events-none data-disabled:opacity-50 dark:aria-selected:bg-yellow-200 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-yellow-100 dark:[&_svg:not([class*='text-'])]:text-yellow-100"
 						>
-							<CheckIcon class={cn(value !== item.value && 'text-transparent')} />
+							<CheckIcon
+								class={cn(
+									value !== item.value ? 'text-transparent' : 'dark:group-hover:text-white-0'
+								)}
+							/>
 							{item.label}
 						</Command.Item>
 					{/each}
