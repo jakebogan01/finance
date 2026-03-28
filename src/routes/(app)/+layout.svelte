@@ -21,7 +21,9 @@
 				if (record.user !== pb.authStore.record?.id) return;
 				switch (e.action) {
 					case 'create':
-						data.incomes = [record, ...data.incomes];
+						if (!data.incomes.find((i) => i.id === record.id)) {
+							data.incomes = [record, ...data.incomes];
+						}
 						break;
 					case 'update':
 						data.incomes = data.incomes.map((item) => (item.id === record.id ? record : item));

@@ -1,8 +1,11 @@
 <script>
+	import { authCheck, filterStatus, sortRecords } from '$lib/utils/functions.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import IncomeForm from '$lib/components/IncomeForm.svelte';
-	import { authCheck } from '$lib/utils/functions.js';
+	import RecordList from '$lib/components/RecordList.svelte';
+	import { data } from '$lib/stores/data.svelte.js';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { onMount } from 'svelte';
@@ -12,6 +15,19 @@
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
+	let filters = $state({
+		status: 'all',
+		sort: 'latest'
+	});
+	let dataList = $derived.by(() => {
+		if (!data.incomes) return [];
+		let list = [...data.incomes];
+		list = filterStatus(list, filters.status);
+		list = sortRecords(list, filters.sort);
+		return list;
+	});
+
+	const handleURLSlug = (slug) => (INCOMESLUG.value = slug);
 </script>
 
 <Head
@@ -26,5 +42,6 @@
 				<IncomeForm bind:handleReset {resetForm} bind:open />
 			</CreateButton>
 		</div>
+		<RecordList data={dataList} {handleURLSlug} title="Income" />
 	</Command.Root>
 </section>

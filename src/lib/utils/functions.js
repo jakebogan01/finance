@@ -94,6 +94,42 @@ export const generateSlug = (value = '') => {
 
 /**
  * ----------------------------------------
+ * User Utilities
+ * ----------------------------------------
+ */
+
+/**
+ * Returns a color based on index (useful for avatars)
+ * @param {number} index
+ * @returns {string}
+ */
+export const getAvatarColor = (index = 0) => {
+	if (!activeColors.length) return '#ccc';
+	return activeColors[Math.abs(index) % activeColors.length];
+};
+
+/**
+ * Generates user initials from a name
+ * Falls back to authenticated user if no name provided
+ * @param {string} name
+ * @returns {string}
+ */
+export const getInitials = (name = '') => {
+	const userName = name || pb.authStore?.record?.name || pb.authStore?.record?.email || '';
+
+	if (!userName) return '';
+
+	return userName
+		.trim()
+		.split(/\s+/)
+		.map((n) => n[0])
+		.join('')
+		.slice(0, 2)
+		.toUpperCase();
+};
+
+/**
+ * ----------------------------------------
  * Input Helpers
  * ----------------------------------------
  */
@@ -151,6 +187,81 @@ export const cleanObject = (obj = {}) => {
 
 /**
  * ----------------------------------------
+ * Data Utilities
+ * ----------------------------------------
+ */
+/**
+ * Filters a list by status
+ * @param {Array} list
+ * @param {'active' | 'inactive' | 'all'} status
+ * @returns {Array}
+ */
+export const filterStatus = (list = [], status = 'all') => {
+	if (!Array.isArray(list)) return [];
+
+	if (status === 'active') {
+		return list.filter((item) => item?.status === true);
+	}
+
+	if (status === 'inactive') {
+		return list.filter((item) => item?.status === false);
+	}
+
+	return list;
+};
+
+/**
+ * Safely extracts numeric value
+ * @param {any} value
+ * @returns {number}
+ */
+const toNumber = (value) => {
+	const num = Number(value);
+	return Number.isFinite(num) ? num : 0;
+};
+
+/**
+ * Sorts records by various strategies
+ * @param {Array} list
+ * @param {'latest' | 'income' | 'amount'} sort
+ * @returns {Array}
+ */
+export const sortRecords = (list = [], sort = 'latest') => {
+	if (!Array.isArray(list)) return [];
+
+	// fallback for older environments (in case toSorted isn't supported)
+	const safeSort = (arr, fn) =>
+		typeof arr.toSorted === 'function' ? arr.toSorted(fn) : [...arr].sort(fn);
+
+	if (sort === 'latest') {
+		return safeSort(list, (a, b) => {
+			const aDate = Date.parse(a?.updated || a?.created || 0);
+			const bDate = Date.parse(b?.updated || b?.created || 0);
+			return bDate - aDate;
+		});
+	}
+
+	if (sort === 'income') {
+		return safeSort(list, (a, b) => {
+			const incomeA = toNumber(a?.income);
+			const incomeB = toNumber(b?.income);
+			return incomeB - incomeA;
+		});
+	}
+
+	if (sort === 'amount') {
+		return safeSort(list, (a, b) => {
+			const amountA = toNumber(a?.expand?.current_history?.amount);
+			const amountB = toNumber(b?.expand?.current_history?.amount);
+			return amountB - amountA;
+		});
+	}
+
+	return list;
+};
+
+/**
+ * ----------------------------------------
  * Constants
  * ----------------------------------------
  */
@@ -158,6 +269,12 @@ export const payTypes = [
 	{ value: 'per month', label: 'Per Month' },
 	{ value: 'bi weekly', label: 'Bi Weekly' },
 	{ value: 'per week', label: 'Per Week' }
+];
+export const activeColors = [
+	'bg-yellow-100',
+	'bg-blue-100 dark:bg-blue-400',
+	'bg-green-100 dark:bg-green-400',
+	'bg-red-100 dark:bg-red-400'
 ];
 
 export const states = [
