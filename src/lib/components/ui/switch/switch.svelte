@@ -23,7 +23,7 @@
 	<SwitchPrimitive.Thumb
 		data-slot="switch-thumb"
 		class={cn(
-			'pointer-events-none block size-5 rounded-full bg-white-0 ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%)] data-[state=unchecked]:translate-x-px dark:bg-white dark:data-[state=checked]:bg-white dark:data-[state=unchecked]:bg-gray-50'
+			'pointer-events-none block size-5 rounded-full border border-grey-50 bg-white-0 ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%)] data-[state=unchecked]:translate-x-px dark:border-grey-300 dark:bg-white dark:data-[state=checked]:bg-white dark:data-[state=unchecked]:bg-gray-50'
 		)}
 	/>
 </SwitchPrimitive.Root>

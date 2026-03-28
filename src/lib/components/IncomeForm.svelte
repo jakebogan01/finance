@@ -114,7 +114,12 @@
 
 <FormLayout step={formState.step}>
 	<form class="space-y-6.5" use:form>
-		<PartOne pay={indexes.pay} step={formState.step} bind:payDropDown={formState.payDropDown} />
+		<PartOne
+			pay={indexes.pay}
+			step={formState.step}
+			bind:payDropDown={formState.payDropDown}
+			bind:checked
+		/>
 		<PartTwo
 			{noValue}
 			state={indexes.state}
