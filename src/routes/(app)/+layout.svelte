@@ -3,8 +3,43 @@
 	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
+	import { data } from '$lib/stores/data.svelte.js';
+	import { onDestroy, onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
+	import pb from '$lib/pocketbase';
 
 	let { children } = $props();
+
+	onMount(async () => {
+		try {
+			data.incomes = await pb.collection('incomes').getFullList({
+				filter: `user="${pb.authStore.record?.id}"`
+			});
+
+			await pb.collection('incomes').subscribe('*', (e) => {
+				const record = e.record;
+				if (record.user !== pb.authStore.record?.id) return;
+				switch (e.action) {
+					case 'create':
+						data.incomes = [record, ...data.incomes];
+						break;
+					case 'update':
+						data.incomes = data.incomes.map((item) => (item.id === record.id ? record : item));
+						break;
+					case 'delete':
+						data.incomes = data.incomes.filter((item) => item.id !== record.id);
+						break;
+				}
+			});
+		} catch (error) {
+			console.dir(error?.response, { depth: null });
+			toast.error(error?.message ?? 'Could not connect to the server');
+		}
+	});
+
+	onDestroy(async () => {
+		await pb.collection('incomes').unsubscribe('*');
+	});
 </script>
 
 <MobileSidebar />
