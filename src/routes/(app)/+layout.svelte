@@ -48,7 +48,7 @@
 
 <div
 	class={[
-		'relative mx-auto flex w-full max-w-367.5 flex-1 flex-col px-4 py-5  sm:px-5 dark:bg-transparent 3xl-tall:ultra-screen',
+		'relative mx-auto flex w-full max-w-367.5 flex-1 flex-col px-4 py-5 sm:px-5 3xl-tall:ultra-screen',
 		darkMode.status ? 'dark' : ''
 	]}
 >
@@ -56,11 +56,11 @@
 		<Sidebar />
 	</div>
 
-	<div class="flex flex-1 flex-col space-y-5 bg-transparent xl:pl-71 dark:bg-transparent">
+	<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
 		<Topbar />
 
 		<main
-			class="relative grid gap-5 bg-transparent lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-transparent"
+			class="relative grid gap-5 bg-blue-500 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-transparent"
 		>
 			{@render children?.()}
 		</main>

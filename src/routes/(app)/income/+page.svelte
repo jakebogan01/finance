@@ -35,13 +35,13 @@
 	description="Track and manage all your income sources in one place. Add, update, and monitor earnings over time with ease."
 />
 
-<section class="bg-transparent dark:bg-transparent">
-	<Command.Root class="bg-transparent">
-		<div class="flex items-center justify-between gap-5 bg-transparent dark:bg-transparent">
+<section class="bg-purple-500 dark:bg-transparent">
+	<Command.Root class="space-y-5 bg-transparent dark:bg-transparent!">
+		<div class="flex items-center justify-between gap-5">
 			<CreateButton bind:handleReset bind:open>
 				<IncomeForm bind:handleReset {resetForm} bind:open />
 			</CreateButton>
 		</div>
-		<RecordList data={dataList} {handleURLSlug} title="Income" />
+		<RecordList data={dataList} {handleURLSlug} />
 	</Command.Root>
 </section>

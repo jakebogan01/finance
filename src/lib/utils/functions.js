@@ -271,10 +271,10 @@ export const payTypes = [
 	{ value: 'per week', label: 'Per Week' }
 ];
 export const activeColors = [
-	'bg-yellow-100',
-	'bg-blue-100 dark:bg-blue-400',
-	'bg-green-100 dark:bg-green-400',
-	'bg-red-100 dark:bg-red-400'
+	'bg-yellow-100 dark:bg-amber-100',
+	'bg-blue-100 dark:bg-blue-200',
+	'bg-green-100 dark:bg-green-200',
+	'bg-red-100 dark:bg-red-200'
 ];
 
 export const states = [
