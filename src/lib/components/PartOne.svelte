@@ -8,7 +8,7 @@
 	let { pay, payDropDown = $bindable(), step, checked = $bindable() } = $props();
 </script>
 
-<div class:hidden={step !== 1} class="grid grid-cols-6 gap-6.5">
+<div class:hidden={step !== 1} class="grid grid-cols-6 gap-4">
 	<FormField id="name" name="name" label="Name">
 		<Input type="text" id="name" name="name" placeholder="Name" maxLength="255" minLength="1" />
 	</FormField>

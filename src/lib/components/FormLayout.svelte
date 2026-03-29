@@ -5,7 +5,7 @@
 	let { children, isMultiStepForm = true, step } = $props();
 </script>
 
-<Dialog.Content showCloseButton={false}>
+<Dialog.Content showCloseButton={false} class="p-5">
 	<Dialog.Header class="text-center">
 		<Dialog.Title class="text-preset-5-semibold">
 			{step !== 2 ? 'Add Income' : 'Additional Information'}
