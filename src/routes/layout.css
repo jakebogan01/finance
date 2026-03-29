@@ -112,6 +112,8 @@
 	--radius-20: 1.25rem;
 	--radius-30: 1.875rem;
 	--blur-3px: 3px;
+	--inset-custom: -4px;
+	--blur-4xl: 20px;
 }
 
 @theme inline {
@@ -146,7 +148,7 @@
 		@apply min-h-dvh scroll-smooth;
 	}
 	body {
-		@apply flex min-h-dvh flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased dark:bg-grey-200 dark:text-grey-900;
+		@apply flex min-h-dvh flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased dark:bg-grey-200 dark:text-grey-900 3xl-tall:items-center 3xl-tall:justify-center 3xl-tall:p-10;
 	}
 }
 
@@ -199,6 +201,11 @@
 	.text-preset-8-bold {
 		@apply text-[2rem] font-bold;
 	}
+}
+
+@custom-variant 3xl-tall (@media (min-width: 1023px) and (min-height: 1081px));
+@utility ultra-screen {
+	@apply 3xl-tall:max-h-270 3xl-tall:max-w-420 3xl-tall:rounded-4xl 3xl-tall:border 3xl-tall:border-grey-300 3xl-tall:bg-grey-700 3xl-tall:before:absolute 3xl-tall:before:-inset-custom 3xl-tall:before:-z-1 3xl-tall:before:rounded-4xl 3xl-tall:before:bg-radial-[at_100%_25%] 3xl-tall:before:from-white-0 3xl-tall:before:to-yellow-200 3xl-tall:before:opacity-30 3xl-tall:before:blur-4xl 3xl-tall:before:content-[''];
 }
 
 input:-webkit-autofill,
