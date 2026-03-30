@@ -64,9 +64,7 @@
 
 {#if hasData}
 	<section>
-		<Command.Root
-			class="rounded-none bg-transparent lg:border-r lg:border-grey-800 lg:pr-5 dark:bg-transparent! lg:dark:border-grey-200"
-		>
+		<Command.Root class="rounded-none bg-transparent dark:bg-transparent!">
 			<div class="flex items-center justify-between gap-5">
 				<CreateButton bind:handleReset bind:open>
 					<IncomeForm bind:handleReset {resetForm} bind:open />
@@ -77,6 +75,11 @@
 	</section>
 	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
 		<section>
+			<h3
+				class="text-preset-4-semibold flex h-13 items-center justify-end text-white-0 dark:text-grey-900"
+			>
+				<span class="mr-2 text-grey-100 dark:text-grey-400">Total:</span>$4,385
+			</h3>
 			<RecordDetails data={incomeRecord} />
 		</section>
 	{/if}

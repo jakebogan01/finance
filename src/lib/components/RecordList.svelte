@@ -17,11 +17,12 @@
 </script>
 
 <div class="flex flex-col space-y-5.5 overflow-hidden pt-5.5 pb-4 lg:flex-1">
-	<h3 class="text-preset-4-semibold text-white-0 dark:text-grey-900">
-		<span class="text-grey-100 dark:text-grey-400">Total:</span> $4,385
-	</h3>
+	<h3 class="sr-only">Income</h3>
 	<div class="flex flex-col overflow-y-auto lg:flex-1">
-		<ul role="list" class="relative space-y-3 lg:flex-1">
+		<ul
+			role="list"
+			class="relative space-y-3 lg:flex-1 lg:border-r lg:border-grey-800 lg:pr-5 lg:dark:border-grey-200"
+		>
 			{#each data as item, i (item?.id)}
 				<RecordListItem {item} {i} {handleSlug} />
 			{/each}
