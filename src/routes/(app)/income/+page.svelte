@@ -43,7 +43,9 @@
 />
 
 <section>
-	<Command.Root class="space-y-5 bg-transparent dark:bg-transparent!">
+	<Command.Root
+		class="space-y-5 rounded-none bg-transparent lg:border-r lg:border-grey-800 lg:pr-5 dark:bg-transparent! lg:dark:border-grey-200"
+	>
 		<div class="flex items-center justify-between gap-5">
 			<CreateButton bind:handleReset bind:open>
 				<IncomeForm bind:handleReset {resetForm} bind:open />

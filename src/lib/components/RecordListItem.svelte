@@ -8,10 +8,10 @@
 
 <li>
 	<Command.Item
-		class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 md:transition-colors md:duration-300 dark:bg-white {page
+		class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 px-4 py-4 sm:px-6 sm:py-5 md:transition-colors md:duration-300 {page
 			.url.hash === `#${item?.slug}`
-			? 'border-yellow-200'
-			: 'border-grey-900 md:hover:border-yellow-100 dark:border-gray-300'}"
+			? 'border-yellow-200 bg-grey-300 dark:bg-white-0'
+			: 'border-grey-500 bg-grey-900 md:hover:border-yellow-100 dark:border-gray-300 dark:bg-grey-100'}"
 	>
 		<div class="flex min-w-0 gap-x-4 sm:gap-x-7">
 			<div
@@ -37,7 +37,7 @@
 						{item?.name || item?.title}
 					</a>
 				</p>
-				<p class="text-white-0 dark:text-grey-500">
+				<p class="text-white-0 dark:text-grey-700">
 					{usdFormatter.format(item?.amount || item?.expand?.current_history?.amount)}
 					<span class="text-preset-1 text-grey-50 capitalize dark:text-grey-500"
 						>{item?.pay_frequency || 'Per Month'}</span
@@ -48,7 +48,7 @@
 		<div
 			class="flex size-3 flex-none shrink-0 flex-col items-end rounded-full {item?.status
 				? 'bg-yellow-200 dark:bg-yellow-200/80'
-				: 'bg-grey-200 dark:bg-grey-300'}"
+				: 'bg-grey-600 dark:bg-grey-400/75'}"
 		></div>
 	</Command.Item>
 </li>

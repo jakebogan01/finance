@@ -85,34 +85,34 @@
 
 <div id={data?.slug} class="lg:col-start-3 lg:row-end-1">
 	<h3 class="sr-only">Details</h3>
-	<div
-		class="overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-20 sm:p-5"
-	>
-		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 p-4.25">
-			<div class="text-grey-600">
-				<dt class="text-preset-6-medium w-58 truncate sm:w-100 lg:w-76 xl:w-71">
+	<div class="overflow-hidden sm:rounded-20">
+		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 px-4 py-6">
+			<div class="text-grey-600 dark:text-white-0">
+				<dt class="text-preset-6 w-58 truncate font-semibold sm:w-100 lg:w-76 xl:w-71">
 					{data?.name || data?.title}
 				</dt>
 				<dd class="text-preset-3-medium">
 					{usdFormatter.format(data?.amount || data?.expand?.current_history?.amount)}
-					<span class="text-preset-1 text-grey-100 dark:text-white">/ per month</span>
+					<span class="text-preset-1 text-grey-100 dark:text-white">/per month</span>
 				</dd>
 			</div>
 			<div class="flex-none">
 				<!--                <EditDeleteDropDown {data} {handleEditRecord} {collectionName} />-->
 			</div>
 		</dl>
-		<Separator class="my-6" />
+		<Separator class="my-5" />
 		<dl
-			class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-775 bg-grey-900 dark:border-gray-400 dark:bg-gray-200"
+			class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-500 bg-grey-900 dark:border-gray-300 dark:bg-gray-100"
 		>
 			{#each details as item (item.label)}
 				<RecordDetailsItem {item} />
 			{/each}
 		</dl>
 		{#if address}
-			<Separator class="my-6" />
-			<dl class="flex flex-wrap rounded-2xl border-t border-grey-775 bg-grey-900">
+			<Separator class="my-5" />
+			<dl
+				class="flex flex-wrap overflow-hidden rounded-2xl border-t border-grey-500 bg-grey-900 dark:border-gray-300 dark:bg-gray-100"
+			>
 				<RecordDetailsItem item={address} isAddress={true} />
 			</dl>
 		{/if}

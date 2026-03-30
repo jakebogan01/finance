@@ -60,7 +60,9 @@
 	<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
 		<Topbar />
 
-		<main class="relative grid gap-5 lg:flex-1 lg:grid-cols-[10fr_8fr]">
+		<main
+			class="relative grid gap-5 overflow-hidden rounded-30 border border-grey-300 bg-grey-1000 p-4 sm:p-5 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-white-0"
+		>
 			{@render children?.()}
 		</main>
 	</div>
