@@ -11,7 +11,7 @@
 	class="absolute top-1/2 left-1/2 z-5 flex size-full -translate-1/2 items-center justify-center text-center"
 >
 	<div class="-translate-y-11 space-y-4">
-		<span class="text-preset-3 block text-grey-100">{message}</span>
+		<span class="text-preset-3 block text-grey-100 dark:text-grey-400">{message}</span>
 		{@render children?.()}
 	</div>
 </div>
