@@ -1,5 +1,6 @@
 <script>
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
@@ -48,7 +49,7 @@
 
 <div
 	class={[
-		'relative mx-auto flex w-full max-w-367.5 flex-1 flex-col px-4 py-5 sm:px-5 3xl-tall:ultra-screen',
+		'relative mx-auto flex w-full max-w-400 flex-1 flex-col px-4 py-5 sm:px-5 3xl-tall:ultra-screen',
 		darkMode.status ? 'dark' : ''
 	]}
 >
@@ -59,9 +60,7 @@
 	<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
 		<Topbar />
 
-		<main
-			class="relative grid gap-5 bg-blue-500 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-transparent"
-		>
+		<main class="relative grid gap-5 lg:flex-1 lg:grid-cols-[10fr_8fr]">
 			{@render children?.()}
 		</main>
 	</div>

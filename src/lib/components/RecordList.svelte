@@ -17,7 +17,7 @@
 </script>
 
 <div
-	class="flex flex-col space-y-4 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 px-2.5 py-4 sm:rounded-20 sm:px-4 lg:flex-1 dark:bg-white-0"
+	class="flex flex-col space-y-5.5 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 px-2.5 pt-5.5 pb-4 sm:rounded-20 sm:px-4 lg:flex-1 dark:bg-white-0"
 >
 	<h3 class="text-preset-4-semibold text-white-0 dark:text-grey-900">
 		<span class="text-grey-150 dark:text-grey-400">Total:</span> $4,385

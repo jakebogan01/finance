@@ -53,7 +53,7 @@
 			<Command.Input placeholder="Search..." />
 			<Command.List>
 				<Command.Empty>No results found</Command.Empty>
-				<Command.Group value="list" class="text-grey-900">
+				<Command.Group value="list" class="dark:text-grey-900">
 					{#each list as item (item.value)}
 						<Command.Item
 							value={item.value}

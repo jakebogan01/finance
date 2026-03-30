@@ -1,5 +1,6 @@
 <script>
 	import { authCheck, filterStatus, sortRecords } from '$lib/utils/functions.js';
+	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
@@ -26,6 +27,12 @@
 		list = sortRecords(list, filters.sort);
 		return list;
 	});
+	let incomeRecord = $derived.by(() => {
+		if (!dataList || dataList.length === 0) return null;
+		if (!INCOMESLUG.value) return null;
+		const slug = INCOMESLUG.value.replace(/#/g, '');
+		return dataList.find((item) => item.slug === slug) ?? {};
+	});
 
 	const handleURLSlug = (slug) => (INCOMESLUG.value = slug);
 </script>
@@ -35,7 +42,7 @@
 	description="Track and manage all your income sources in one place. Add, update, and monitor earnings over time with ease."
 />
 
-<section class="bg-purple-500 dark:bg-transparent">
+<section>
 	<Command.Root class="space-y-5 bg-transparent dark:bg-transparent!">
 		<div class="flex items-center justify-between gap-5">
 			<CreateButton bind:handleReset bind:open>
@@ -44,4 +51,8 @@
 		</div>
 		<RecordList data={dataList} {handleURLSlug} />
 	</Command.Root>
+</section>
+
+<section>
+	<RecordDetails data={incomeRecord} />
 </section>

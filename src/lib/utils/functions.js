@@ -57,6 +57,60 @@ export const calendarDateToISO = (value) => {
 };
 
 /**
+ * Formats a date into "time ago" (e.g., 2 days ago)
+ * @param {string|Date} dateInput
+ * @returns {string}
+ */
+export const timeAgo = (dateInput) => {
+	try {
+		const date = new Date(dateInput);
+		if (isNaN(date.getTime())) return '';
+
+		const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+
+		const intervals = [
+			['year', 31536000],
+			['month', 2592000],
+			['week', 604800],
+			['day', 86400],
+			['hour', 3600],
+			['minute', 60],
+			['second', 1]
+		];
+
+		for (const [unit, value] of intervals) {
+			const count = Math.floor(seconds / value);
+			if (count >= 1) {
+				return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+			}
+		}
+
+		return 'just now';
+	} catch (e) {
+		console.error('Invalid date passed to timeAgo:', dateInput, e);
+		return '';
+	}
+};
+
+/**
+ * Formats a date string into readable format (e.g., Jan 1, 2025)
+ * @param {string|Date} dateInput
+ * @returns {string}
+ */
+export const formatDate = (dateInput) => {
+	if (!dateInput) return '';
+
+	const date = new Date(dateInput);
+	if (isNaN(date.getTime())) return '';
+
+	return new Intl.DateTimeFormat('en-US', {
+		month: 'short',
+		day: 'numeric',
+		year: 'numeric'
+	}).format(date);
+};
+
+/**
  * ----------------------------------------
  * Navigation / Auth Actions
  * ----------------------------------------
@@ -155,6 +209,28 @@ export const formatCurrency = (e) => {
 	}
 
 	e.target.value = usdFormatter.format(Number(raw));
+};
+
+/**
+ * Formats a phone number into (XXX) XXX-XXXX
+ * @param {string} value
+ * @returns {string}
+ */
+export const formatPhone = (value) => {
+	if (!value) return '';
+
+	const digits = String(value).replace(/\D/g, '');
+
+	// Handle leading "1" (US country code)
+	const normalized = digits.length === 11 && digits.startsWith('1') ? digits.slice(1) : digits;
+
+	if (normalized.length !== 10) return value;
+
+	const area = normalized.slice(0, 3);
+	const prefix = normalized.slice(3, 6);
+	const line = normalized.slice(6);
+
+	return `(${area}) ${prefix}-${line}`;
 };
 
 /**
