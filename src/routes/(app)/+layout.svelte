@@ -1,12 +1,13 @@
 <script>
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
-	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
+	import { EXPENSES, INCOME } from '$lib/utils/constants.js';
 	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
 	import { data } from '$lib/stores/data.svelte.js';
 	import { onDestroy, onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import { page } from '$app/state';
 	import pb from '$lib/pocketbase';
 
 	let { children } = $props();
@@ -61,10 +62,16 @@
 	<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
 		<Topbar />
 
-		<main
-			class="relative grid gap-5 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-30 sm:p-5 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-white-0"
-		>
-			{@render children?.()}
-		</main>
+		{#if page.url.pathname === EXPENSES || page.url.pathname === INCOME}
+			<main
+				class="relative grid gap-5 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-30 sm:p-5 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-white-0"
+			>
+				{@render children?.()}
+			</main>
+		{:else}
+			<main class="relative grid gap-5 lg:flex-1 lg:grid-cols-[10fr_8fr]">
+				{@render children?.()}
+			</main>
+		{/if}
 	</div>
 </div>
