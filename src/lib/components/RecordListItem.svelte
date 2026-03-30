@@ -13,7 +13,7 @@
 			? 'border-yellow-200 bg-grey-300 dark:bg-white-0'
 			: 'border-grey-500 bg-grey-900 md:hover:border-yellow-100 dark:border-gray-300 dark:bg-grey-100'}"
 	>
-		<div class="flex min-w-0 gap-x-4 sm:gap-x-7">
+		<div class="flex min-w-0 gap-x-4">
 			<div
 				class="relative flex size-12.5 flex-none items-center justify-center rounded-full {getAvatarColor(
 					i

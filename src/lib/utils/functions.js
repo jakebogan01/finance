@@ -262,6 +262,20 @@ export const cleanObject = (obj = {}) => {
 };
 
 /**
+ * Checks if a value is an empty object
+ * @param {any} value
+ * @returns {boolean}
+ */
+export const isEmpty = (value) => {
+	if (!value || typeof value !== 'object') return false;
+
+	// Exclude arrays
+	if (Array.isArray(value)) return value.length === 0;
+
+	return Object.keys(value).length === 0;
+};
+
+/**
  * ----------------------------------------
  * Data Utilities
  * ----------------------------------------

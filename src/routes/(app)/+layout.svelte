@@ -14,7 +14,8 @@
 	onMount(async () => {
 		try {
 			data.incomes = await pb.collection('incomes').getFullList({
-				filter: `user="${pb.authStore.record?.id}"`
+				filter: `user="${pb.authStore.record?.id}"`,
+				sort: '-created'
 			});
 
 			await pb.collection('incomes').subscribe('*', (e) => {
@@ -61,7 +62,7 @@
 		<Topbar />
 
 		<main
-			class="relative grid gap-5 overflow-hidden rounded-30 border border-grey-300 bg-grey-1000 p-4 sm:p-5 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-white-0"
+			class="relative grid gap-5 overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-4 sm:rounded-30 sm:p-5 lg:flex-1 lg:grid-cols-[10fr_8fr] dark:bg-white-0"
 		>
 			{@render children?.()}
 		</main>
