@@ -37,7 +37,7 @@
 <ul
 	bind:this={containerEl}
 	role="tablist"
-	class="text-preset-2-medium relative flex h-11 w-full items-center justify-center overflow-hidden rounded-10 bg-grey-600 dark:bg-grey-200"
+	class="text-preset-2-medium relative flex h-13 w-full items-center justify-center overflow-hidden rounded-10 bg-grey-600 dark:bg-grey-200"
 >
 	{#each tabItems as item, i (i)}
 		<li role="listitem" class="h-full flex-1">
