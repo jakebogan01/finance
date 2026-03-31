@@ -1,5 +1,5 @@
 <script>
-	import { isEmpty, authCheck, filterStatus, sortRecords } from '$lib/utils/functions.js';
+	import { authCheck, filterStatus, sortRecords, usdFormatter } from '$lib/utils/functions.js';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import EmptyTemplate from '$lib/components/EmptyTemplate.svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
@@ -26,35 +26,36 @@
 		sort: 'latest'
 	});
 	$effect(() => {
-		if (!data?.incomes || data.incomes.length === 0) return;
-		if (INCOMESLUG.value === null && !page.url.hash) {
-			const targetHash = `#${data.incomes[0]?.slug}`;
-			if (page.url.hash !== targetHash) {
-				goto(resolve(`${page.url.pathname}${targetHash}`), { replaceState: true });
-			}
-		}
-	});
-	$effect(() => {
+		if (!data?.incomes?.length) return;
 		const hash = page.url.hash;
-		if (!hash) return;
+		if (!hash) {
+			const firstSlug = data.incomes[0]?.slug;
+			if (!firstSlug) return;
+			if (page.url.hash !== `#${firstSlug}`) {
+				goto(resolve(`${page.url.pathname}#${firstSlug}`), { replaceState: true });
+			}
+			return;
+		}
 		if (INCOMESLUG.value !== hash) {
 			INCOMESLUG.value = hash;
 		}
 	});
 	let dataList = $derived.by(() => {
-		if (!data.incomes) return [];
-		let list = [...data.incomes];
-		list = filterStatus(list, filters.status);
-		list = sortRecords(list, filters.sort);
+		const incomes = data.incomes;
+		if (!incomes) return [];
+		let list = incomes;
+		if (filters.status !== 'all') list = filterStatus(list, filters.status);
+		if (filters.sort !== 'latest') list = sortRecords(list, filters.sort);
 		return list;
 	});
-	let cleanSlug = $derived(INCOMESLUG.value ? INCOMESLUG.value.replace(/#/g, '') : null);
+	let cleanSlug = $derived(INCOMESLUG.value?.slice(1) ?? null);
 	let incomeRecord = $derived.by(() => {
-		if (!dataList.length || !cleanSlug) return null;
-		return dataList.find((item) => item.slug === cleanSlug) ?? {};
+		if (!data.incomes || !cleanSlug) return null;
+		return data.incomes.find((item) => item.slug === cleanSlug) ?? null;
 	});
-
-	const handleURLSlug = (slug) => (INCOMESLUG.value = slug);
+	const activeIncome = $derived(dataList.filter((r) => r.status));
+	const totalMonthlyIncome = $derived(activeIncome.reduce((sum, r) => sum + (r.amount || 0), 0));
+	const handleURLSlug = (slug) => (INCOMESLUG.value = slug.startsWith('#') ? slug : `#${slug}`);
 </script>
 
 <Head
@@ -73,12 +74,11 @@
 			<RecordList data={dataList} {handleURLSlug} />
 		</Command.Root>
 	</section>
-	{#if !isEmpty(incomeRecord) && incomeRecord !== null}
+	{#if incomeRecord}
 		<section>
-			<h3
-				class="text-preset-4-semibold flex h-13 items-center justify-end text-white-0 dark:text-grey-900"
-			>
-				<span class="mr-2 text-grey-100 dark:text-grey-400">Total:</span>$4,385
+			<h3 class="text-preset-4-semibold flex h-13 items-center justify-end text-yellow-200">
+				<span class="text-preset-5-semibold mr-2 text-grey-200 dark:text-grey-400">Total:</span
+				>{usdFormatter.format(totalMonthlyIncome)}
 			</h3>
 			<RecordDetails data={incomeRecord} />
 		</section>
