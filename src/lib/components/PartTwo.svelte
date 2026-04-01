@@ -52,7 +52,7 @@
 			id="city"
 			name="city"
 			placeholder="City"
-			autoComplete="saddress-level2"
+			autoComplete="address-level2"
 			maxLength="255"
 			minLength="1"
 		/>

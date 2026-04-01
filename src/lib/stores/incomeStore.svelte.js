@@ -9,6 +9,10 @@ import pb from '$lib/pocketbase';
  */
 let paginated = $state(null);
 let all = $state([]);
+let filters = $state({
+	status: 'all',
+	sort: 'latest'
+});
 
 let fetchTimeout;
 
@@ -26,15 +30,21 @@ const total = $derived.by(() =>
  * Helpers
  * ----------------------------------------
  */
-const fetchPage = async () => {
+const getSortValue = () => {
+	if (filters.sort === 'latest') return '-created';
+	if (filters.sort === 'income') return '-amount';
+	return '-created';
+};
+
+const fetchPage = async (pageOverride) => {
 	try {
-		let currentPage = paginated?.page ?? 1;
+		const page = pageOverride ?? paginated?.page ?? 1;
 
-		if (paginated?.items?.length === 1 && currentPage > 1) {
-			currentPage -= 1;
-		}
-
-		paginated = await getUserIncomes({ page: currentPage });
+		paginated = await getUserIncomes({
+			page,
+			sort: getSortValue(),
+			status: filters.status
+		});
 	} catch (error) {
 		if (error?.isAbort || error?.name === 'AbortError') return;
 		console.dir(error?.response, { depth: null });
@@ -54,6 +64,13 @@ const setPage = async (page) => {
 		if (err?.isAbort || err?.name === 'AbortError') return;
 		console.error(err);
 	}
+};
+
+const setFilters = async (newFilters) => {
+	filters = { ...filters, ...newFilters };
+
+	// Reset to page 1 when filters change
+	await fetchPage(1);
 };
 
 /**
@@ -97,7 +114,8 @@ const init = async () => {
 	paginated = await getUserIncomes();
 
 	all = await pb.collection('incomes').getFullList({
-		filter: `user="${pb.authStore.record?.id}"`
+		filter: `user="${pb.authStore.record?.id}"`,
+		$autoCancel: false
 	});
 
 	// Subscribe
@@ -116,7 +134,11 @@ export const incomeStore = {
 	get total() {
 		return total;
 	},
+	get filters() {
+		return filters;
+	},
 	init,
 	cleanup,
-	setPage
+	setPage,
+	setFilters
 };

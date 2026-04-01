@@ -280,32 +280,12 @@ export const isEmpty = (value) => {
  * Data Utilities
  * ----------------------------------------
  */
-/**
- * Filters a list by status
- * @param {Array} list
- * @param {'active' | 'inactive' | 'all'} status
- * @returns {Array}
- */
-export const filterStatus = (list = [], status = 'all') => {
-	if (!Array.isArray(list)) return [];
-
-	if (status === 'active') {
-		return list.filter((item) => item?.status === true);
-	}
-
-	if (status === 'inactive') {
-		return list.filter((item) => item?.status === false);
-	}
-
-	return list;
-};
 
 /**
  * ----------------------------------------
  * PocketBase Utilities
  * ----------------------------------------
  */
-
 /**
  * Fetch paginated incomes for the authenticated user
  * @param {Object} options
@@ -314,10 +294,26 @@ export const filterStatus = (list = [], status = 'all') => {
  * @param {string} options.sort
  * @returns {Promise<Object|null>}
  */
-export const getUserIncomes = async ({ page = 1, perPage = 5, sort = '-created' } = {}) => {
+export const getUserIncomes = async ({
+	page = 1,
+	perPage = 5,
+	sort = '-created',
+	status = 'all'
+} = {}) => {
+	let filter = `user="${pb.authStore.record?.id}"`;
+
+	if (status === 'active') {
+		filter += ' && status=true';
+	}
+
+	if (status === 'inactive') {
+		filter += ' && status=false';
+	}
+
 	return await pb.collection('incomes').getList(page, perPage, {
-		filter: `user="${pb.authStore.record?.id}"`,
-		sort
+		filter,
+		sort,
+		$autoCancel: false
 	});
 };
 
@@ -329,46 +325,6 @@ export const getUserIncomes = async ({ page = 1, perPage = 5, sort = '-created' 
 const toNumber = (value) => {
 	const num = Number(value);
 	return Number.isFinite(num) ? num : 0;
-};
-
-/**
- * Sorts records by various strategies
- * @param {Array} list
- * @param {'latest' | 'income' | 'amount'} sort
- * @returns {Array}
- */
-export const sortRecords = (list = [], sort = 'latest') => {
-	if (!Array.isArray(list)) return [];
-
-	// fallback for older environments (in case toSorted isn't supported)
-	const safeSort = (arr, fn) =>
-		typeof arr.toSorted === 'function' ? arr.toSorted(fn) : [...arr].sort(fn);
-
-	if (sort === 'latest') {
-		return safeSort(list, (a, b) => {
-			const aDate = Date.parse(a?.updated || a?.created || 0);
-			const bDate = Date.parse(b?.updated || b?.created || 0);
-			return bDate - aDate;
-		});
-	}
-
-	if (sort === 'income') {
-		return safeSort(list, (a, b) => {
-			const incomeA = toNumber(a?.income);
-			const incomeB = toNumber(b?.income);
-			return incomeB - incomeA;
-		});
-	}
-
-	if (sort === 'amount') {
-		return safeSort(list, (a, b) => {
-			const amountA = toNumber(a?.expand?.current_history?.amount);
-			const amountB = toNumber(b?.expand?.current_history?.amount);
-			return amountB - amountA;
-		});
-	}
-
-	return list;
 };
 
 /**

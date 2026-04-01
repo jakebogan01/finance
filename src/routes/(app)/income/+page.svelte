@@ -1,10 +1,11 @@
 <script>
-	import { authCheck, filterStatus, sortRecords, usdFormatter } from '$lib/utils/functions.js';
+	import { authCheck, usdFormatter } from '$lib/utils/functions.js';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import EmptyTemplate from '$lib/components/EmptyTemplate.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
+	import FilterButton from '$lib/components/FilterButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import IncomeForm from '$lib/components/IncomeForm.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
@@ -21,10 +22,6 @@
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
-	let filters = $state({
-		status: 'all',
-		sort: 'latest'
-	});
 	$effect(() => {
 		if (!incomeStore.paginated?.items?.length) return;
 		const hash = page.url.hash;
@@ -40,14 +37,7 @@
 			INCOMESLUG.value = hash;
 		}
 	});
-	let dataList = $derived.by(() => {
-		const incomes = incomeStore.paginated?.items;
-		if (!incomes) return [];
-		let list = incomes;
-		if (filters.status !== 'all') list = filterStatus(list, filters.status);
-		if (filters.sort !== 'latest') list = sortRecords(list, filters.sort);
-		return list;
-	});
+	let filters = $derived(incomeStore.filters);
 	let cleanSlug = $derived(INCOMESLUG.value?.slice(1) ?? null);
 	let incomeRecord = $derived.by(() => {
 		if (!incomeStore.paginated?.items || !cleanSlug) return null;
@@ -68,8 +58,15 @@
 				<CreateButton bind:handleReset bind:open>
 					<IncomeForm bind:handleReset {resetForm} bind:open />
 				</CreateButton>
+				<div class="mr-4 flex items-center sm:mr-0">
+					<FilterButton
+						filters={incomeStore.filters}
+						sortType="income"
+						onChange={(f) => incomeStore.setFilters(f)}
+					/>
+				</div>
 			</div>
-			<RecordList items={dataList} {handleURLSlug} />
+			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} />
 		</Command.Root>
 	</section>
 	<section>
