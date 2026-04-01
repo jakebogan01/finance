@@ -148,7 +148,7 @@
 		@apply min-h-dvh scroll-smooth;
 	}
 	body {
-		@apply flex min-h-dvh flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased dark:bg-grey-200 dark:text-grey-900 3xl-tall:items-center 3xl-tall:justify-center 3xl-tall:p-10;
+		@apply flex min-h-dvh flex-col overflow-x-hidden bg-grey-800 font-poppins text-base font-normal text-white-0 antialiased dark:bg-grey-200 dark:text-grey-900;
 	}
 }
 
