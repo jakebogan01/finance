@@ -2,12 +2,12 @@
 	import { authCheck, filterStatus, sortRecords, usdFormatter } from '$lib/utils/functions.js';
 	import RecordDetails from '$lib/components/RecordDetails.svelte';
 	import EmptyTemplate from '$lib/components/EmptyTemplate.svelte';
+	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import IncomeForm from '$lib/components/IncomeForm.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
-	import { data } from '$lib/stores/data.svelte.js';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { goto } from '$app/navigation';
@@ -17,7 +17,7 @@
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
-	let hasData = $derived(data.incomes?.length > 0);
+	let hasData = $derived(incomeStore.paginated?.items?.length > 0);
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
@@ -26,10 +26,10 @@
 		sort: 'latest'
 	});
 	$effect(() => {
-		if (!data?.incomes?.length) return;
+		if (!incomeStore.paginated?.items?.length) return;
 		const hash = page.url.hash;
 		if (!hash) {
-			const firstSlug = data.incomes[0]?.slug;
+			const firstSlug = incomeStore.paginated?.items[0]?.slug;
 			if (!firstSlug) return;
 			if (page.url.hash !== `#${firstSlug}`) {
 				goto(resolve(`${page.url.pathname}#${firstSlug}`), { replaceState: true });
@@ -41,7 +41,7 @@
 		}
 	});
 	let dataList = $derived.by(() => {
-		const incomes = data.incomes;
+		const incomes = incomeStore.paginated?.items;
 		if (!incomes) return [];
 		let list = incomes;
 		if (filters.status !== 'all') list = filterStatus(list, filters.status);
@@ -50,11 +50,9 @@
 	});
 	let cleanSlug = $derived(INCOMESLUG.value?.slice(1) ?? null);
 	let incomeRecord = $derived.by(() => {
-		if (!data.incomes || !cleanSlug) return null;
-		return data.incomes.find((item) => item.slug === cleanSlug) ?? null;
+		if (!incomeStore.paginated?.items || !cleanSlug) return null;
+		return incomeStore.paginated?.items.find((item) => item.slug === cleanSlug) ?? null;
 	});
-	const activeIncome = $derived(dataList.filter((r) => r.status));
-	const totalMonthlyIncome = $derived(activeIncome.reduce((sum, r) => sum + (r.amount || 0), 0));
 	const handleURLSlug = (slug) => (INCOMESLUG.value = slug.startsWith('#') ? slug : `#${slug}`);
 </script>
 
@@ -71,18 +69,18 @@
 					<IncomeForm bind:handleReset {resetForm} bind:open />
 				</CreateButton>
 			</div>
-			<RecordList data={dataList} {handleURLSlug} />
+			<RecordList items={dataList} {handleURLSlug} />
 		</Command.Root>
 	</section>
-	{#if incomeRecord}
-		<section>
-			<h3 class="text-preset-4-semibold flex h-13 items-center justify-end text-yellow-200">
-				<span class="text-preset-5-semibold mr-2 text-grey-200 dark:text-grey-400">Total:</span
-				>{usdFormatter.format(totalMonthlyIncome)}
-			</h3>
+	<section>
+		<h3 class="text-preset-4-semibold hidden h-13 items-center justify-end text-yellow-200 lg:flex">
+			<span class="text-preset-5-semibold mr-2 text-grey-100/80 dark:text-grey-400">Total:</span
+			>{usdFormatter.format(incomeStore.total)}
+		</h3>
+		{#if incomeRecord}
 			<RecordDetails data={incomeRecord} />
-		</section>
-	{/if}
+		{/if}
+	</section>
 {:else}
 	<EmptyTemplate>
 		<CreateButton bind:handleReset bind:open>

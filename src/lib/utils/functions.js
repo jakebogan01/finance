@@ -301,6 +301,27 @@ export const filterStatus = (list = [], status = 'all') => {
 };
 
 /**
+ * ----------------------------------------
+ * PocketBase Utilities
+ * ----------------------------------------
+ */
+
+/**
+ * Fetch paginated incomes for the authenticated user
+ * @param {Object} options
+ * @param {number} options.page
+ * @param {number} options.perPage
+ * @param {string} options.sort
+ * @returns {Promise<Object|null>}
+ */
+export const getUserIncomes = async ({ page = 1, perPage = 5, sort = '-created' } = {}) => {
+	return await pb.collection('incomes').getList(page, perPage, {
+		filter: `user="${pb.authStore.record?.id}"`,
+		sort
+	});
+};
+
+/**
  * Safely extracts numeric value
  * @param {any} value
  * @returns {number}

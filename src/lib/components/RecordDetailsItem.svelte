@@ -7,7 +7,7 @@
 
 <div
 	class={[
-		'flex w-full items-center justify-between gap-x-2 px-4 py-[13.45px] even:bg-grey-700/20 dark:even:bg-grey-200/50'
+		'flex w-full items-center justify-between gap-x-2 px-4 py-[15.45px] even:bg-grey-700/20 dark:even:bg-grey-200/50'
 	]}
 >
 	<dt class="flex-none">

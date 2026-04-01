@@ -1,50 +1,17 @@
 <script>
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
+	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { EXPENSES, INCOME } from '$lib/utils/constants.js';
 	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
-	import { data } from '$lib/stores/data.svelte.js';
 	import { onDestroy, onMount } from 'svelte';
-	import { toast } from 'svelte-sonner';
 	import { page } from '$app/state';
-	import pb from '$lib/pocketbase';
 
 	let { children } = $props();
 
-	onMount(async () => {
-		try {
-			data.incomes = await pb.collection('incomes').getFullList({
-				filter: `user="${pb.authStore.record?.id}"`,
-				sort: '-created'
-			});
-
-			await pb.collection('incomes').subscribe('*', (e) => {
-				const record = e.record;
-				if (record.user !== pb.authStore.record?.id) return;
-				switch (e.action) {
-					case 'create':
-						if (!data.incomes.find((i) => i.id === record.id)) {
-							data.incomes = [record, ...data.incomes];
-						}
-						break;
-					case 'update':
-						data.incomes = data.incomes.map((item) => (item.id === record.id ? record : item));
-						break;
-					case 'delete':
-						data.incomes = data.incomes.filter((item) => item.id !== record.id);
-						break;
-				}
-			});
-		} catch (error) {
-			console.dir(error?.response, { depth: null });
-			toast.error(error?.message ?? 'Could not connect to the server');
-		}
-	});
-
-	onDestroy(async () => {
-		await pb.collection('incomes').unsubscribe('*');
-	});
+	onMount(() => incomeStore.init());
+	onDestroy(() => incomeStore.cleanup());
 </script>
 
 <MobileSidebar />

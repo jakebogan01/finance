@@ -1,0 +1,122 @@
+import { getUserIncomes } from '$lib/utils/functions.js';
+import { toast } from 'svelte-sonner';
+import pb from '$lib/pocketbase';
+
+/**
+ * ----------------------------------------
+ * State
+ * ----------------------------------------
+ */
+let paginated = $state(null);
+let all = $state([]);
+
+let fetchTimeout;
+
+/**
+ * ----------------------------------------
+ * Derived
+ * ----------------------------------------
+ */
+const total = $derived.by(() =>
+	all.filter((r) => r.status).reduce((sum, r) => sum + (r.amount || 0), 0)
+);
+
+/**
+ * ----------------------------------------
+ * Helpers
+ * ----------------------------------------
+ */
+const fetchPage = async () => {
+	try {
+		let currentPage = paginated?.page ?? 1;
+
+		if (paginated?.items?.length === 1 && currentPage > 1) {
+			currentPage -= 1;
+		}
+
+		paginated = await getUserIncomes({ page: currentPage });
+	} catch (error) {
+		if (error?.isAbort || error?.name === 'AbortError') return;
+		console.dir(error?.response, { depth: null });
+		toast.error(error?.message ?? 'Could not connect to the server');
+	}
+};
+
+const scheduleFetchPage = () => {
+	clearTimeout(fetchTimeout);
+	fetchTimeout = setTimeout(fetchPage, 120);
+};
+
+const setPage = async (page) => {
+	try {
+		paginated = await getUserIncomes({ page });
+	} catch (err) {
+		if (err?.isAbort || err?.name === 'AbortError') return;
+		console.error(err);
+	}
+};
+
+/**
+ * ----------------------------------------
+ * Realtime Sync
+ * ----------------------------------------
+ */
+const handleRealtime = async (e) => {
+	const record = e.record;
+
+	if (record.user !== pb.authStore.record?.id) return;
+
+	switch (e.action) {
+		case 'create':
+			all = [...all, record];
+			scheduleFetchPage();
+			break;
+
+		case 'delete':
+			all = all.filter((r) => r.id !== record.id);
+			scheduleFetchPage();
+			break;
+
+		case 'update':
+			all = all.map((r) => (r.id === record.id ? record : r));
+
+			if (paginated?.items) {
+				paginated.items = paginated.items.map((item) => (item.id === record.id ? record : item));
+			}
+			break;
+	}
+};
+
+/**
+ * ----------------------------------------
+ * Public API
+ * ----------------------------------------
+ */
+const init = async () => {
+	// Initial fetch
+	paginated = await getUserIncomes();
+
+	all = await pb.collection('incomes').getFullList({
+		filter: `user="${pb.authStore.record?.id}"`
+	});
+
+	// Subscribe
+	await pb.collection('incomes').subscribe('*', handleRealtime);
+};
+
+const cleanup = async () => {
+	clearTimeout(fetchTimeout);
+	await pb.collection('incomes').unsubscribe('*');
+};
+
+export const incomeStore = {
+	get paginated() {
+		return paginated;
+	},
+	get total() {
+		return total;
+	},
+	init,
+	cleanup,
+	setPage
+};
