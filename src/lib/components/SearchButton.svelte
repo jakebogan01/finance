@@ -26,7 +26,7 @@
 	<div
 		class={[
 			'absolute right-full mr-2 overflow-hidden ease-[cubic-bezier(.34,1.56,.64,1)] md:transition-[width] md:duration-250',
-			open ? 'w-100' : 'w-0'
+			open ? 'w-[500%]' : 'w-[0%]'
 		]}
 	>
 		<div class="relative flex items-center">
