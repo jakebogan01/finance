@@ -45,18 +45,18 @@
 			<DropdownMenu.RadioGroup bind:value={filters.status}>
 				<DropdownMenu.RadioItem
 					value="all"
-					class={filters.status === 'all' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
+					class={filters.status === 'all' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-100' : ''}
 					>Show all</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem
 					value="active"
-					class={filters.status === 'active' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
+					class={filters.status === 'active' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-100' : ''}
 					>Active</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem
 					value="inactive"
 					class={filters.status === 'inactive'
-						? 'bg-grey-1000 text-white-0 dark:bg-yellow-200'
+						? 'bg-grey-1000 text-white-0 dark:bg-yellow-100'
 						: ''}>Inactive</DropdownMenu.RadioItem
 				>
 			</DropdownMenu.RadioGroup>
@@ -64,7 +64,7 @@
 			<DropdownMenu.RadioGroup bind:value={filters.sort}>
 				<DropdownMenu.RadioItem
 					value="latest"
-					class={filters.sort === 'latest' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
+					class={filters.sort === 'latest' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-100' : ''}
 					>Latest</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem

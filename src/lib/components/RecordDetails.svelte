@@ -2,6 +2,7 @@
 	import { formatDate, formatPhone, timeAgo, usdFormatter } from '$lib/utils/functions.js';
 	// import EditDeleteDropDown from '$lib/components/EditDeleteDropDown.svelte';
 	import RecordDetailsItem from '$lib/components/RecordDetailsItem.svelte';
+	import DropDownButton from '$lib/components/DropDownButton.svelte';
 	import { Separator } from '$lib/components/ui/separator/index.js';
 	// import CreditCardIcon from '@lucide/svelte/icons/credit-card';
 	// import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
@@ -97,7 +98,7 @@
 				</dd>
 			</div>
 			<div class="flex-none">
-				<!--                <EditDeleteDropDown {data} {handleEditRecord} {collectionName} />-->
+				<DropDownButton {data} />
 			</div>
 		</dl>
 		<Separator class="my-5" />
