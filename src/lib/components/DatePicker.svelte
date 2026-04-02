@@ -21,7 +21,7 @@
 					{...props}
 					variant="outline"
 					class={[
-						'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200 dark:border-grey-400 dark:bg-gray-300',
+						'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200 dark:border-grey-400 dark:bg-white-0',
 						value ? 'text-white-0 dark:text-grey-900' : 'text-grey-200 dark:text-grey-500'
 					]}
 				>

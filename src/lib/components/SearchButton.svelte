@@ -57,6 +57,6 @@
 		Icon={SearchIcon}
 		size="6"
 		onmousedown={toggle}
-		class={open ? 'border-yellow-200 text-yellow-200' : ''}
+		class={open ? 'border-yellow-200 text-yellow-200 dark:bg-yellow-100 dark:text-white-0' : ''}
 	/>
 </div>

@@ -39,7 +39,7 @@
 				aria-expanded={open}
 				aria-haspopup="listbox"
 				class={[
-					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200 dark:border-grey-400 dark:bg-gray-300',
+					'h-13 w-full justify-between rounded-lg border border-grey-300 bg-grey-900 px-2! sm:px-4! md:hover:border-yellow-200 dark:border-grey-400 dark:bg-white-0',
 					selectedValue ? 'text-white-0 dark:text-black' : 'text-grey-200 dark:text-grey-500'
 				]}
 			>
