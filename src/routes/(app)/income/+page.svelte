@@ -21,7 +21,7 @@
 
 	let isSearching = $derived(incomeStore.filters.search?.length > 0);
 	let hasData = $derived(incomeStore.paginated?.items?.length > 0);
-	let hasAnyData = $derived(incomeStore.total > 0);
+	let hasAnyData = $derived((incomeStore.paginated?.totalItems ?? 0) > 0);
 	let handleEditRecord;
 	let open = $state(false);
 	let resetForm = $state(false);
