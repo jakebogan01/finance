@@ -25,8 +25,8 @@
 <div bind:this={container} class="relative hidden w-full items-center md:flex">
 	<div
 		class={[
-			'absolute right-full mr-2 overflow-hidden ease-[cubic-bezier(.34,1.56,.64,1)] md:transition-[width] md:duration-250',
-			open ? 'w-[500%]' : 'w-[0%]'
+			'absolute right-full mr-5 overflow-hidden ease-[cubic-bezier(.34,1.56,.64,1)] md:transition-[width] md:duration-250',
+			open ? 'w-[408%]' : 'w-[0%]'
 		]}
 	>
 		<div class="relative flex items-center">
