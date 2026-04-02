@@ -39,9 +39,7 @@
 				</p>
 				<p class="text-white-0 dark:text-grey-700">
 					{usdFormatter.format(item?.amount || item?.expand?.current_history?.amount)}
-					<span class="text-preset-1 text-grey-50 capitalize dark:text-grey-500"
-						>{item?.pay_frequency || 'Per Month'}</span
-					>
+					<span class="text-preset-1 text-grey-50 capitalize dark:text-grey-500">Per Month</span>
 				</p>
 			</div>
 		</div>

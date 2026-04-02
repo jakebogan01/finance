@@ -10,7 +10,15 @@
 
 <div class:hidden={step !== 1} class="grid grid-cols-6 gap-4">
 	<FormField id="name" name="name" label="Name">
-		<Input type="text" id="name" name="name" placeholder="Name" maxLength="255" minLength="1" />
+		<Input
+			type="text"
+			id="name"
+			name="name"
+			placeholder="Name"
+			maxLength="255"
+			minLength="1"
+			autoComplete="off"
+		/>
 	</FormField>
 	<div class="col-span-3">
 		<DropDown list={payTypes} bind:result={payDropDown} index={pay} defaultText="Pay Frequency" />
@@ -21,6 +29,7 @@
 			id="amount"
 			name="amount"
 			placeholder="Amount"
+			autoComplete="off"
 			maxLength="255"
 			minLength="1"
 			inputmode="numeric"

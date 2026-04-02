@@ -26,12 +26,7 @@
 	import { page } from '$app/state';
 	import { tick } from 'svelte';
 
-	let {
-		handleReset = $bindable(),
-		open = $bindable(),
-		handleEditRecord = $bindable(),
-		data
-	} = $props();
+	let { handleReset = $bindable(), open = $bindable(), handleEditRecord = $bindable() } = $props();
 
 	let noValue = $state(true);
 	let checked = $state(true);
@@ -68,21 +63,23 @@
 	};
 
 	const buildPayload = (values) => {
-		values.user = pb.authStore.record?.id;
-		values.slug = generateSlug(values.name);
-		values.pay_frequency = formState.payDropDown;
-		values.phone = formState.phoneValue;
-		values.state = formState.stateDropDown;
-		values.date = calendarDateToISO(formState.dateValue);
-		values.status = checked;
-		return cleanObject(values);
+		return cleanObject({
+			...values,
+			user: pb.authStore.record?.id,
+			slug: generateSlug(values.name),
+			pay_frequency: formState.payDropDown,
+			phone: formState.phoneValue,
+			state: formState.stateDropDown,
+			date: calendarDateToISO(formState.dateValue),
+			status: checked
+		});
 	};
 
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
 		if (record.update) {
-			checkUpdatedValues(payload);
-			await pb.collection('incomes').update(data.id, payload);
+			const cleanedPayload = checkUpdatedValues(payload);
+			await pb.collection('incomes').update(record.id, cleanedPayload);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			INCOMESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
@@ -93,14 +90,15 @@
 		}
 	};
 
-	const checkUpdatedValues = (payload) => {
-		payload.address = payload.address || '';
-		payload.city = payload.city || '';
-		payload.email = payload.email || '';
-		payload.phone = payload.phone || null;
-		payload.zip = payload.zip || '';
-		payload.state = payload.state === 'None' ? '' : payload.state;
-	};
+	const checkUpdatedValues = (payload) => ({
+		...payload,
+		address: payload.address || '',
+		city: payload.city || '',
+		email: payload.email || '',
+		phone: payload.phone || null,
+		zip: payload.zip || '',
+		state: payload.state === 'None' ? '' : payload.state
+	});
 
 	const { form, reset, isSubmitting, validate, setFields } = createForm({
 		initialValues: {
@@ -114,19 +112,11 @@
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
 		transform: (values) => ({
 			...values,
-			amount: cleanNumber(values.amount)
+			amount: Number(cleanNumber(values.amount)) || ''
 		}),
 		onSubmit: async (values) => {
 			try {
-				let amount = values.amount;
-				if (amount) {
-					if (formState.payDropDown === 'per week') {
-						amount *= 4;
-					} else if (formState.payDropDown === 'bi weekly') {
-						amount *= 2;
-					}
-				}
-				values.amount = amount;
+				values.amount = toMonthly(values.amount, formState.payDropDown);
 				await saveRecord(values);
 				reset();
 				resetState();
@@ -141,8 +131,8 @@
 	const next = async () => {
 		const result = await validate();
 		const keys = ['name', 'amount'];
-		const allEmpty = keys.every((key) => result[key] === null || result[key]?.length === 0);
-		if (allEmpty) formState.step += 1;
+		const hasErrors = keys.some((key) => result[key] || result[key]?.length === 0);
+		if (hasErrors) formState.step += 1;
 	};
 
 	const back = () => (formState.step -= 1);
@@ -150,7 +140,6 @@
 	handleReset = () => resetState();
 
 	handleEditRecord = async (data) => {
-		console.log(data);
 		open = true;
 		formState.step = 1;
 		checked = data?.status;
@@ -158,7 +147,7 @@
 		const startDate = data?.date ? new Date(data.date) : null;
 		formState.dateValue =
 			startDate && !isNaN(startDate.getTime()) ? fromDate(startDate, getLocalTimeZone()) : null;
-		indexes.pay = 0;
+		indexes.pay = payTypes.findIndex((item) => item.value === data?.pay_frequency);
 		if (data?.state?.length) {
 			noValue = false;
 			indexes.state = states.findIndex((x) => x.value === data?.state);
@@ -170,7 +159,7 @@
 		record.id = data?.id;
 		setFields({
 			name: data?.name || '',
-			amount: data?.amount || '',
+			amount: fromMonthly(data?.amount, data?.pay_frequency) || '',
 			email: data?.email || '',
 			address: data?.address || '',
 			city: data?.city || '',
@@ -178,6 +167,30 @@
 		});
 		formState.payDropDown = payTypes[indexes.pay]?.value ?? payTypes[0].value;
 		formState.stateDropDown = states[indexes.state]?.value ?? '';
+	};
+
+	const toMonthly = (amount, frequency) => {
+		if (!amount) return amount;
+		switch (frequency) {
+			case 'per week':
+				return amount * 4;
+			case 'bi weekly':
+				return amount * 2;
+			default:
+				return amount; // monthly already
+		}
+	};
+
+	const fromMonthly = (amount, frequency) => {
+		if (!amount) return amount;
+		switch (frequency) {
+			case 'per week':
+				return amount / 4;
+			case 'bi weekly':
+				return amount / 2;
+			default:
+				return amount;
+		}
 	};
 </script>
 
