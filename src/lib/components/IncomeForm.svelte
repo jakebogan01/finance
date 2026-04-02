@@ -70,7 +70,7 @@
 			pay_frequency: formState.payDropDown,
 			phone: formState.phoneValue,
 			state: formState.stateDropDown,
-			date: calendarDateToISO(formState.dateValue),
+			date: formState.dateValue ? calendarDateToISO(formState.dateValue) : null,
 			status: checked
 		});
 	};
@@ -92,6 +92,7 @@
 
 	const checkUpdatedValues = (payload) => ({
 		...payload,
+		date: payload.date ?? null,
 		address: payload.address || '',
 		city: payload.city || '',
 		email: payload.email || '',
