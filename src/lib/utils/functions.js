@@ -1,3 +1,4 @@
+import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 import { DASHBOARD, SIGNIN } from '$lib/utils/constants';
 import { redirect } from '@sveltejs/kit';
 import { goto } from '$app/navigation';
@@ -280,6 +281,15 @@ export const isEmpty = (value) => {
  * Data Utilities
  * ----------------------------------------
  */
+export const deleteRecord = async (type, id) => {
+	try {
+		await pb.collection(type.toLowerCase()).delete(id);
+		toast.success(`${type} successfully deleted!`);
+		INCOMESLUG.value = null;
+	} catch (error) {
+		console.dir(error?.response, { depth: null });
+	}
+};
 
 /**
  * ----------------------------------------

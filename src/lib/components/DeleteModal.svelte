@@ -1,7 +1,8 @@
 <script>
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import { deleteRecord } from '$lib/utils/functions.js';
 
-	let { data, deleteDialogOpen = $bindable(), open = $bindable() } = $props();
+	let { data, deleteDialogOpen = $bindable(), open = $bindable(), collectionName } = $props();
 </script>
 
 <AlertDialog.Content>
@@ -19,7 +20,10 @@
 		>
 			Cancel
 		</AlertDialog.Cancel>
-		<AlertDialog.Action class="h-13 bg-red-400 px-6 font-medium text-white-0 md:hover:bg-red-500">
+		<AlertDialog.Action
+			class="h-13 bg-red-400 px-6 font-medium text-white-0 md:hover:bg-red-500"
+			onclick={() => deleteRecord(collectionName, data?.id)}
+		>
 			Delete
 		</AlertDialog.Action>
 	</AlertDialog.Footer>

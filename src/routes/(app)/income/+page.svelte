@@ -90,7 +90,7 @@
 			>{usdFormatter.format(incomeStore.total)}
 		</h3>
 		{#if incomeRecord}
-			<RecordDetails data={incomeRecord} />
+			<RecordDetails data={incomeRecord} collectionName="Incomes" />
 		{/if}
 	</section>
 {:else}
