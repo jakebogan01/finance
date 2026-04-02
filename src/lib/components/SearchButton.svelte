@@ -31,10 +31,10 @@
 	>
 		<div class="relative flex items-center">
 			<SearchIcon
-				class="md:transition-[opacity, transform] absolute left-3 z-10 size-4 text-grey-200 md:duration-300"
+				class="md:transition-[opacity, transform] absolute left-3 z-10 size-4 text-grey-200 md:duration-300 dark:text-grey-600"
 			/>
 			<input
-				type="search"
+				type="text"
 				id="search"
 				bind:value
 				oninput={(e) => onSearch?.(value)}
@@ -47,7 +47,7 @@
 				spellcheck="false"
 				aria-autocomplete="list"
 				class={[
-					'pointer-events-auto mb-0 hidden h-13 w-full min-w-0 translate-x-0 rounded-full border border-grey-300 bg-grey-900 pr-4 pl-8 opacity-100 ring-offset-yellow-100 outline-none selection:bg-yellow-100 selection:text-grey-1100 placeholder:text-grey-200 focus-visible:border-yellow-100 focus-visible:ring-[3px] focus-visible:ring-yellow-200/500 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-200 aria-invalid:ring-red-100/20 md:flex md:transition-colors md:hover:border-yellow-200 dark:bg-grey-800',
+					'pointer-events-auto mb-0 hidden h-13 w-full min-w-0 translate-x-0 rounded-full border border-grey-300 bg-grey-900 pr-4 pl-8 opacity-100 ring-offset-yellow-100 outline-none selection:bg-yellow-100 selection:text-grey-1100 placeholder:text-grey-200 focus-visible:border-yellow-100 focus-visible:ring-[3px] focus-visible:ring-yellow-200/500 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-red-200 aria-invalid:ring-red-100/20 md:flex md:transition-colors md:hover:border-yellow-200 dark:border-grey-400 dark:bg-white-0 dark:text-grey-900 dark:placeholder:text-grey-600',
 					className
 				]}
 			/>

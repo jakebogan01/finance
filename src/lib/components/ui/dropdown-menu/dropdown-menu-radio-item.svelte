@@ -10,7 +10,7 @@
 	bind:ref
 	data-slot="dropdown-menu-radio-item"
 	class={cn(
-		"text-preset-3 relative flex cursor-pointer items-center gap-2 rounded-10 py-1.5 ps-8 pe-2 outline-hidden select-none focus:bg-grey-1000 focus:text-white-0 data-disabled:pointer-events-none data-disabled:opacity-50 md:transition-all [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+		"text-preset-3 relative flex cursor-pointer items-center gap-2 rounded-10 py-1.5 ps-8 pe-2 outline-hidden select-none focus:bg-grey-1000 focus:text-white-0 data-disabled:pointer-events-none data-disabled:opacity-50 md:transition-all dark:focus:bg-yellow-200 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
 		className
 	)}
 	{...restProps}

@@ -9,7 +9,7 @@
 	<Dialog.Trigger
 		type="button"
 		onclick={handleReset}
-		class="flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! whitespace-nowrap text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200 dark:border-yellow-200 dark:bg-yellow-200 dark:md:hover:border-white-0 dark:md:hover:bg-yellow-100 dark:md:hover:text-white-0"
+		class="flex h-13 cursor-pointer items-center gap-2 rounded-full border border-grey-300 bg-grey-1000 px-5! whitespace-nowrap text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200 dark:border-grey-300 dark:bg-transparent dark:text-grey-900 dark:md:hover:border-white-0 dark:md:hover:bg-yellow-100 dark:md:hover:text-white-0"
 		asChild
 	>
 		<ArrowRightIcon class="size-6" strokeWidth="1.5" />

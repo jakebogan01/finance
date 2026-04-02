@@ -45,30 +45,31 @@
 			<DropdownMenu.RadioGroup bind:value={filters.status}>
 				<DropdownMenu.RadioItem
 					value="all"
-					class={filters.status === 'all' ? 'bg-grey-1000 text-white-0' : ''}
+					class={filters.status === 'all' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
 					>Show all</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem
 					value="active"
-					class={filters.status === 'active' ? 'bg-grey-1000 text-white-0' : ''}
+					class={filters.status === 'active' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
 					>Active</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem
 					value="inactive"
-					class={filters.status === 'inactive' ? 'bg-grey-1000 text-white-0' : ''}
-					>Inactive</DropdownMenu.RadioItem
+					class={filters.status === 'inactive'
+						? 'bg-grey-1000 text-white-0 dark:bg-yellow-200'
+						: ''}>Inactive</DropdownMenu.RadioItem
 				>
 			</DropdownMenu.RadioGroup>
 			<DropdownMenu.Separator />
 			<DropdownMenu.RadioGroup bind:value={filters.sort}>
 				<DropdownMenu.RadioItem
 					value="latest"
-					class={filters.sort === 'latest' ? 'bg-grey-1000 text-white-0' : ''}
+					class={filters.sort === 'latest' ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
 					>Latest</DropdownMenu.RadioItem
 				>
 				<DropdownMenu.RadioItem
 					value={sortType}
-					class={filters.sort === sortType ? 'bg-grey-1000 text-white-0' : ''}
+					class={filters.sort === sortType ? 'bg-grey-1000 text-white-0 dark:bg-yellow-200' : ''}
 					>Highest amount</DropdownMenu.RadioItem
 				>
 			</DropdownMenu.RadioGroup>
