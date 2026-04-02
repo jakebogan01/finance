@@ -22,6 +22,7 @@
 	let isSearching = $derived(incomeStore.filters.search?.length > 0);
 	let hasData = $derived(incomeStore.paginated?.items?.length > 0);
 	let hasAnyData = $derived(incomeStore.total > 0);
+	let handleEditRecord;
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
@@ -58,7 +59,13 @@
 		<Command.Root class="rounded-none bg-transparent dark:bg-transparent!">
 			<div class="flex items-center justify-between gap-5">
 				<CreateButton bind:handleReset bind:open>
-					<IncomeForm bind:handleReset {resetForm} bind:open />
+					<IncomeForm
+						bind:handleReset
+						bind:handleEditRecord
+						{resetForm}
+						bind:open
+						data={incomeRecord}
+					/>
 				</CreateButton>
 				<div class="mr-0 flex items-center lg:mr-5">
 					<FilterButton
@@ -90,7 +97,7 @@
 			>{usdFormatter.format(incomeStore.total)}
 		</h3>
 		{#if incomeRecord}
-			<RecordDetails data={incomeRecord} collectionName="Incomes" />
+			<RecordDetails data={incomeRecord} {handleEditRecord} collectionName="Incomes" />
 		{/if}
 	</section>
 {:else}

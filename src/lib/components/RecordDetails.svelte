@@ -1,6 +1,5 @@
 <script>
 	import { formatDate, formatPhone, timeAgo, usdFormatter } from '$lib/utils/functions.js';
-	// import EditDeleteDropDown from '$lib/components/EditDeleteDropDown.svelte';
 	import RecordDetailsItem from '$lib/components/RecordDetailsItem.svelte';
 	import DropDownButton from '$lib/components/DropDownButton.svelte';
 	import { Separator } from '$lib/components/ui/separator/index.js';
@@ -10,11 +9,11 @@
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import HistoryIcon from '@lucide/svelte/icons/history';
 	import MapPinIcon from '@lucide/svelte/icons/map-pin';
+	// import UserIcon from '@lucide/svelte/icons/user';
 	import PhoneIcon from '@lucide/svelte/icons/phone';
 	import MailIcon from '@lucide/svelte/icons/mail';
-	// import UserIcon from '@lucide/svelte/icons/user';
 
-	let { data, collectionName } = $props();
+	let { data, handleEditRecord, collectionName } = $props();
 
 	let details = $derived.by(() => {
 		if (!data) return [];
@@ -98,7 +97,7 @@
 				</dd>
 			</div>
 			<div class="flex-none">
-				<DropDownButton {data} {collectionName} />
+				<DropDownButton {data} {handleEditRecord} {collectionName} />
 			</div>
 		</dl>
 		<Separator class="my-5" />

@@ -1,11 +1,14 @@
 <script>
 	import {
+		states,
 		generateSlug,
 		cleanNumber,
 		payTypes,
 		cleanObject,
 		calendarDateToISO
 	} from '$lib/utils/functions.js';
+	import { fromDate, getLocalTimeZone } from '@internationalized/date';
+	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
@@ -15,17 +18,31 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { validator } from '@felte/validator-zod';
 	import reporterDom from '@felte/reporter-dom';
+	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase.js';
 	import { createForm } from 'felte';
+	import { resolve } from '$app/paths';
+	import { page } from '$app/state';
+	import { tick } from 'svelte';
 
-	let { handleReset = $bindable(), open = $bindable() } = $props();
+	let {
+		handleReset = $bindable(),
+		open = $bindable(),
+		handleEditRecord = $bindable(),
+		data
+	} = $props();
 
 	let noValue = $state(true);
 	let checked = $state(true);
 	let indexes = $state({
 		pay: 0,
 		state: 0
+	});
+
+	let record = $state({
+		id: null,
+		update: false
 	});
 
 	let formState = $state({
@@ -44,6 +61,8 @@
 		formState.stateDropDown = '';
 		indexes.pay = 0;
 		indexes.state = 0;
+		record.id = null;
+		record.update = false;
 		checked = true;
 		noValue = true;
 	};
@@ -61,10 +80,29 @@
 
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
-		await pb.collection('incomes').create(payload);
+		if (record.update) {
+			checkUpdatedValues(payload);
+			await pb.collection('incomes').update(data.id, payload);
+			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
+			INCOMESLUG.value = `#${payload.slug}`;
+			toast.success('Successfully updated');
+		} else {
+			await pb.collection('incomes').create(payload);
+			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
+			toast.success('Successfully created');
+		}
 	};
 
-	const { form, reset, isSubmitting, validate } = createForm({
+	const checkUpdatedValues = (payload) => {
+		payload.address = payload.address || '';
+		payload.city = payload.city || '';
+		payload.email = payload.email || '';
+		payload.phone = payload.phone || null;
+		payload.zip = payload.zip || '';
+		payload.state = payload.state === 'None' ? '' : payload.state;
+	};
+
+	const { form, reset, isSubmitting, validate, setFields } = createForm({
 		initialValues: {
 			name: '',
 			amount: '',
@@ -110,6 +148,37 @@
 	const back = () => (formState.step -= 1);
 
 	handleReset = () => resetState();
+
+	handleEditRecord = async (data) => {
+		console.log(data);
+		open = true;
+		formState.step = 1;
+		checked = data?.status;
+		formState.phoneValue = data?.phone || null;
+		const startDate = data?.date ? new Date(data.date) : null;
+		formState.dateValue =
+			startDate && !isNaN(startDate.getTime()) ? fromDate(startDate, getLocalTimeZone()) : null;
+		indexes.pay = 0;
+		if (data?.state?.length) {
+			noValue = false;
+			indexes.state = states.findIndex((x) => x.value === data?.state);
+		} else {
+			noValue = true;
+		}
+		await tick();
+		record.update = true;
+		record.id = data?.id;
+		setFields({
+			name: data?.name || '',
+			amount: data?.amount || '',
+			email: data?.email || '',
+			address: data?.address || '',
+			city: data?.city || '',
+			zip: data?.zip || ''
+		});
+		formState.payDropDown = payTypes[indexes.pay]?.value ?? payTypes[0].value;
+		formState.stateDropDown = states[indexes.state]?.value ?? '';
+	};
 </script>
 
 <FormLayout step={formState.step}>
