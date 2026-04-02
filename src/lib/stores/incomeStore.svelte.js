@@ -8,13 +8,16 @@ import pb from '$lib/pocketbase';
  * ----------------------------------------
  */
 let paginated = $state(null);
+let searchInput = $state('');
 let all = $state([]);
 let filters = $state({
 	status: 'all',
-	sort: 'latest'
+	sort: 'latest',
+	search: ''
 });
 
 let fetchTimeout;
+let searchTimeout;
 
 /**
  * ----------------------------------------
@@ -36,15 +39,20 @@ const getSortValue = () => {
 	return '-created';
 };
 
+let currentRequest = 0;
+
 const fetchPage = async (pageOverride) => {
+	const requestId = ++currentRequest;
 	try {
 		const page = pageOverride ?? paginated?.page ?? 1;
-
-		paginated = await getUserIncomes({
+		const result = await getUserIncomes({
 			page,
 			sort: getSortValue(),
-			status: filters.status
+			status: filters.status,
+			search: filters.search
 		});
+		if (requestId !== currentRequest) return;
+		paginated = result;
 	} catch (error) {
 		if (error?.isAbort || error?.name === 'AbortError') return;
 		console.dir(error?.response, { depth: null });
@@ -57,20 +65,25 @@ const scheduleFetchPage = () => {
 	fetchTimeout = setTimeout(fetchPage, 120);
 };
 
-const setPage = async (page) => {
-	try {
-		paginated = await getUserIncomes({ page });
-	} catch (err) {
-		if (err?.isAbort || err?.name === 'AbortError') return;
-		console.error(err);
-	}
-};
+const setPage = async (page) => fetchPage(page);
 
 const setFilters = async (newFilters) => {
 	filters = { ...filters, ...newFilters };
 
 	// Reset to page 1 when filters change
 	await fetchPage(1);
+};
+
+const setSearch = (value) => {
+	searchInput = value;
+	clearTimeout(searchTimeout);
+	searchTimeout = setTimeout(() => {
+		const trimmed = value.trim();
+		if (trimmed.length > 0 && trimmed.length < 2) return;
+		if (filters.search === trimmed) return;
+		filters = { ...filters, search: trimmed };
+		fetchPage(1);
+	}, 500);
 };
 
 /**
@@ -140,5 +153,6 @@ export const incomeStore = {
 	init,
 	cleanup,
 	setPage,
-	setFilters
+	setFilters,
+	setSearch
 };

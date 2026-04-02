@@ -5,6 +5,7 @@
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
+	import SearchButton from '$lib/components/SearchButton.svelte';
 	import FilterButton from '$lib/components/FilterButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import IncomeForm from '$lib/components/IncomeForm.svelte';
@@ -18,7 +19,9 @@
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
+	let isSearching = $derived(incomeStore.filters.search?.length > 0);
 	let hasData = $derived(incomeStore.paginated?.items?.length > 0);
+	let hasAnyData = $derived(incomeStore.total > 0);
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
@@ -37,7 +40,6 @@
 			INCOMESLUG.value = hash;
 		}
 	});
-	let filters = $derived(incomeStore.filters);
 	let cleanSlug = $derived(INCOMESLUG.value?.slice(1) ?? null);
 	let incomeRecord = $derived.by(() => {
 		if (!incomeStore.paginated?.items || !cleanSlug) return null;
@@ -51,22 +53,35 @@
 	description="Track and manage all your income sources in one place. Add, update, and monitor earnings over time with ease."
 />
 
-{#if hasData}
+{#if hasAnyData || isSearching}
 	<section>
 		<Command.Root class="rounded-none bg-transparent dark:bg-transparent!">
 			<div class="flex items-center justify-between gap-5">
 				<CreateButton bind:handleReset bind:open>
 					<IncomeForm bind:handleReset {resetForm} bind:open />
 				</CreateButton>
-				<div class="mr-4 flex items-center sm:mr-0">
+				<div class="mr-0 flex items-center lg:mr-5">
 					<FilterButton
 						filters={incomeStore.filters}
 						sortType="income"
 						onChange={(f) => incomeStore.setFilters(f)}
 					/>
+					<SearchButton class="hidden md:flex" onSearch={(value) => incomeStore.setSearch(value)} />
 				</div>
 			</div>
-			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} />
+			{#if hasData}
+				<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} />
+			{:else if isSearching}
+				<div class="flex flex-col space-y-5.5 overflow-hidden pt-5.5 pb-4 lg:flex-1">
+					<div
+						class="flex flex-col items-center justify-center lg:flex-1 lg:border-r lg:border-grey-800 lg:pr-5 lg:dark:border-grey-200"
+					>
+						<p class="text-center text-grey-200">
+							No results found for "{incomeStore.filters.search}"
+						</p>
+					</div>
+				</div>
+			{/if}
 		</Command.Root>
 	</section>
 	<section>

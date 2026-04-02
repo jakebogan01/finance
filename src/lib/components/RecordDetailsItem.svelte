@@ -6,9 +6,7 @@
 </script>
 
 <div
-	class={[
-		'flex w-full items-center justify-between gap-x-2 px-4 py-[15.45px] even:bg-grey-700/20 dark:even:bg-grey-200/50'
-	]}
+	class="flex w-full items-center justify-between gap-x-2 px-4 py-4.5 even:bg-grey-700/20 dark:even:bg-grey-200/50"
 >
 	<dt class="flex-none">
 		<span class="sr-only">{item.label}</span>

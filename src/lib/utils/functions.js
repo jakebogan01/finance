@@ -296,9 +296,10 @@ export const isEmpty = (value) => {
  */
 export const getUserIncomes = async ({
 	page = 1,
-	perPage = 5,
+	perPage = 4,
 	sort = '-created',
-	status = 'all'
+	status = 'all',
+	search = ''
 } = {}) => {
 	let filter = `user="${pb.authStore.record?.id}"`;
 
@@ -308,6 +309,11 @@ export const getUserIncomes = async ({
 
 	if (status === 'inactive') {
 		filter += ' && status=false';
+	}
+
+	if (search && search.trim().length > 0) {
+		const safe = search.replace(/"/g, '\\"');
+		filter += ` && name ~ "${safe}"`;
 	}
 
 	return await pb.collection('incomes').getList(page, perPage, {
