@@ -1,15 +1,14 @@
 <script>
-	import { authCheck, usdFormatter } from '$lib/utils/functions.js';
-	import RecordDetails from '$lib/components/RecordDetails.svelte';
+	import FailedSearchResults from '$lib/components/FailedSearchResults.svelte';
+	import { authCheck } from '$lib/utils/functions.js';
 	import EmptyTemplate from '$lib/components/EmptyTemplate.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
-	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
-	import SearchButton from '$lib/components/SearchButton.svelte';
-	import FilterButton from '$lib/components/FilterButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
+	import RightLayout from '$lib/components/RightLayout.svelte';
 	import IncomeForm from '$lib/components/IncomeForm.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
+	import LeftLayout from '$lib/components/LeftLayout.svelte';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { goto } from '$app/navigation';
@@ -55,51 +54,14 @@
 />
 
 {#if hasAnyData || isSearching}
-	<section>
-		<Command.Root class="rounded-none bg-transparent dark:bg-transparent!">
-			<div class="flex items-center justify-between gap-5">
-				<CreateButton bind:handleReset bind:open>
-					<IncomeForm
-						bind:handleReset
-						bind:handleEditRecord
-						{resetForm}
-						bind:open
-						data={incomeRecord}
-					/>
-				</CreateButton>
-				<div class="mr-0 flex items-center lg:mr-5">
-					<FilterButton
-						filters={incomeStore.filters}
-						sortType="income"
-						onChange={(f) => incomeStore.setFilters(f)}
-					/>
-					<SearchButton class="hidden md:flex" onSearch={(value) => incomeStore.setSearch(value)} />
-				</div>
-			</div>
-			{#if hasData}
-				<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} />
-			{:else if isSearching}
-				<div class="flex flex-col space-y-5.5 overflow-hidden pt-5.5 pb-4 lg:flex-1">
-					<div
-						class="flex flex-col items-center justify-center lg:flex-1 lg:border-r lg:border-grey-800 lg:pr-5 lg:dark:border-grey-200"
-					>
-						<p class="text-center text-grey-200 dark:text-grey-500">
-							No results found for "{incomeStore.filters.search}"
-						</p>
-					</div>
-				</div>
-			{/if}
-		</Command.Root>
-	</section>
-	<section>
-		<h3 class="text-preset-4-semibold hidden h-13 items-center justify-end text-yellow-200 lg:flex">
-			<span class="text-preset-5-semibold mr-2 text-grey-100/80 dark:text-grey-400">Total:</span
-			>{usdFormatter.format(incomeStore.total)}
-		</h3>
-		{#if incomeRecord}
-			<RecordDetails data={incomeRecord} {handleEditRecord} collectionName="Incomes" />
+	<RightLayout bind:handleReset bind:handleEditRecord {resetForm} bind:open data={incomeRecord}>
+		{#if hasData}
+			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} />
+		{:else if isSearching}
+			<FailedSearchResults />
 		{/if}
-	</section>
+	</RightLayout>
+	<LeftLayout {incomeRecord} data={incomeRecord} {handleEditRecord} collectionName="Incomes" />
 {:else}
 	<EmptyTemplate>
 		<CreateButton bind:handleReset bind:open>
