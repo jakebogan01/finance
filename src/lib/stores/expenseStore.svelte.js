@@ -151,16 +151,18 @@ const init = async () => {
 		const record = e.record;
 		if (!record.expense) return;
 
-		// Update current_amount in the expense
-		await pb.collection('expenses').update(record.expense, {
-			current_amount: record.amount
-		});
-
-		// Update totals in user record
-		const expenseRecord = await pb.collection('expenses').getOne(record.expense);
-		await updateUserTotal(expenseRecord.user);
-
-		scheduleFetchPage();
+		// Use try/catch to prevent unhandled aborts
+		try {
+			// Only update if current_amount changed
+			await pb
+				.collection('expenses')
+				.update(record.expense, { current_amount: record.amount, $autoCancel: false });
+			await updateUserTotal(pb.authStore.record?.id); // $autoCancel now false internally
+			scheduleFetchPage();
+		} catch (err) {
+			if (err?.isAbort) return; // ignore aborts
+			console.error('Realtime expense update failed', err);
+		}
 	});
 };
 

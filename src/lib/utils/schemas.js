@@ -81,3 +81,8 @@ export const incomeSchema = z.object({
 	city: optionalStringField,
 	zip: zipField
 });
+
+export const expenseSchema = z.object({
+	title: nameField,
+	amount: amountField
+});

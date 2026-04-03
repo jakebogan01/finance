@@ -187,7 +187,8 @@ export const updateUserTotal = async (userId) => {
 	// Fetch all expenses for the user
 	const expenses = await pb.collection('expenses').getFullList({
 		filter: `user="${userId}"`,
-		fields: 'current_amount'
+		fields: 'current_amount',
+		$autoCancel: false
 	});
 
 	// Calculate total
@@ -395,6 +396,10 @@ export const payTypes = [
 	{ value: 'per month', label: 'Per Month' },
 	{ value: 'bi weekly', label: 'Bi Weekly' },
 	{ value: 'per week', label: 'Per Week' }
+];
+export const categoryTypes = [
+	{ value: 'Bill', label: 'Bill' },
+	{ value: 'Subscription', label: 'Subscription' }
 ];
 export const activeColors = [
 	'bg-yellow-100 dark:bg-amber-100',

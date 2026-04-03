@@ -7,6 +7,7 @@
 
 	let {
 		children,
+		form,
 		handleReset = $bindable(),
 		open = $bindable(),
 		handleEditRecord = $bindable(),
@@ -21,13 +22,7 @@
 	<Command.Root class="rounded-none bg-transparent dark:bg-transparent!">
 		<div class="flex items-center justify-between gap-5">
 			<CreateButton bind:handleReset bind:open>
-				<IncomeForm
-					bind:handleReset
-					bind:handleEditRecord
-					{resetForm}
-					bind:open
-					data={incomeRecord}
-				/>
+				{@render form?.()}
 			</CreateButton>
 			<div class="mr-0 flex items-center lg:mr-5">
 				<FilterButton

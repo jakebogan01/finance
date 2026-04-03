@@ -2,9 +2,9 @@
 	import FailedSearchResults from '$lib/components/FailedSearchResults.svelte';
 	import EmptyTemplate from '$lib/components/EmptyTemplate.svelte';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
-	// import CreateButton from '$lib/components/CreateButton.svelte';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
-	// import IncomeForm from '$lib/components/IncomeForm.svelte';
+	import CreateButton from '$lib/components/CreateButton.svelte';
+	import ExpenseForm from '$lib/components/ExpenseForm.svelte';
 	import RightLayout from '$lib/components/RightLayout.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
 	import LeftLayout from '$lib/components/LeftLayout.svelte';
@@ -63,6 +63,15 @@
 		store={expenseStore}
 		sortBy="amount"
 	>
+		{#snippet form()}
+			<ExpenseForm
+				bind:handleReset
+				bind:handleEditRecord
+				{resetForm}
+				bind:open
+				data={expenseRecord}
+			/>
+		{/snippet}
 		{#if hasData}
 			<RecordList
 				items={expenseStore.paginated?.items ?? []}
@@ -81,8 +90,8 @@
 	/>
 {:else}
 	<EmptyTemplate>
-		<!--		<CreateButton bind:handleReset bind:open>-->
-		<!--			<IncomeForm bind:handleReset {resetForm} bind:open />-->
-		<!--		</CreateButton>-->
+		<CreateButton bind:handleReset bind:open>
+			<ExpenseForm bind:handleReset {resetForm} bind:open />
+		</CreateButton>
 	</EmptyTemplate>
 {/if}

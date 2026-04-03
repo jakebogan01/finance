@@ -1,15 +1,19 @@
 <script>
-	import * as Dialog from '$lib/components/ui/dialog';
 	import { Separator } from '$lib/components/ui/separator/index.js';
+	import * as Dialog from '$lib/components/ui/dialog';
 
-	let { children, isMultiStepForm = true, step } = $props();
+	let { children, isMultiStepForm = true, step = 1 } = $props();
 </script>
 
 <Dialog.Content showCloseButton={false} class="p-5">
 	<Dialog.Header class="text-center">
 		<Dialog.Title class="text-preset-5-semibold">
-			{step !== 2 ? 'Add Income' : 'Additional Information'}
-			<br /><span class="text-preset-3 text-grey-50">{step === 2 ? '(optional)' : ''}</span>
+			{#if isMultiStepForm}
+				{step !== 2 ? 'Add Income' : 'Additional Information'}
+				<br /><span class="text-preset-3 text-grey-50">{step === 2 ? '(optional)' : ''}</span>
+			{:else}
+				Create Expense
+			{/if}
 		</Dialog.Title>
 	</Dialog.Header>
 	{#if isMultiStepForm}

@@ -15,7 +15,6 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
-	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
@@ -64,6 +63,15 @@
 		store={incomeStore}
 		sortBy="income"
 	>
+		{#snippet form()}
+			<IncomeForm
+				bind:handleReset
+				bind:handleEditRecord
+				{resetForm}
+				bind:open
+				data={incomeRecord}
+			/>
+		{/snippet}
 		{#if hasData}
 			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} store={incomeStore} />
 		{:else if isSearching}
