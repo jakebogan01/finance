@@ -1,3 +1,4 @@
+import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 import { DASHBOARD, SIGNIN } from '$lib/utils/constants';
 import { redirect } from '@sveltejs/kit';
@@ -314,6 +315,10 @@ export const isEmpty = (value) => {
 export const deleteRecord = async (type, id) => {
 	try {
 		await pb.collection(type.toLowerCase()).delete(id);
+		if (type.toLowerCase() === 'expenses') {
+			const total = await updateUserTotal(pb.authStore.record.id);
+			expenseStore.setUserTotal(total);
+		}
 		toast.success(`${type} successfully deleted!`);
 		INCOMESLUG.value = null;
 	} catch (error) {

@@ -4,8 +4,10 @@
 		cleanNumber,
 		payTypes,
 		categoryTypes,
-		cleanObject
+		cleanObject,
+		updateUserTotal
 	} from '$lib/utils/functions.js';
+	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
@@ -65,13 +67,13 @@
 		});
 
 		await pb.collection('expenses').update(record.id, {
-			current_history: history.id
+			current_history: history.id,
+			current_amount: amount
 		});
 	};
 
 	const updateExpenseHistory = async (record, amount) => {
 		const current = record?.expand?.current_history;
-
 		if (current.month === month && current.year === year) {
 			await pb.collection('expense_history').update(current.id, { amount: amount });
 		} else {
@@ -94,14 +96,21 @@
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
 		if (record.update) {
-			// const cleanedPayload = checkUpdatedValues(payload);
-			// await pb.collection('expenses').update(record.id, cleanedPayload);
-			// await goto(resolve(`${page.url.pathname}#${payload.slug}`));
-			// EXPENSESLUG.value = `#${payload.slug}`;
-			// toast.success('Successfully updated');
+			const updated = await pb.collection('expenses').update(record.id, {
+				...payload,
+				current_amount: payload.amount
+			});
+			await updateExpenseHistory(updated, payload.amount);
+			const total = await updateUserTotal(pb.authStore.record.id);
+			expenseStore.setUserTotal(total);
+			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
+			EXPENSESLUG.value = `#${payload.slug}`;
+			toast.success('Successfully updated');
 		} else {
 			const record = await pb.collection('expenses').create(payload);
 			await createExpenseHistory(record, payload.amount);
+			const total = await updateUserTotal(pb.authStore.record.id);
+			expenseStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			toast.success('Successfully created');
 		}
@@ -119,10 +128,10 @@
 		onSubmit: async (values) => {
 			try {
 				values.amount = toMonthly(values.amount, formState.payDropDown);
+				open = false;
 				await saveRecord(values);
 				reset();
 				resetState();
-				open = false;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');

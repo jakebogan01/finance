@@ -19,7 +19,6 @@ let filters = $state({
 let fetchTimeout;
 let searchTimeout;
 let currentRequest = 0;
-let totalTimeout;
 
 /**
  * ----------------------------------------
@@ -36,12 +35,8 @@ const total = $derived.by(() => {
  * Helpers
  * ----------------------------------------
  */
-const scheduleUserTotalUpdate = (userId) => {
-	clearTimeout(totalTimeout);
-
-	totalTimeout = setTimeout(() => {
-		updateUserTotal(userId);
-	}, 150);
+const setUserTotal = (value) => {
+	userTotal = value ?? 0;
 };
 
 const getSortValue = () => {
@@ -59,11 +54,6 @@ const fetchUserTotal = async () => {
 	});
 
 	userTotal = user.total_expenses ?? 0;
-};
-
-const getAmount = (item) => {
-	const full = allExpenses.find((e) => e.id === item.id);
-	return full?.current_amount ?? full?.expand?.current_history?.amount ?? 0;
 };
 
 const fetchPage = async (pageOverride) => {
@@ -121,14 +111,11 @@ const setSearch = (value) => {
  */
 const handleExpenseRealtime = async (e) => {
 	const record = e.record;
-
 	if (record.user !== pb.authStore.record?.id) return;
-
 	switch (e.action) {
 		case 'create':
 		case 'update':
 		case 'delete':
-			scheduleUserTotalUpdate(record.user);
 			scheduleFetchPage();
 			break;
 	}
@@ -152,24 +139,6 @@ const init = async () => {
 	await fetchUserTotal();
 
 	await pb.collection('expenses').subscribe('*', handleExpenseRealtime);
-
-	await pb.collection('expense_history').subscribe('*', async (e) => {
-		const record = e.record;
-		if (!record.expense) return;
-
-		// Use try/catch to prevent unhandled aborts
-		try {
-			// Only update if current_amount changed
-			await pb
-				.collection('expenses')
-				.update(record.expense, { current_amount: record.amount, $autoCancel: false });
-			scheduleUserTotalUpdate(pb.authStore.record?.id);
-			scheduleFetchPage();
-		} catch (err) {
-			if (err?.isAbort) return; // ignore aborts
-			console.error('Realtime expense update failed', err);
-		}
-	});
 };
 
 const cleanup = async () => {
@@ -195,5 +164,6 @@ export const expenseStore = {
 	cleanup,
 	setPage,
 	setFilters,
-	setSearch
+	setSearch,
+	setUserTotal
 };
