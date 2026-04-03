@@ -19,6 +19,7 @@ let filters = $state({
 let fetchTimeout;
 let searchTimeout;
 let currentRequest = 0;
+let totalTimeout;
 
 /**
  * ----------------------------------------
@@ -35,6 +36,14 @@ const total = $derived.by(() => {
  * Helpers
  * ----------------------------------------
  */
+const scheduleUserTotalUpdate = (userId) => {
+	clearTimeout(totalTimeout);
+
+	totalTimeout = setTimeout(() => {
+		updateUserTotal(userId);
+	}, 150);
+};
+
 const getSortValue = () => {
 	if (filters.sort === 'latest') return '-created';
 	if (filters.sort === 'amount') return '-current_amount';
@@ -119,10 +128,7 @@ const handleExpenseRealtime = async (e) => {
 		case 'create':
 		case 'update':
 		case 'delete':
-			// Update totals in the user record
-			await updateUserTotal(record.user);
-
-			// Refresh local state
+			scheduleUserTotalUpdate(record.user);
 			scheduleFetchPage();
 			break;
 	}
@@ -157,7 +163,7 @@ const init = async () => {
 			await pb
 				.collection('expenses')
 				.update(record.expense, { current_amount: record.amount, $autoCancel: false });
-			await updateUserTotal(pb.authStore.record?.id); // $autoCancel now false internally
+			scheduleUserTotalUpdate(pb.authStore.record?.id);
 			scheduleFetchPage();
 		} catch (err) {
 			if (err?.isAbort) return; // ignore aborts

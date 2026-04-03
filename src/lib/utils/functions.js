@@ -183,23 +183,34 @@ export const getInitials = (name = '') => {
 		.toUpperCase();
 };
 
+let updatingTotal = false;
+
 export const updateUserTotal = async (userId) => {
-	// Fetch all expenses for the user
-	const expenses = await pb.collection('expenses').getFullList({
-		filter: `user="${userId}"`,
-		fields: 'current_amount',
-		$autoCancel: false
-	});
+	if (updatingTotal) return; // 🚫 prevent overlap
+	updatingTotal = true;
 
-	// Calculate total
-	const total = expenses.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
+	try {
+		const expenses = await pb.collection('expenses').getFullList({
+			filter: `user="${userId}"`,
+			fields: 'current_amount',
+			$autoCancel: false
+		});
 
-	// Update user record
-	await pb.collection('users').update(userId, {
-		total_expenses: total
-	});
+		const total = expenses.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
 
-	return total;
+		await pb.collection('users').update(userId, {
+			total_expenses: total,
+			$autoCancel: false
+		});
+
+		return total;
+	} catch (err) {
+		if (!err?.isAbort) {
+			console.error('updateUserTotal failed:', err);
+		}
+	} finally {
+		updatingTotal = false;
+	}
 };
 
 /**
