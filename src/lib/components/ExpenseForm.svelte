@@ -102,7 +102,7 @@
 			});
 			await updateExpenseHistory(updated, payload.amount);
 			const total = await updateUserTotal(pb.authStore.record.id);
-			expenseStore.setUserTotal(total);
+			if (typeof total === 'number') expenseStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			EXPENSESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
@@ -110,7 +110,7 @@
 			const record = await pb.collection('expenses').create(payload);
 			await createExpenseHistory(record, payload.amount);
 			const total = await updateUserTotal(pb.authStore.record.id);
-			expenseStore.setUserTotal(total);
+			if (typeof total === 'number') expenseStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			toast.success('Successfully created');
 		}

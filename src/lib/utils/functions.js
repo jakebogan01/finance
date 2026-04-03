@@ -1,4 +1,5 @@
 import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
+import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 import { DASHBOARD, SIGNIN } from '$lib/utils/constants';
 import { redirect } from '@sveltejs/kit';
@@ -214,6 +215,35 @@ export const updateUserTotal = async (userId) => {
 	}
 };
 
+let updatingIncomeTotal = false;
+
+export const updateUserIncomeTotal = async (userId) => {
+	if (updatingIncomeTotal) return incomeStore.userTotal;
+	updatingIncomeTotal = true;
+
+	try {
+		const incomes = await pb.collection('incomes').getFullList({
+			filter: `user="${userId}"`,
+			fields: 'amount',
+			$autoCancel: false
+		});
+
+		const total = incomes.reduce((sum, i) => sum + (i.amount ?? 0), 0);
+
+		await pb.collection('users').update(userId, {
+			total_income: total,
+			$autoCancel: false
+		});
+
+		return total;
+	} catch (err) {
+		if (!err?.isAbort) {
+			console.error('updateUserIncomeTotal failed:', err);
+		}
+	} finally {
+		updatingIncomeTotal = false;
+	}
+};
 /**
  * ----------------------------------------
  * Input Helpers
@@ -316,8 +346,12 @@ export const deleteRecord = async (type, id) => {
 	try {
 		await pb.collection(type.toLowerCase()).delete(id);
 		if (type.toLowerCase() === 'expenses') {
-			const total = await updateUserTotal(pb.authStore.record.id);
+			const total = await updateUserTotal(pb.authStore.record?.id);
 			expenseStore.setUserTotal(total);
+		}
+		if (type.toLowerCase() === 'incomes') {
+			const total = await updateUserIncomeTotal(pb.authStore.record?.id);
+			incomeStore.setUserTotal(total);
 		}
 		toast.success(`${type} successfully deleted!`);
 		INCOMESLUG.value = null;
@@ -391,16 +425,6 @@ export const getUserExpenses = async ({
 		expand: 'current_history',
 		$autoCancel: false
 	});
-};
-
-/**
- * Safely extracts numeric value
- * @param {any} value
- * @returns {number}
- */
-const toNumber = (value) => {
-	const num = Number(value);
-	return Number.isFinite(num) ? num : 0;
 };
 
 /**

@@ -5,9 +5,11 @@
 		cleanNumber,
 		payTypes,
 		cleanObject,
-		calendarDateToISO
+		calendarDateToISO,
+		updateUserIncomeTotal
 	} from '$lib/utils/functions.js';
 	import { fromDate, getLocalTimeZone } from '@internationalized/date';
+	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import FormButton from '$lib/components/FormButton.svelte';
@@ -79,12 +81,20 @@
 		const payload = buildPayload(values);
 		if (record.update) {
 			const cleanedPayload = checkUpdatedValues(payload);
+			await pb.collection('incomes').update(record.id, {
+				...cleanedPayload,
+				amount: cleanedPayload.amount
+			});
+			const total = await updateUserIncomeTotal(pb.authStore.record.id);
+			if (typeof total === 'number') incomeStore.setUserTotal(total);
 			await pb.collection('incomes').update(record.id, cleanedPayload);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			INCOMESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
 		} else {
 			await pb.collection('incomes').create(payload);
+			const total = await updateUserIncomeTotal(pb.authStore.record.id);
+			if (typeof total === 'number') incomeStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			toast.success('Successfully created');
 		}
@@ -118,10 +128,10 @@
 		onSubmit: async (values) => {
 			try {
 				values.amount = toMonthly(values.amount, formState.payDropDown);
+				open = false;
 				await saveRecord(values);
 				reset();
 				resetState();
-				open = false;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');
