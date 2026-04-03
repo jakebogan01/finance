@@ -18,15 +18,21 @@
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
-	let isSearching = $derived(expenseStore.filters.search?.length > 0);
-	let hasData = $derived(expenseStore.paginated?.items?.length > 0);
-	let hasAnyData = $derived((expenseStore.paginated?.totalItems ?? 0) > 0);
+	let hasAnyRecords = $state(false);
+	let hasFilteredItems = $state(false);
+	let isSearchingOrFiltering = $state(false);
 	let handleEditRecord;
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
 	$effect(() => {
 		if (!expenseStore.paginated?.items?.length) return;
+		const paginated = expenseStore.paginated;
+		const filters = expenseStore.filters;
+		hasAnyRecords = (paginated?.totalItems ?? 0) > 0;
+		hasFilteredItems = (paginated?.items?.length ?? 0) > 0;
+		isSearchingOrFiltering =
+			filters.search?.length > 0 || (filters.status && filters.status !== 'all');
 		const hash = page.url.hash;
 		if (!hash) {
 			const firstSlug = expenseStore.paginated?.items[0]?.slug;
@@ -53,7 +59,7 @@
 	description="Log, organize, and update your expenses to better understand your spending habits and stay within your budget."
 />
 
-{#if hasAnyData || isSearching}
+{#if hasAnyRecords}
 	<LeftLayout
 		bind:handleReset
 		bind:handleEditRecord
@@ -72,13 +78,13 @@
 				data={expenseRecord}
 			/>
 		{/snippet}
-		{#if hasData}
+		{#if hasFilteredItems}
 			<RecordList
 				items={expenseStore.paginated?.items ?? []}
 				{handleURLSlug}
 				store={expenseStore}
 			/>
-		{:else if isSearching}
+		{:else if isSearchingOrFiltering}
 			<FailedSearchResults />
 		{/if}
 	</LeftLayout>

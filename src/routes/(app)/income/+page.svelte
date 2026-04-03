@@ -18,15 +18,21 @@
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
-	let isSearching = $derived(incomeStore.filters.search?.length > 0);
-	let hasData = $derived(incomeStore.paginated?.items?.length > 0);
-	let hasAnyData = $derived((incomeStore.paginated?.totalItems ?? 0) > 0);
+	let hasAnyRecords = $state(false);
+	let hasFilteredItems = $state(false);
+	let isSearchingOrFiltering = $state(false);
 	let handleEditRecord;
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
 	$effect(() => {
 		if (!incomeStore.paginated?.items?.length) return;
+		const paginated = incomeStore.paginated;
+		const filters = incomeStore.filters;
+		hasAnyRecords = (paginated?.totalItems ?? 0) > 0;
+		hasFilteredItems = (paginated?.items?.length ?? 0) > 0;
+		isSearchingOrFiltering =
+			filters.search?.length > 0 || (filters.status && filters.status !== 'all');
 		const hash = page.url.hash;
 		if (!hash) {
 			const firstSlug = incomeStore.paginated?.items[0]?.slug;
@@ -53,7 +59,7 @@
 	description="Track and manage all your income sources in one place. Add, update, and monitor earnings over time with ease."
 />
 
-{#if hasAnyData || isSearching}
+{#if hasAnyRecords}
 	<LeftLayout
 		bind:handleReset
 		bind:handleEditRecord
@@ -72,9 +78,9 @@
 				data={incomeRecord}
 			/>
 		{/snippet}
-		{#if hasData}
+		{#if hasFilteredItems}
 			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} store={incomeStore} />
-		{:else if isSearching}
+		{:else if isSearchingOrFiltering}
 			<FailedSearchResults />
 		{/if}
 	</LeftLayout>
