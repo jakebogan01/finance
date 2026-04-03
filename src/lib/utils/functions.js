@@ -183,6 +183,24 @@ export const getInitials = (name = '') => {
 		.toUpperCase();
 };
 
+export const updateUserTotal = async (userId) => {
+	// Fetch all expenses for the user
+	const expenses = await pb.collection('expenses').getFullList({
+		filter: `user="${userId}"`,
+		fields: 'current_amount'
+	});
+
+	// Calculate total
+	const total = expenses.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
+
+	// Update user record
+	await pb.collection('users').update(userId, {
+		total_expenses: total
+	});
+
+	return total;
+};
+
 /**
  * ----------------------------------------
  * Input Helpers
@@ -329,6 +347,31 @@ export const getUserIncomes = async ({
 	return await pb.collection('incomes').getList(page, perPage, {
 		filter,
 		sort,
+		$autoCancel: false
+	});
+};
+
+export const getUserExpenses = async ({
+	page = 1,
+	perPage = 4,
+	sort = '-created',
+	status = 'all',
+	search = ''
+} = {}) => {
+	let filter = `user="${pb.authStore.record?.id}"`;
+
+	if (status === 'active') filter += ' && status=true';
+	if (status === 'inactive') filter += ' && status=false';
+
+	if (search?.trim()) {
+		const safe = search.replace(/"/g, '\\"');
+		filter += ` && title ~ "${safe}"`;
+	}
+
+	return await pb.collection('expenses').getList(page, perPage, {
+		filter,
+		sort,
+		expand: 'current_history',
 		$autoCancel: false
 	});
 };

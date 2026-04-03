@@ -1,4 +1,5 @@
 <script>
+	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { EXPENSES, INCOME } from '$lib/utils/constants.js';
@@ -10,8 +11,14 @@
 
 	let { children } = $props();
 
-	onMount(() => incomeStore.init());
-	onDestroy(() => incomeStore.cleanup());
+	onMount(() => {
+		incomeStore.init();
+		expenseStore.init();
+	});
+	onDestroy(() => {
+		incomeStore.cleanup();
+		expenseStore.cleanup();
+	});
 </script>
 
 <MobileSidebar />

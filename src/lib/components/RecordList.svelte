@@ -1,16 +1,15 @@
 <script>
 	import RecordListItem from '$lib/components/RecordListItem.svelte';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
-	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import Pagination from '$lib/components/Pagination.svelte';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 
-	let { items = [], handleURLSlug } = $props();
+	let { items = [], handleURLSlug, store } = $props();
 
-	const totalPages = $derived(Math.max(1, incomeStore.paginated?.totalPages ?? 1));
+	const totalPages = $derived(Math.max(1, store.paginated?.totalPages ?? 1));
 	const showPagination = $derived(totalPages > 1);
 
 	onMount(() => {
@@ -37,7 +36,7 @@
 			{/if}
 		</ul>
 		{#if showPagination}
-			<Pagination />
+			<Pagination {store} />
 		{/if}
 	</div>
 </div>

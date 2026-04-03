@@ -1,42 +1,16 @@
 <script>
-	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
-	import * as Command from '$lib/components/ui/command/index.js';
-	import CreateButton from '$lib/components/CreateButton.svelte';
-	import SearchButton from '$lib/components/SearchButton.svelte';
-	import FilterButton from '$lib/components/FilterButton.svelte';
-	import IncomeForm from '$lib/components/IncomeForm.svelte';
+	import RecordDetails from '$lib/components/RecordDetails.svelte';
+	import { usdFormatter } from '$lib/utils/functions.js';
 
-	let {
-		children,
-		handleReset = $bindable(),
-		open = $bindable(),
-		handleEditRecord = $bindable(),
-		resetForm,
-		incomeRecord
-	} = $props();
+	let { data, handleEditRecord, collectionName, store } = $props();
 </script>
 
 <section>
-	<Command.Root class="rounded-none bg-transparent dark:bg-transparent!">
-		<div class="flex items-center justify-between gap-5">
-			<CreateButton bind:handleReset bind:open>
-				<IncomeForm
-					bind:handleReset
-					bind:handleEditRecord
-					{resetForm}
-					bind:open
-					data={incomeRecord}
-				/>
-			</CreateButton>
-			<div class="mr-0 flex items-center lg:mr-5">
-				<FilterButton
-					filters={incomeStore.filters}
-					sortType="income"
-					onChange={(f) => incomeStore.setFilters(f)}
-				/>
-				<SearchButton class="hidden md:flex" onSearch={(value) => incomeStore.setSearch(value)} />
-			</div>
-		</div>
-		{@render children?.()}
-	</Command.Root>
+	<h3 class="text-preset-4-semibold hidden h-13 items-center justify-end text-yellow-200 lg:flex">
+		<span class="text-preset-5-semibold mr-2 text-grey-100/80 dark:text-grey-400">Total:</span
+		>{usdFormatter.format(store.userTotal)}
+	</h3>
+	{#if data}
+		<RecordDetails {data} {handleEditRecord} {collectionName} />
+	{/if}
 </section>

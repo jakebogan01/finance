@@ -3,13 +3,11 @@
 	import RecordDetailsItem from '$lib/components/RecordDetailsItem.svelte';
 	import DropDownButton from '$lib/components/DropDownButton.svelte';
 	import { Separator } from '$lib/components/ui/separator/index.js';
-	// import CreditCardIcon from '@lucide/svelte/icons/credit-card';
-	// import HandCoinsIcon from '@lucide/svelte/icons/hand-coins';
-	import KeyRoundIcon from '@lucide/svelte/icons/key-round';
+	import CreditCardIcon from '@lucide/svelte/icons/credit-card';
 	import CalendarIcon from '@lucide/svelte/icons/calendar';
 	import HistoryIcon from '@lucide/svelte/icons/history';
 	import MapPinIcon from '@lucide/svelte/icons/map-pin';
-	// import UserIcon from '@lucide/svelte/icons/user';
+	import UserIcon from '@lucide/svelte/icons/user';
 	import PhoneIcon from '@lucide/svelte/icons/phone';
 	import MailIcon from '@lucide/svelte/icons/mail';
 
@@ -43,21 +41,16 @@
 				icon: HistoryIcon,
 				copy: false
 			},
-			// {
-			//     label: 'Category',
-			//     value: data.category,
-			//     icon: CreditCardIcon,
-			//     copy: false
-			// },
-			// {
-			//     label: 'Compensation',
-			//     value: usdFormatter.format(data.pay || data.expand.current_history.amount),
-			//     icon: HandCoinsIcon
-			// },
+			{
+				label: 'Category',
+				value: data.category,
+				icon: CreditCardIcon,
+				copy: false
+			},
 			{
 				label: 'User',
 				value: 'JB',
-				icon: KeyRoundIcon,
+				icon: UserIcon,
 				copy: false
 			}
 		];

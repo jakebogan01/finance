@@ -1,20 +1,21 @@
 <script>
 	import FailedSearchResults from '$lib/components/FailedSearchResults.svelte';
-	import { authCheck } from '$lib/utils/functions.js';
 	import EmptyTemplate from '$lib/components/EmptyTemplate.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import RightLayout from '$lib/components/RightLayout.svelte';
+	import LeftLayout from '$lib/components/LeftLayout.svelte';
 	import IncomeForm from '$lib/components/IncomeForm.svelte';
 	import RecordList from '$lib/components/RecordList.svelte';
-	import LeftLayout from '$lib/components/LeftLayout.svelte';
+	import { authCheck } from '$lib/utils/functions.js';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { goto } from '$app/navigation';
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
@@ -54,14 +55,27 @@
 />
 
 {#if hasAnyData || isSearching}
-	<RightLayout bind:handleReset bind:handleEditRecord {resetForm} bind:open data={incomeRecord}>
+	<LeftLayout
+		bind:handleReset
+		bind:handleEditRecord
+		{resetForm}
+		bind:open
+		data={incomeRecord}
+		store={incomeStore}
+		sortBy="income"
+	>
 		{#if hasData}
-			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} />
+			<RecordList items={incomeStore.paginated?.items ?? []} {handleURLSlug} store={incomeStore} />
 		{:else if isSearching}
 			<FailedSearchResults />
 		{/if}
-	</RightLayout>
-	<LeftLayout {incomeRecord} data={incomeRecord} {handleEditRecord} collectionName="Incomes" />
+	</LeftLayout>
+	<RightLayout
+		data={incomeRecord}
+		{handleEditRecord}
+		collectionName="Incomes"
+		store={incomeStore}
+	/>
 {:else}
 	<EmptyTemplate>
 		<CreateButton bind:handleReset bind:open>

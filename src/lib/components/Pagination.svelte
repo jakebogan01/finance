@@ -2,11 +2,12 @@
 	import PaginationButton from '$lib/components/PaginationButton.svelte';
 	import ChevronRightIcon from '@lucide/svelte/icons/chevron-right';
 	import ChevronLeftIcon from '@lucide/svelte/icons/chevron-left';
-	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { toast } from 'svelte-sonner';
 
-	const currentPage = $derived(incomeStore.paginated?.page ?? 1);
-	const totalPages = $derived(Math.max(1, incomeStore.paginated?.totalPages ?? 1));
+	let { store } = $props();
+
+	const currentPage = $derived(store.paginated?.page ?? 1);
+	const totalPages = $derived(Math.max(1, store.paginated?.totalPages ?? 1));
 	const prevPage = $derived(Math.max(1, currentPage - 1));
 	const nextPage = $derived(Math.min(totalPages, currentPage + 1));
 	const isPrevDisabled = $derived(currentPage === 1);
@@ -18,7 +19,7 @@
 		if (loading) return;
 		loading = true;
 		try {
-			await incomeStore.setPage(pageNumber);
+			await store.setPage(pageNumber);
 		} catch (error) {
 			console.dir(error?.response, { depth: null });
 			toast.error(error?.message ?? 'Could not connect to the server');
