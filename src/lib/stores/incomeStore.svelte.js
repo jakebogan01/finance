@@ -1,4 +1,5 @@
-import { getUserIncomes } from '$lib/utils/functions.js';
+// incomeStore.svelte.js
+import { getUserIncomes, updateUserIncomeTotal } from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';
 
@@ -18,15 +19,7 @@ let filters = $state({
 let fetchTimeout;
 let searchTimeout;
 let currentRequest = 0;
-
-/**
- * ----------------------------------------
- * Derived
- * ----------------------------------------
- */
-const total = $derived.by(() => {
-	return userTotal;
-});
+let fetchUserTotalTimeout;
 
 /**
  * ----------------------------------------
@@ -46,13 +39,14 @@ const getSortValue = () => {
 const fetchUserTotal = async () => {
 	if (!pb.authStore.isValid) return;
 
-	const userId = pb.authStore.record?.id;
+	userTotal = paginated?.items
+		.filter((i) => i.status === true)
+		.reduce((sum, i) => sum + (i.amount ?? 0), 0);
+};
 
-	const user = await pb.collection('users').getOne(userId, {
-		fields: 'total_income'
-	});
-
-	userTotal = user.total_income ?? 0;
+const scheduleFetchUserTotal = () => {
+	clearTimeout(fetchUserTotalTimeout);
+	fetchUserTotalTimeout = setTimeout(fetchUserTotal, 100);
 };
 
 const fetchPage = async (pageOverride) => {
@@ -71,6 +65,7 @@ const fetchPage = async (pageOverride) => {
 		if (requestId !== currentRequest) return;
 
 		paginated = result;
+		scheduleFetchUserTotal(); // always update total after fetching page
 	} catch (error) {
 		if (error?.isAbort) return;
 		console.dir(error?.response, { depth: null });
@@ -110,15 +105,13 @@ const setSearch = (value) => {
  */
 const handleIncomeRealtime = async (e) => {
 	const record = e.record;
-
 	if (record.user !== pb.authStore.record?.id) return;
 
 	switch (e.action) {
 		case 'create':
 		case 'update':
 		case 'delete':
-			scheduleFetchPage();
-			await fetchUserTotal();
+			scheduleFetchPage(); // updates paginated and totals
 			break;
 	}
 };
@@ -130,16 +123,13 @@ const handleIncomeRealtime = async (e) => {
  */
 const init = async () => {
 	paginated = await getUserIncomes();
-
-	// Load total from DB (source of truth)
-	await fetchUserTotal();
-
-	// Realtime updates
+	await fetchUserTotal(); // initial total
 	await pb.collection('incomes').subscribe('*', handleIncomeRealtime);
 };
 
 const cleanup = async () => {
 	clearTimeout(fetchTimeout);
+	clearTimeout(fetchUserTotalTimeout);
 	await pb.collection('incomes').unsubscribe('*');
 };
 
@@ -151,7 +141,10 @@ export const incomeStore = {
 		return paginated;
 	},
 	get total() {
-		return total;
+		if (!paginated?.items?.length) return 0;
+		return paginated.items
+			.filter((e) => e.status === true)
+			.reduce((sum, e) => sum + (e.amount ?? 0), 0);
 	},
 	get filters() {
 		return filters;

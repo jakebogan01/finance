@@ -1,3 +1,4 @@
+// expenseStore.svelte.js
 import { getUserExpenses, updateUserTotal } from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';
@@ -19,16 +20,7 @@ let filters = $state({
 let fetchTimeout;
 let searchTimeout;
 let currentRequest = 0;
-
-/**
- * ----------------------------------------
- * Derived
- * ----------------------------------------
- */
-const total = $derived.by(() => {
-	if (!paginated?.items?.length) return 0;
-	return paginated.items.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
-});
+let fetchUserTotalTimeout;
 
 /**
  * ----------------------------------------
@@ -48,12 +40,14 @@ const getSortValue = () => {
 const fetchUserTotal = async () => {
 	if (!pb.authStore.isValid) return;
 
-	const userId = pb.authStore.record?.id;
-	const user = await pb.collection('users').getOne(userId, {
-		fields: 'total_expenses'
-	});
+	userTotal = paginated?.items
+		.filter((i) => i.status === true)
+		.reduce((sum, i) => sum + (i.current_amount ?? 0), 0);
+};
 
-	userTotal = user.total_expenses ?? 0;
+const scheduleFetchUserTotal = () => {
+	clearTimeout(fetchUserTotalTimeout);
+	fetchUserTotalTimeout = setTimeout(fetchUserTotal, 100);
 };
 
 const fetchPage = async (pageOverride) => {
@@ -72,6 +66,7 @@ const fetchPage = async (pageOverride) => {
 		if (requestId !== currentRequest) return;
 
 		paginated = result;
+		scheduleFetchUserTotal(); // always update total after fetching page
 	} catch (error) {
 		if (error?.isAbort) return;
 		console.dir(error?.response, { depth: null });
@@ -112,11 +107,12 @@ const setSearch = (value) => {
 const handleExpenseRealtime = async (e) => {
 	const record = e.record;
 	if (record.user !== pb.authStore.record?.id) return;
+
 	switch (e.action) {
 		case 'create':
 		case 'update':
 		case 'delete':
-			scheduleFetchPage();
+			scheduleFetchPage(); // updates paginated and totals
 			break;
 	}
 };
@@ -128,21 +124,19 @@ const handleExpenseRealtime = async (e) => {
  */
 const init = async () => {
 	paginated = await getUserExpenses();
-
 	allExpenses = await pb.collection('expenses').getFullList({
 		filter: `user="${pb.authStore.record?.id}"`,
 		expand: 'current_history',
 		$autoCancel: false
 	});
 
-	// Realtime subscriptions
-	await fetchUserTotal();
-
+	await fetchUserTotal(); // initial total
 	await pb.collection('expenses').subscribe('*', handleExpenseRealtime);
 };
 
 const cleanup = async () => {
 	clearTimeout(fetchTimeout);
+	clearTimeout(fetchUserTotalTimeout);
 	await pb.collection('expenses').unsubscribe('*');
 	await pb.collection('expense_history').unsubscribe('*');
 };
@@ -155,7 +149,10 @@ export const expenseStore = {
 		return paginated;
 	},
 	get total() {
-		return total;
+		if (!paginated?.items?.length) return 0;
+		return paginated.items
+			.filter((e) => e.status === true)
+			.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
 	},
 	get filters() {
 		return filters;

@@ -32,16 +32,8 @@
 	const month = now.getMonth() + 1;
 	const year = now.getFullYear();
 
-	let indexes = $state({
-		pay: 0,
-		category: 0
-	});
-
-	let record = $state({
-		id: null,
-		update: false
-	});
-
+	let indexes = $state({ pay: 0, category: 0 });
+	let record = $state({ id: null, update: false });
 	let formState = $state({
 		payDropDown: payTypes[0].value,
 		categoryDropDown: categoryTypes[0].value
@@ -61,11 +53,10 @@
 	const createExpenseHistory = async (record, amount) => {
 		const history = await pb.collection('expense_history').create({
 			expense: record.id,
-			amount: amount,
-			month: month,
-			year: year
+			amount,
+			month,
+			year
 		});
-
 		await pb.collection('expenses').update(record.id, {
 			current_history: history.id,
 			current_amount: amount
@@ -74,15 +65,15 @@
 
 	const updateExpenseHistory = async (record, amount) => {
 		const current = record?.expand?.current_history;
-		if (current.month === month && current.year === year) {
-			await pb.collection('expense_history').update(current.id, { amount: amount });
+		if (current && current.month === month && current.year === year) {
+			await pb.collection('expense_history').update(current.id, { amount });
 		} else {
 			await createExpenseHistory(record, amount);
 		}
 	};
 
-	const buildPayload = (values) => {
-		return cleanObject({
+	const buildPayload = (values) =>
+		cleanObject({
 			...values,
 			user: pb.authStore.record?.id,
 			slug: generateSlug(values.title),
@@ -91,24 +82,24 @@
 			current_amount: values.amount,
 			status: checked
 		});
-	};
 
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
+
 		if (record.update) {
-			const updated = await pb.collection('expenses').update(record.id, {
-				...payload,
-				current_amount: payload.amount
-			});
-			await updateExpenseHistory(updated, payload.amount);
+			await pb.collection('expenses').update(record.id, payload);
+			const updated = await pb
+				.collection('expenses')
+				.getOne(record.id, { expand: 'current_history' });
+			await updateExpenseHistory(updated, payload.current_amount);
 			const total = await updateUserTotal(pb.authStore.record.id);
 			if (typeof total === 'number') expenseStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			EXPENSESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
 		} else {
-			const record = await pb.collection('expenses').create(payload);
-			await createExpenseHistory(record, payload.amount);
+			const newRecord = await pb.collection('expenses').create(payload);
+			await createExpenseHistory(newRecord, payload.current_amount);
 			const total = await updateUserTotal(pb.authStore.record.id);
 			if (typeof total === 'number') expenseStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
@@ -116,15 +107,10 @@
 		}
 	};
 
-	const checkUpdatedValues = (payload) => ({ ...payload });
-
 	const { form, reset, isSubmitting, setFields } = createForm({
 		initialValues: { title: '', amount: '' },
 		extend: [validator({ schema: expenseSchema }), reporterDom()],
-		transform: (values) => ({
-			...values,
-			amount: Number(cleanNumber(values.amount)) || ''
-		}),
+		transform: (values) => ({ ...values, amount: Number(cleanNumber(values.amount)) || '' }),
 		onSubmit: async (values) => {
 			try {
 				values.amount = toMonthly(values.amount, formState.payDropDown);
@@ -165,7 +151,7 @@
 			case 'bi weekly':
 				return amount * 2;
 			default:
-				return amount; // monthly already
+				return amount;
 		}
 	};
 

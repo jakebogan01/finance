@@ -3,7 +3,6 @@
 	import CreateButton from '$lib/components/CreateButton.svelte';
 	import SearchButton from '$lib/components/SearchButton.svelte';
 	import FilterButton from '$lib/components/FilterButton.svelte';
-	import IncomeForm from '$lib/components/IncomeForm.svelte';
 
 	let {
 		children,
@@ -11,8 +10,6 @@
 		handleReset = $bindable(),
 		open = $bindable(),
 		handleEditRecord = $bindable(),
-		resetForm,
-		incomeRecord,
 		store,
 		sortBy
 	} = $props();

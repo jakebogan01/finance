@@ -15,8 +15,8 @@
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormLayout from '$lib/components/FormLayout.svelte';
 	import PartOne from '$lib/components/PartOne.svelte';
-	import { incomeSchema } from '$lib/utils/schemas.js';
 	import PartTwo from '$lib/components/PartTwo.svelte';
+	import { incomeSchema } from '$lib/utils/schemas.js';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { validator } from '@felte/validator-zod';
 	import reporterDom from '@felte/reporter-dom';
@@ -32,16 +32,8 @@
 
 	let noValue = $state(true);
 	let checked = $state(true);
-	let indexes = $state({
-		pay: 0,
-		state: 0
-	});
-
-	let record = $state({
-		id: null,
-		update: false
-	});
-
+	let indexes = $state({ pay: 0, state: 0 });
+	let record = $state({ id: null, update: false });
 	let formState = $state({
 		step: 1,
 		phoneValue: null,
@@ -64,8 +56,8 @@
 		noValue = true;
 	};
 
-	const buildPayload = (values) => {
-		return cleanObject({
+	const buildPayload = (values) =>
+		cleanObject({
 			...values,
 			user: pb.authStore.record?.id,
 			slug: generateSlug(values.name),
@@ -75,19 +67,14 @@
 			date: formState.dateValue ? calendarDateToISO(formState.dateValue) : null,
 			status: checked
 		});
-	};
 
 	const saveRecord = async (values) => {
 		const payload = buildPayload(values);
+
 		if (record.update) {
-			const cleanedPayload = checkUpdatedValues(payload);
-			await pb.collection('incomes').update(record.id, {
-				...cleanedPayload,
-				amount: cleanedPayload.amount
-			});
+			await pb.collection('incomes').update(record.id, payload);
 			const total = await updateUserIncomeTotal(pb.authStore.record.id);
 			if (typeof total === 'number') incomeStore.setUserTotal(total);
-			await pb.collection('incomes').update(record.id, cleanedPayload);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			INCOMESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
@@ -100,31 +87,10 @@
 		}
 	};
 
-	const checkUpdatedValues = (payload) => ({
-		...payload,
-		date: payload.date ?? null,
-		address: payload.address || '',
-		city: payload.city || '',
-		email: payload.email || '',
-		phone: payload.phone || null,
-		zip: payload.zip || '',
-		state: payload.state === 'None' ? '' : payload.state
-	});
-
 	const { form, reset, isSubmitting, validate, setFields } = createForm({
-		initialValues: {
-			name: '',
-			amount: '',
-			email: '',
-			address: '',
-			city: '',
-			zip: ''
-		},
+		initialValues: { name: '', amount: '', email: '', address: '', city: '', zip: '' },
 		extend: [validator({ schema: incomeSchema }), reporterDom()],
-		transform: (values) => ({
-			...values,
-			amount: Number(cleanNumber(values.amount)) || ''
-		}),
+		transform: (values) => ({ ...values, amount: Number(cleanNumber(values.amount)) || '' }),
 		onSubmit: async (values) => {
 			try {
 				values.amount = toMonthly(values.amount, formState.payDropDown);
@@ -142,8 +108,7 @@
 	const next = async () => {
 		const result = await validate();
 		const keys = ['name', 'amount'];
-		const hasErrors = keys.some((key) => result[key] || result[key]?.length === 0);
-		if (hasErrors) formState.step += 1;
+		if (!keys.some((key) => result[key] || result[key]?.length === 0)) formState.step += 1;
 	};
 
 	const back = () => (formState.step -= 1);
@@ -155,16 +120,10 @@
 		formState.step = 1;
 		checked = data?.status;
 		formState.phoneValue = data?.phone || null;
-		const startDate = data?.date ? new Date(data.date) : null;
-		formState.dateValue =
-			startDate && !isNaN(startDate.getTime()) ? fromDate(startDate, getLocalTimeZone()) : null;
+		formState.dateValue = data?.date ? fromDate(new Date(data.date), getLocalTimeZone()) : null;
 		indexes.pay = payTypes.findIndex((item) => item.value === data?.pay_frequency);
-		if (data?.state?.length) {
-			noValue = false;
-			indexes.state = states.findIndex((x) => x.value === data?.state);
-		} else {
-			noValue = true;
-		}
+		indexes.state = data?.state?.length ? states.findIndex((x) => x.value === data?.state) : 0;
+		noValue = !data?.state?.length;
 		await tick();
 		record.update = true;
 		record.id = data?.id;
@@ -188,7 +147,7 @@
 			case 'bi weekly':
 				return amount * 2;
 			default:
-				return amount; // monthly already
+				return amount;
 		}
 	};
 
