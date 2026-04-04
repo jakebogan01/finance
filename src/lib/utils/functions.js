@@ -365,3 +365,80 @@ export const states = [
 	'Wisconsin',
 	'Wyoming'
 ].map((s) => ({ value: s.replace(/\s+/g, ' '), label: s }));
+
+export const fillMissingMonths = (history) => {
+	if (!history || history.length === 0) return [];
+	const sorted = [...history].sort((a, b) => a.year - b.year || a.month - b.month);
+	const filled = [];
+	let lastAmount = null;
+	for (let i = 0; i < sorted.length; i++) {
+		const record = sorted[i];
+		if (i === 0) {
+			filled.push(record);
+			lastAmount = record.amount;
+			continue;
+		}
+		const prev = sorted[i - 1];
+		let year = prev.year;
+		let month = prev.month + 1;
+		while (year < record.year || month < record.month) {
+			filled.push({ month, year, amount: lastAmount });
+			month++;
+			if (month > 12) {
+				month = 1;
+				year++;
+			}
+		}
+		filled.push(record);
+		lastAmount = record.amount;
+	}
+	const latestRecord = filled[filled.length - 1];
+	let month = latestRecord.month + 1;
+	let year = latestRecord.year;
+	lastAmount = latestRecord.amount;
+	const now = new Date();
+	while (year < now.getFullYear() || month <= now.getMonth() + 1) {
+		filled.push({ month, year, amount: lastAmount });
+		month++;
+		if (month > 12) {
+			month = 1;
+			year++;
+		}
+		if (year > now.getFullYear()) break;
+	}
+	return filled;
+};
+
+export const getExpenseHistoryMap = async (userId) => {
+	try {
+		const history = await pb.collection('expense_history').getFullList({
+			filter: `expense.user="${userId}"`,
+			sort: 'year,month',
+			expand: 'expense',
+			$autoCancel: false
+		});
+
+		const map = {};
+
+		for (const item of history) {
+			const expenseId = item.expense;
+
+			if (!expenseId) continue;
+
+			if (!map[expenseId]) {
+				map[expenseId] = [];
+			}
+
+			map[expenseId].push({
+				month: item.month,
+				year: item.year,
+				amount: item.amount
+			});
+		}
+
+		return map;
+	} catch (err) {
+		console.error('Failed to fetch expense history:', err);
+		return {};
+	}
+};

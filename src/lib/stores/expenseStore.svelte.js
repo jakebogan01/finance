@@ -1,5 +1,5 @@
 // expenseStore.svelte.js
-import { getUserExpenses, updateUserTotal } from '$lib/utils/functions.js';
+import { getExpenseHistoryMap, getUserExpenses } from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';
 
@@ -11,6 +11,7 @@ import pb from '$lib/pocketbase';
 let paginated = $state(null);
 let userTotal = $state(0);
 let allExpenses = $state([]);
+let historyMap = $state({});
 let filters = $state({
 	status: 'all',
 	sort: 'latest',
@@ -27,6 +28,25 @@ let fetchUserTotalTimeout;
  * Helpers
  * ----------------------------------------
  */
+const handleExpenseHistoryRealtime = async (e) => {
+	const record = e.record;
+
+	if (!record?.expense) return;
+
+	switch (e.action) {
+		case 'create':
+		case 'update':
+		case 'delete':
+			await fetchHistoryMap(); // refresh chart data
+			break;
+	}
+};
+
+const fetchHistoryMap = async () => {
+	if (!pb.authStore.isValid) return;
+	historyMap = await getExpenseHistoryMap(pb.authStore.record.id);
+};
+
 const setUserTotal = (value) => {
 	userTotal = value ?? 0;
 };
@@ -124,6 +144,7 @@ const handleExpenseRealtime = async (e) => {
  */
 const init = async () => {
 	paginated = await getUserExpenses();
+	await fetchHistoryMap();
 	allExpenses = await pb.collection('expenses').getFullList({
 		filter: `user="${pb.authStore.record?.id}"`,
 		expand: 'current_history',
@@ -132,6 +153,7 @@ const init = async () => {
 
 	await fetchUserTotal(); // initial total
 	await pb.collection('expenses').subscribe('*', handleExpenseRealtime);
+	await pb.collection('expense_history').subscribe('*', handleExpenseHistoryRealtime);
 };
 
 const cleanup = async () => {
@@ -156,6 +178,9 @@ export const expenseStore = {
 	},
 	get filters() {
 		return filters;
+	},
+	get historyMap() {
+		return historyMap;
 	},
 	init,
 	cleanup,

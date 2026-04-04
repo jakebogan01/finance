@@ -15,6 +15,7 @@
 	import { resolve } from '$app/paths';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import ExpenseChart from '$lib/components/ExpenseChart.svelte';
 
 	onMount(() => authCheck(303, SIGNIN, true));
 
@@ -93,7 +94,9 @@
 		{handleEditRecord}
 		collectionName="Expenses"
 		store={expenseStore}
-	/>
+	>
+		<ExpenseChart historyMap={expenseStore.historyMap} expenseId={expenseRecord?.id} />
+	</RightLayout>
 {:else}
 	<EmptyTemplate>
 		<CreateButton bind:handleReset bind:open>
