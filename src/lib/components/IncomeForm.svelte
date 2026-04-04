@@ -108,7 +108,10 @@
 	const next = async () => {
 		const result = await validate();
 		const keys = ['name', 'amount'];
-		if (!keys.some((key) => result[key] || result[key]?.length === 0)) formState.step += 1;
+		const hasErrors = keys.some((key) => (result[key]?.length ?? 0) > 0);
+		if (!hasErrors) {
+			formState.step += 1;
+		}
 	};
 
 	const back = () => (formState.step -= 1);

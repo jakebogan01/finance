@@ -27,7 +27,11 @@
 					sortType={sortBy}
 					onChange={(f) => store.setFilters(f)}
 				/>
-				<SearchButton class="hidden md:flex" onSearch={(value) => store.setSearch(value)} />
+				<SearchButton
+					class="hidden md:flex"
+					value={store.filters.search}
+					onSearch={(value) => store.setSearch(value)}
+				/>
 			</div>
 		</div>
 		{@render children?.()}

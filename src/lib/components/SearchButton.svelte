@@ -1,11 +1,11 @@
 <script>
 	import CircleButton from '$lib/components/CircleButton.svelte';
 	import SearchIcon from '@lucide/svelte/icons/search';
+	import XIcon from '@lucide/svelte/icons/x';
 	import { tick } from 'svelte';
 
-	let { class: className, onSearch } = $props();
-	let open = $state(false);
-	let value = $state('');
+	let { class: className, onSearch, value = '' } = $props();
+	let open = $derived(value.length > 0);
 	let container;
 
 	const toggle = async (e) => {
@@ -19,6 +19,13 @@
 	};
 	const close = () => {
 		if (!value) open = false;
+	};
+
+	const clearSearch = (e) => {
+		e?.preventDefault();
+		value = '';
+		onSearch?.('');
+		open = false;
 	};
 </script>
 
@@ -38,7 +45,7 @@
 				id="search"
 				bind:value
 				oninput={(e) => onSearch?.(value)}
-				onkeydown={(e) => e.key === 'Escape' && close()}
+				onkeydown={(e) => e.key === 'Escape' && clearSearch()}
 				onblur={close}
 				placeholder="Search..."
 				inputmode="search"
@@ -53,10 +60,19 @@
 			/>
 		</div>
 	</div>
-	<CircleButton
-		Icon={SearchIcon}
-		size="6"
-		onmousedown={toggle}
-		class={open ? 'border-yellow-200 text-yellow-200 dark:bg-yellow-100 dark:text-white-0' : ''}
-	/>
+	{#if open}
+		<CircleButton
+			Icon={XIcon}
+			size="6"
+			onmousedown={clearSearch}
+			class={open ? 'border-yellow-200 text-yellow-200 dark:bg-yellow-100 dark:text-white-0' : ''}
+		/>
+	{:else}
+		<CircleButton
+			Icon={SearchIcon}
+			size="6"
+			onmousedown={toggle}
+			class={open ? 'border-yellow-200 text-yellow-200 dark:bg-yellow-100 dark:text-white-0' : ''}
+		/>
+	{/if}
 </div>
