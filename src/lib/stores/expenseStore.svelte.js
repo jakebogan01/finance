@@ -181,6 +181,9 @@ export const expenseStore = {
 	get historyMap() {
 		return historyMap;
 	},
+	get allExpenses() {
+		return allExpenses;
+	},
 	init,
 	cleanup,
 	setPage,

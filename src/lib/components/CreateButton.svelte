@@ -2,7 +2,7 @@
 	import ArrowRightIcon from '@lucide/svelte/icons/arrow-right';
 	import * as Dialog from '$lib/components/ui/dialog';
 
-	let { children, open = $bindable(), handleReset = () => {} } = $props();
+	let { children, open = $bindable(), handleReset = () => {}, buttonText = 'Add new' } = $props();
 </script>
 
 <Dialog.Root bind:open>
@@ -13,7 +13,7 @@
 		asChild
 	>
 		<ArrowRightIcon class="size-6" strokeWidth="1.5" />
-		Add new
+		{buttonText}
 	</Dialog.Trigger>
 	{@render children?.()}
 </Dialog.Root>

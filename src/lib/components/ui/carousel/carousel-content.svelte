@@ -5,7 +5,7 @@
 
 	let { ref = $bindable(null), class: className, children, ...restProps } = $props();
 
-	const emblaCtx = getEmblaContext('<Carousel.Content/>');
+	const emblaCtx = getEmblaContext('<ExpenseCarousel.Content/>');
 </script>
 
 <div

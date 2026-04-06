@@ -12,7 +12,7 @@
 		...restProps
 	} = $props();
 
-	const emblaCtx = getEmblaContext('<Carousel.Next/>');
+	const emblaCtx = getEmblaContext('<ExpenseCarousel.Next/>');
 </script>
 
 <Button
