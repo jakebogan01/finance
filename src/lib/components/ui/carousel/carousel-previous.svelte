@@ -21,7 +21,7 @@
 	{size}
 	aria-disabled={!emblaCtx.canScrollPrev}
 	class={cn(
-		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:transition-colors md:hover:border-yellow-200 md:hover:text-yellow-200 dark:bg-grey-800',
+		'size-13 rounded-full border border-grey-100 bg-grey-900 text-white-0 md:hover:border-yellow-200 md:hover:text-yellow-200 dark:border-white-0 dark:bg-yellow-200 dark:aria-disabled:border-grey-300 dark:aria-disabled:bg-transparent! dark:aria-disabled:text-grey-900 dark:aria-disabled:opacity-100! dark:md:hover:border-white-0 dark:md:hover:bg-yellow-100 dark:md:hover:text-white-0',
 		emblaCtx.orientation === 'horizontal' ? '' : '',
 		className
 	)}

@@ -1,5 +1,6 @@
 <script>
 	import ExpenseCarousel from '$lib/components/ExpenseCarousel.svelte';
+	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import CreateButton from '$lib/components/CreateButton.svelte';
@@ -27,7 +28,7 @@
 		<Command.Root class="space-y-5 rounded-none bg-transparent dark:bg-transparent!">
 			<div class="flex items-center justify-between gap-5">
 				<div class="flex items-center gap-x-5">
-					<CreateButton bind:handleReset bind:open buttonText="Add expense">
+					<CreateButton class="dark:bg-white-0" bind:handleReset bind:open buttonText="Add expense">
 						<ExpenseForm bind:handleReset {resetForm} bind:open />
 					</CreateButton>
 					<DisplayDate />
@@ -37,7 +38,9 @@
 					<Carousel.Next class="md:mr-5" />
 				</div>
 			</div>
-			<ExpenseCarousel />
+			{#if expenseStore.allExpenses.length}
+				<ExpenseCarousel />
+			{/if}
 		</Command.Root>
 	</Carousel.Root>
 </section>

@@ -22,14 +22,14 @@
 			{...restProps}
 		>
 			<Card.Root
-				class="rounded-2xl border border-grey-300 bg-grey-1000 py-0! sm:rounded-30 md:transition-colors md:duration-300 md:hover:border-yellow-200"
+				class="rounded-2xl border border-grey-300 bg-grey-1000 py-0! sm:rounded-30 md:transition-colors md:duration-300 md:hover:border-yellow-200 dark:bg-white-0"
 			>
 				<Card.Content class="px-0!">
 					<a href={resolve(`${EXPENSES}#${item?.slug}`)} class="flex flex-col space-y-6 p-4 sm:p-5">
 						<div class="size-12.5 rounded-full {getAvatarColor(i)}"></div>
 						<div>
-							<p class="truncate">{item?.title}</p>
-							<p class="text-preset-2 text-grey-50">
+							<p class="truncate dark:text-gray-900">{item?.title}</p>
+							<p class="text-preset-2 text-grey-50 dark:text-gray-900">
 								{usdFormatter.format(item?.expand?.current_history?.amount)}
 							</p>
 						</div>
