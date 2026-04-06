@@ -26,7 +26,7 @@
 />
 
 <section class="min-w-0">
-	<Carousel.Root opts={{ align: "start" }}>
+	<Carousel.Root opts={{ align: 'start' }}>
 		<Command.Root class="space-y-5 rounded-none bg-transparent dark:bg-transparent!">
 			<div class="flex items-center justify-between gap-5">
 				<div class="flex items-center gap-x-5">
