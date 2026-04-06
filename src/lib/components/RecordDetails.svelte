@@ -76,7 +76,7 @@
 	});
 </script>
 
-<div id={data?.slug} class="pt-5.5 lg:col-start-3 lg:row-end-1">
+<div id={data?.slug} class="lg:col-start-3 lg:row-end-1 lg:pt-5.5">
 	<h3 class="sr-only">Details</h3>
 	<div class="overflow-hidden sm:rounded-20">
 		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 px-4 py-6">

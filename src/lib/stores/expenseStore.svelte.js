@@ -1,4 +1,3 @@
-// expenseStore.svelte.js
 import { getExpenseHistoryMap, getUserExpenses } from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';

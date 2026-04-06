@@ -64,7 +64,7 @@
 <TooltipPrimitive.Root variant="none">
 	<div
 		class={cn(
-			'text-preset-1 grid min-w-36 items-start gap-1.5 rounded-lg border border-grey-100 bg-grey-900 px-2.5 py-1.5',
+			'text-preset-1 grid min-w-36 items-start gap-1.5 rounded-lg border border-grey-100 bg-grey-900 px-2.5 py-1.5 dark:bg-white-0',
 			className
 		)}
 		{...restProps}

@@ -374,6 +374,15 @@ export const fillMissingMonths = (history) => {
 	for (let i = 0; i < sorted.length; i++) {
 		const record = sorted[i];
 		if (i === 0) {
+			// BACKFILL from January → first record
+			for (let m = 1; m < record.month; m++) {
+				filled.push({
+					month: m,
+					year: record.year,
+					amount: record.amount
+				});
+			}
+
 			filled.push(record);
 			lastAmount = record.amount;
 			continue;

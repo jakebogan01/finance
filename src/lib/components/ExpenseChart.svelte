@@ -7,9 +7,6 @@
 	import { scaleBand } from 'd3-scale';
 
 	let { historyMap, expenseId, class: className } = $props();
-	$effect(() => {
-		console.log('chartData:', chartData);
-	});
 
 	let expenseHistory = $derived(historyMap?.[expenseId] ?? []);
 	let years = $derived.by(() => {
@@ -117,20 +114,20 @@
 
 <Card.Root
 	class={[
-		'mt-5 flex flex-1 flex-col space-y-1 rounded-20 bg-linear-to-b from-grey-1000 to-grey-800',
+		'mt-5 flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border-t border-grey-500 bg-grey-900 dark:border-gray-300 dark:bg-gray-100',
 		className
 	]}
 >
 	<Card.Header class="flex items-center justify-between">
-		<Card.Title>Payment History</Card.Title>
+		<Card.Title class="text-preset-5-semibold dark:text-grey-600">Payment History</Card.Title>
 		<div class="flex">
 			{#each years as year (year)}
 				<button
 					data-active={activeChart === `year_${year}`}
 					class={[
-						'text-preset-2 cursor-pointer border-grey-775 px-2.5 py-0.5 text-grey-50 capitalize data-[active=true]:border-grey-150 data-[active=true]:text-white-0 md:transition-colors md:hover:border-grey-150 md:hover:bg-grey-750 md:hover:text-white-0',
+						'cursor-pointer border-grey-775 px-2.5 py-0.5 text-grey-100 capitalize data-[active=true]:border-grey-150 data-[active=true]:text-white-0 md:transition-colors md:hover:border-grey-150 md:hover:bg-white-0/15 md:hover:text-white-0 dark:border-transparent dark:text-grey-400 dark:data-[active=true]:border-transparent dark:data-[active=true]:text-grey-900 dark:md:hover:border-transparent dark:md:hover:bg-transparent dark:md:hover:text-grey-900',
 						years?.length > 1
-							? 'border-s last:rounded-r-md data-[active=true]:bg-grey-750'
+							? 'border-s first:rounded-l-md last:rounded-r-md data-[active=true]:bg-white-0/15'
 							: 'rounded-md'
 					]}
 					onclick={() => (activeChart = `year_${year}`)}
@@ -140,7 +137,7 @@
 			{/each}
 		</div>
 	</Card.Header>
-	<Card.Content class="mt-6 flex flex-1 flex-col px-0!">
+	<Card.Content class="mt-2 flex flex-1 flex-col px-0!">
 		<Chart.Container config={chartConfig} class="flex aspect-auto w-full flex-1 flex-col">
 			{#if activeSeries.length}
 				<BarChart

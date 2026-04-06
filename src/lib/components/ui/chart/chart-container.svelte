@@ -34,7 +34,7 @@
 		// Stroke around dots/marks when hovering
 		'[&_.lc-highlight-point]:stroke-transparent',
 		// override the default stroke color of lines
-		'[&_.lc-line]:stroke-grey-550 dark:[&_.lc-line]:stroke-gray-300',
+		'[&_.lc-line]:stroke-grey-600 dark:[&_.lc-line]:stroke-gray-300',
 
 		// by default, layerchart shows a line intersecting the point when hovering, this hides that
 		'[&_.lc-highlight-line]:stroke-0',
@@ -64,7 +64,7 @@
 		'[&_.lc-labels-text:not([fill])]:fill-foreground [&_text]:stroke-transparent',
 
 		// Tick labels on th x/y axes
-		'[&_.lc-axis-tick-label]:fill-white-0',
+		'[&_.lc-axis-tick-label]:fill-white-0 dark:[&_.lc-axis-tick-label]:fill-grey-900',
 		'[&_.lc-tooltip-rects-g]:fill-transparent',
 		'[&_.lc-layout-svg-g]:fill-transparent',
 		'[&_.lc-root-container]:w-full',

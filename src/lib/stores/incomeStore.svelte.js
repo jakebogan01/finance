@@ -1,5 +1,4 @@
-// incomeStore.svelte.js
-import { getUserIncomes, updateUserIncomeTotal } from '$lib/utils/functions.js';
+import { getUserIncomes } from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';
 
