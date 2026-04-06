@@ -10,10 +10,12 @@
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { onMount } from 'svelte';
+	import SearchCarouselButton from '$lib/components/SearchCarouselButton.svelte';
 
 	let open = $state(false);
 	let resetForm = $state(false);
 	let handleReset = $state(null);
+	let checkNumOfExpenses = $derived(expenseStore.allExpenses.length > 3 ? '' : 'sm:hidden');
 
 	onMount(() => authCheck(303, SIGNIN, true));
 </script>
@@ -34,8 +36,11 @@
 					<DisplayDate />
 				</div>
 				<div class="flex items-center">
-					<Carousel.Previous class="mr-5" />
-					<Carousel.Next class="md:mr-5" />
+					<Carousel.Previous class="mr-5 {checkNumOfExpenses}" />
+					<Carousel.Next class="md:mr-5 {checkNumOfExpenses}" />
+					{#if expenseStore.allExpenses.length > 3}
+						<SearchCarouselButton class="hidden md:flex" />
+					{/if}
 				</div>
 			</div>
 			{#if expenseStore.allExpenses.length}
