@@ -25,7 +25,7 @@
 	description="View a complete overview of your finances with a clean dashboard showing income, expenses, and budget insights to help you stay on track."
 />
 
-<section>
+<section class="min-w-0">
 	<Carousel.Root>
 		<Command.Root class="space-y-5 rounded-none bg-transparent dark:bg-transparent!">
 			<div class="flex items-center justify-between gap-5">
