@@ -1,18 +1,20 @@
 <script>
 	import BanknoteArrowDownIcon from '@lucide/svelte/icons/banknote-arrow-down';
 	import BanknoteArrowUpIcon from '@lucide/svelte/icons/banknote-arrow-up';
+	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
+	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { usdFormatter } from '$lib/utils/functions.js';
 
 	const stats = $derived([
 		{
 			title: 'Total Income',
 			icon: BanknoteArrowUpIcon,
-			sum: 4524
+			sum: incomeStore.userTotal
 		},
 		{
 			title: 'Total Expenses',
 			icon: BanknoteArrowDownIcon,
-			sum: 3689
+			sum: expenseStore.userTotal
 		}
 	]);
 </script>
