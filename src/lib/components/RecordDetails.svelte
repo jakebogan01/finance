@@ -79,7 +79,9 @@
 <div id={data?.slug} class="lg:col-start-3 lg:row-end-1 lg:pt-5.5">
 	<h3 class="sr-only">Details</h3>
 	<div class="overflow-hidden sm:rounded-20">
-		<dl class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 px-4 py-6">
+		<dl
+			class="flex flex-wrap items-center justify-between rounded-2xl bg-yellow-100 px-4 py-[1.171875rem]"
+		>
 			<div class="text-grey-600 dark:text-white-0">
 				<dt class="text-preset-6 w-58 truncate font-semibold sm:w-100 lg:w-76 xl:w-71">
 					{data?.name || data?.title}

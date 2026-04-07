@@ -46,7 +46,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 			<SliderPrimitive.Thumb
 				data-slot="slider-thumb"
 				index={thumb}
-				class="group flex size-8 shrink-0 cursor-pointer items-center justify-center rounded-full border border-grey-100 bg-grey-900 ring-yellow-100 transition-[color] focus-visible:text-yellow-100 focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 md:hover:ring-1 dark:bg-white"
+				class="group flex size-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-grey-100 bg-grey-900 ring-yellow-100 transition-[color] focus-visible:text-yellow-100 focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50 md:hover:ring-1 dark:bg-white"
 			>
 				<EllipsisVerticalIcon class="size-4 text-white-0 group-hover:text-yellow-100" />
 			</SliderPrimitive.Thumb>

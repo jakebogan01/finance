@@ -1,4 +1,5 @@
 <script>
+	import { Separator } from '$lib/components/ui/separator/index.js';
 	import { fillMissingMonths } from '$lib/utils/functions.js';
 	import * as Chart from '$lib/components/ui/chart/index.js';
 	import * as Card from '$lib/components/ui/card/index.js';
@@ -112,9 +113,10 @@
 	);
 </script>
 
+<Separator class="my-5" />
 <Card.Root
 	class={[
-		'mt-5 flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border-t border-grey-500 bg-grey-900 dark:border-gray-300 dark:bg-gray-100',
+		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border-t border-grey-500 bg-grey-900 lg:min-h-52 dark:border-gray-300 dark:bg-gray-100',
 		className
 	]}
 >

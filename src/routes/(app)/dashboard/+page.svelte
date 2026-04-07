@@ -1,5 +1,6 @@
 <script>
 	import SearchCarouselButton from '$lib/components/SearchCarouselButton.svelte';
+	import RemainingBalance from '$lib/components/RemainingBalance.svelte';
 	import ExpenseCarousel from '$lib/components/ExpenseCarousel.svelte';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
@@ -8,11 +9,11 @@
 	import ExpenseForm from '$lib/components/ExpenseForm.svelte';
 	import DisplayDate from '$lib/components/DisplayDate.svelte';
 	import { authCheck } from '$lib/utils/functions.js';
+	import Budget from '$lib/components/Budget.svelte';
 	import Stats from '$lib/components/Stats.svelte';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { onMount } from 'svelte';
-	import RemainingBalance from '$lib/components/RemainingBalance.svelte';
 
 	let open = $state(false);
 	let resetForm = $state(false);
@@ -38,8 +39,8 @@
 					<DisplayDate />
 				</div>
 				<div class="flex items-center">
-					<Carousel.Previous class="mr-5 {checkNumOfExpenses}" />
-					<Carousel.Next class="md:mr-5 {checkNumOfExpenses}" />
+					<Carousel.Previous class="mr-5 dark:border-transparent {checkNumOfExpenses}" />
+					<Carousel.Next class="md:mr-5 dark:border-transparent {checkNumOfExpenses}" />
 					{#if expenseStore.allExpenses.length > 3}
 						<SearchCarouselButton class="hidden md:flex" />
 					{/if}
@@ -56,6 +57,6 @@
 <section>
 	<div class="flex items-center gap-5">
 		<RemainingBalance />
-		<RemainingBalance />
+		<Budget />
 	</div>
 </section>
