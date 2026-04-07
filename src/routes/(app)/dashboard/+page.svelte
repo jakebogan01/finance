@@ -12,6 +12,7 @@
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { onMount } from 'svelte';
+	import RemainingBalance from '$lib/components/RemainingBalance.svelte';
 
 	let open = $state(false);
 	let resetForm = $state(false);
@@ -53,5 +54,8 @@
 </section>
 
 <section>
-
+	<div class="flex items-center gap-5">
+		<RemainingBalance />
+		<RemainingBalance />
+	</div>
 </section>
