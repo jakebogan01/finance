@@ -1,7 +1,7 @@
 <script>
 	import * as Card from '$lib/components/ui/card/index.js';
 
-	let { children, title, description, footer } = $props();
+	let { children, title, footer } = $props();
 </script>
 
 <Card.Root
@@ -9,7 +9,6 @@
 >
 	<Card.Header class="px-0!">
 		<Card.Title class="text-preset-4-semibold">{title}</Card.Title>
-		{@render description?.()}
 	</Card.Header>
 	{@render children?.()}
 	<Card.Footer class="px-0!">

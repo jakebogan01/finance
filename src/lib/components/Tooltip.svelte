@@ -1,23 +1,21 @@
 <script>
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
-	let { children, buttonContent, ...props } = $props();
+	let { content, buttonContent, class: className } = $props();
 </script>
 
 <Tooltip.Provider>
-	<Tooltip.Root>
+	<Tooltip.Root disableCloseOnTriggerClick={true}>
 		<Tooltip.Trigger
-			class="text-preset-5-semibold sm:text-preset-5-medium flex h-13.5 w-full items-center rounded-full bg-grey-600 p-1 dark:bg-grey-100 {children
-				? 'cursor-pointer md:transition-colors md:hover:bg-white-0/15 dark:md:hover:bg-gray-200'
-				: ''}"
-			{...props}
+			class={[
+				'flex h-full flex-1 cursor-pointer items-center justify-center py-1 md:transition-colors md:hover:bg-white-0/15 dark:md:hover:bg-gray-200',
+				className
+			]}
 		>
 			{@render buttonContent?.()}
 		</Tooltip.Trigger>
-		{#if children}
-			<Tooltip.Content>
-				{@render children?.()}
-			</Tooltip.Content>
-		{/if}
+		<Tooltip.Content>
+			{@render content?.()}
+		</Tooltip.Content>
 	</Tooltip.Root>
 </Tooltip.Provider>

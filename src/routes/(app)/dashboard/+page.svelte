@@ -9,7 +9,7 @@
 	import ExpenseForm from '$lib/components/ExpenseForm.svelte';
 	import DisplayDate from '$lib/components/DisplayDate.svelte';
 	import { authCheck } from '$lib/utils/functions.js';
-	import Budget from '$lib/components/Budget.svelte';
+	import MonthlyBudget from '$lib/components/MonthlyBudget.svelte';
 	import Stats from '$lib/components/Stats.svelte';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
@@ -57,6 +57,6 @@
 <section>
 	<div class="flex items-center gap-5">
 		<RemainingBalance />
-		<Budget />
+		<MonthlyBudget />
 	</div>
 </section>
