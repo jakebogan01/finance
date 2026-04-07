@@ -15,9 +15,11 @@
 </script>
 
 <CardLayout title="Monthly Budget">
-	<Card.Content class="px-0">
-		<Slider onValueCommit={handleBudget} type="single" bind:value max={5000} step={100} />
-	</Card.Content>
+	{#snippet content()}
+		<Card.Content class="px-0">
+			<Slider onValueCommit={handleBudget} type="single" bind:value max={5000} step={100} />
+		</Card.Content>
+	{/snippet}
 	{#snippet footer()}
 		<div
 			class="text-preset-3-medium sm:text-preset-5-medium flex h-13.5 w-full items-center overflow-hidden rounded-full bg-grey-600 dark:bg-grey-100"
