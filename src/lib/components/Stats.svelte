@@ -21,7 +21,7 @@
 
 <div>
 	<h3 class="sr-only">Stats</h3>
-	<dl class="grid-cols-full mt-5 grid gap-5 sm:grid-cols-2">
+	<dl class="grid-cols-full grid gap-5 sm:grid-cols-2">
 		{#each stats as { title, icon: Icon, sum }, i (i)}
 			<div
 				class="relative overflow-hidden rounded-2xl border border-grey-300 bg-grey-1000 p-5 dark:border-grey-300 dark:bg-white-0"
