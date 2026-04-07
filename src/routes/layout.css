@@ -168,6 +168,9 @@
 	.text-preset-3-medium {
 		@apply text-base font-medium;
 	}
+	.text-preset-3-semibold {
+		@apply text-base font-semibold;
+	}
 	.text-preset-3-bold {
 		@apply text-base font-bold;
 	}

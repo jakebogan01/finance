@@ -10,9 +10,14 @@
 </script>
 
 <CardLayout title="Remaining Balance">
+	{#snippet content()}
+		<p class="text-preset-6-bold text-center text-yellow-200">
+			-{usdFormatter.format(expenseStore.userTotal)}
+		</p>
+	{/snippet}
 	{#snippet footer()}
 		<div
-			class="text-preset-4-semibold sm:text-preset-5-medium flex h-13.5 w-full items-center overflow-hidden rounded-full bg-grey-600 dark:bg-grey-100"
+			class="flex h-13.5 w-full items-center overflow-hidden rounded-full bg-grey-600 font-semibold sm:text-xl sm:font-medium dark:bg-grey-100"
 		>
 			<Tooltip class="pl-1">
 				{#snippet buttonContent()}

@@ -20,7 +20,7 @@
 	</Card.Content>
 	{#snippet footer()}
 		<div
-			class="text-preset-4-semibold sm:text-preset-5-medium flex h-13.5 w-full items-center overflow-hidden rounded-full bg-grey-600 dark:bg-grey-100"
+			class="text-preset-3-medium sm:text-preset-5-medium flex h-13.5 w-full items-center overflow-hidden rounded-full bg-grey-600 dark:bg-grey-100"
 		>
 			{#if budgetStore.amount === 0}
 				<p class="inline-block flex-1 text-center">{usdFormatter.format(value)}</p>

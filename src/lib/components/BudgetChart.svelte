@@ -72,7 +72,7 @@
 			return {
 				period,
 				label: `${usdFormatter.format(Math.abs(diff))} under budget`,
-				color: 'text-green-200'
+				color: 'text-green-200 dark:text-green-600'
 			};
 		}
 
@@ -163,21 +163,19 @@
 
 <Card.Root
 	class={[
-		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border border-grey-300 bg-grey-1000 lg:min-h-52 dark:bg-white-0',
+		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border border-grey-300 bg-grey-1000 py-4 sm:py-5 lg:min-h-52 dark:bg-white-0',
 		className
 	]}
 >
-	<Card.Header class="flex items-center justify-between">
-		<div class="flex flex-1 flex-col justify-center gap-1">
-			<Card.Title class="text-preset-4-semibold dark:text-grey-600"
-				>This Year's Expenditures</Card.Title
+	<Card.Header class="flex items-center justify-between px-4 sm:px-5">
+		<div
+			class="flex flex-1 flex-col justify-center gap-1 sm:flex-row sm:items-center sm:justify-between"
+		>
+			<Card.Title class="font-semibold sm:text-lg sm:font-semibold dark:text-grey-600"
+				>Budget Comparison</Card.Title
 			>
 			{#if currentBudget !== 0}
 				<Card.Description>
-					<span class="text-preset-2 mt-1 text-grey-50">
-						{budgetStatus.period}:
-					</span>
-
 					<span class={['text-preset-2', budgetStatus.color]}>
 						{budgetStatus.label}
 					</span>
@@ -185,7 +183,7 @@
 			{/if}
 		</div>
 	</Card.Header>
-	<Card.Content class="mt-4 flex flex-1 flex-col px-0!">
+	<Card.Content class="flex flex-1 flex-col px-0! 2xl:mt-10">
 		<Chart.Container config={chartConfig} class="flex aspect-auto w-full flex-1 flex-col">
 			<BarChart
 				bind:context
