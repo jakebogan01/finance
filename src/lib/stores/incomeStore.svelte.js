@@ -38,9 +38,15 @@ const getSortValue = () => {
 const fetchUserTotal = async () => {
 	if (!pb.authStore.isValid) return;
 
-	userTotal = paginated?.items
-		.filter((i) => i.status === true)
-		.reduce((sum, i) => sum + (i.amount ?? 0), 0);
+	const records = await pb.collection('incomes').getFullList({
+		filter: `user="${pb.authStore.record?.id}" && status=true`,
+		fields: 'amount',
+		$autoCancel: false
+	});
+
+	if (!records.length && userTotal > 0) return;
+
+	userTotal = records.reduce((sum, i) => sum + (i.amount ?? 0), 0);
 };
 
 const scheduleFetchUserTotal = () => {
@@ -64,7 +70,6 @@ const fetchPage = async (pageOverride) => {
 		if (requestId !== currentRequest) return;
 
 		paginated = result;
-		scheduleFetchUserTotal(); // always update total after fetching page
 	} catch (error) {
 		if (error?.isAbort) return;
 		console.dir(error?.response, { depth: null });
@@ -108,9 +113,13 @@ const handleIncomeRealtime = async (e) => {
 
 	switch (e.action) {
 		case 'create':
+			userTotal += record.amount ?? 0; // instant feedback
+			scheduleFetchUserTotal(); // correct it after
+			break;
 		case 'update':
 		case 'delete':
-			scheduleFetchPage(); // updates paginated and totals
+			scheduleFetchUserTotal();
+			scheduleFetchPage();
 			break;
 	}
 };

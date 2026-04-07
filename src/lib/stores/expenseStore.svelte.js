@@ -59,9 +59,15 @@ const getSortValue = () => {
 const fetchUserTotal = async () => {
 	if (!pb.authStore.isValid) return;
 
-	userTotal = paginated?.items
-		.filter((i) => i.status === true)
-		.reduce((sum, i) => sum + (i.current_amount ?? 0), 0);
+	const records = await pb.collection('expenses').getFullList({
+		filter: `user="${pb.authStore.record?.id}" && status=true`,
+		fields: 'current_amount',
+		$autoCancel: false
+	});
+
+	if (!records.length && userTotal > 0) return;
+
+	userTotal = records.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
 };
 
 const scheduleFetchUserTotal = () => {
@@ -85,7 +91,6 @@ const fetchPage = async (pageOverride) => {
 		if (requestId !== currentRequest) return;
 
 		paginated = result;
-		scheduleFetchUserTotal(); // always update total after fetching page
 	} catch (error) {
 		if (error?.isAbort) return;
 		console.dir(error?.response, { depth: null });
@@ -129,9 +134,13 @@ const handleExpenseRealtime = async (e) => {
 
 	switch (e.action) {
 		case 'create':
+			userTotal += record.current_amount ?? 0; // instant feedback
+			scheduleFetchUserTotal(); // correct it after
+			break;
 		case 'update':
 		case 'delete':
-			scheduleFetchPage(); // updates paginated and totals
+			scheduleFetchUserTotal();
+			scheduleFetchPage();
 			break;
 	}
 };
@@ -144,6 +153,7 @@ const handleExpenseRealtime = async (e) => {
 const init = async () => {
 	paginated = await getUserExpenses();
 	await fetchHistoryMap();
+	await fetchUserTotal();
 	allExpenses = await pb.collection('expenses').getFullList({
 		filter: `user="${pb.authStore.record?.id}"`,
 		expand: 'current_history',
