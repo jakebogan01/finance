@@ -133,15 +133,50 @@ const handleExpenseRealtime = async (e) => {
 	if (record.user !== pb.authStore.record?.id) return;
 
 	switch (e.action) {
-		case 'create':
-			userTotal += record.current_amount ?? 0; // instant feedback
-			scheduleFetchUserTotal(); // correct it after
-			break;
-		case 'update':
-		case 'delete':
+		case 'create': {
+			allExpenses = [
+				{
+					...record,
+					expand: {
+						current_history: record.expand?.current_history ?? null
+					}
+				},
+				...allExpenses
+			];
+
+			// optional optimistic total
+			userTotal += record.current_amount ?? 0;
+
 			scheduleFetchUserTotal();
 			scheduleFetchPage();
 			break;
+		}
+
+		case 'update': {
+			allExpenses = allExpenses.map((item) =>
+				item.id === record.id
+					? {
+							...item,
+							...record,
+							expand: {
+								current_history: record.expand?.current_history ?? item.expand?.current_history
+							}
+						}
+					: item
+			);
+
+			scheduleFetchUserTotal();
+			scheduleFetchPage();
+			break;
+		}
+
+		case 'delete': {
+			allExpenses = allExpenses.filter((item) => item.id !== record.id);
+
+			scheduleFetchUserTotal();
+			scheduleFetchPage();
+			break;
+		}
 	}
 };
 

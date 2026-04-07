@@ -8,10 +8,12 @@
 	import { resolve } from '$app/paths';
 
 	let { ref = $bindable(null), ...restProps } = $props();
+
+	let expenses = $derived(expenseStore.allExpenses); // not showing updated
 </script>
 
 <Carousel.Content class="ms-0 -mr-5">
-	{#each expenseStore.allExpenses as item, i (item?.id)}
+	{#each expenses as item, i (item?.id)}
 		<Command.Item
 			class="min-100:basis-1/2 imtess min-w-0 shrink-0 grow-0 basis-1/2 ps-0 pr-5 sm:basis-1/3 md:basis-1/3"
 			bind:this={ref}
@@ -30,7 +32,7 @@
 						<div>
 							<p class="text-preset-4 truncate text-white-0 dark:text-gray-900">{item?.title}</p>
 							<p class="text-grey-50 dark:text-gray-900">
-								{usdFormatter.format(item?.expand?.current_history?.amount)}
+								{usdFormatter.format(item?.current_amount)}
 							</p>
 						</div>
 					</a>
