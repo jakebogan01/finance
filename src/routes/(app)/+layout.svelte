@@ -2,6 +2,7 @@
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
+	import { budgetStore } from '$lib/stores/budgetStore.svelte.js';
 	import { EXPENSES, INCOME } from '$lib/utils/constants.js';
 	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
@@ -14,10 +15,12 @@
 	onMount(() => {
 		incomeStore.init();
 		expenseStore.init();
+		budgetStore.init();
 	});
 	onDestroy(() => {
 		incomeStore.cleanup();
 		expenseStore.cleanup();
+		budgetStore.cleanup();
 	});
 </script>
 

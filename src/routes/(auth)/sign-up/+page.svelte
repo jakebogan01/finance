@@ -46,6 +46,7 @@
 			try {
 				await pb.collection('users').create(values);
 				await pb.collection('users').authWithPassword(values.email, values.password);
+				await pb.collection('budgets').create({ user: pb.authStore.record?.id, amount: 0 });
 				await goto(resolve(DASHBOARD));
 				await toast.success('Account successfully created!');
 				reset();

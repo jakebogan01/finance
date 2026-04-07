@@ -446,8 +446,55 @@ export const getExpenseHistoryMap = async (userId) => {
 		}
 
 		return map;
-	} catch (err) {
-		console.error('Failed to fetch expense history:', err);
+	} catch (error) {
+		console.dir(error?.response, { depth: null });
+		toast.error('Failed to fetch expense history:');
 		return {};
+	}
+};
+
+/**
+ * ----------------------------------------
+ * Budget Utilities
+ * ----------------------------------------
+ */
+export const getUserBudget = async () => {
+	try {
+		return await pb
+			.collection('budgets')
+			.getFirstListItem(`user="${pb.authStore.record?.id}"`, { $autoCancel: false });
+	} catch (error) {
+		// No budget yet
+		if (error?.status === 404) return null;
+		console.dir(error?.response, { depth: null });
+		toast.error('Failed to connect to server');
+		return null;
+	}
+};
+
+export const saveUserBudget = async (amount) => {
+	try {
+		const userId = pb.authStore.record?.id;
+
+		// check if exists
+		const existing = await getUserBudget();
+
+		if (existing) {
+			return await pb.collection('budgets').update(existing.id, {
+				amount,
+				$autoCancel: false
+			});
+		}
+
+		// create if not exists
+		return await pb.collection('budgets').create({
+			user: userId,
+			amount,
+			$autoCancel: false
+		});
+	} catch (error) {
+		console.dir(error?.response, { depth: null });
+		toast.error('Failed to connect to server');
+		throw error;
 	}
 };
