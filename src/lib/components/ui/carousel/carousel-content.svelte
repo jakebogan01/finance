@@ -13,7 +13,9 @@
 
 <div
 	data-slot="carousel-content"
-	class="overflow-hidden {expenses?.length < 3 ? 'rounded-2xl bg-[#212121] p-2 sm:rounded-20' : ''}"
+	class="overflow-hidden {expenses?.length < 3
+		? 'rounded-2xl bg-[#181818] p-2 sm:rounded-20 2xl:p-4 3xl-tall:bg-[#212121]'
+		: ''}"
 	use:emblaCarouselSvelte={{
 		options: {
 			container: '[data-embla-container]',
