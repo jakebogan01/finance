@@ -44,8 +44,6 @@ const fetchUserTotal = async () => {
 		$autoCancel: false
 	});
 
-	if (!records.length && userTotal > 0) return;
-
 	userTotal = records.reduce((sum, i) => sum + (i.amount ?? 0), 0);
 };
 
@@ -113,9 +111,6 @@ const handleIncomeRealtime = async (e) => {
 
 	switch (e.action) {
 		case 'create':
-			userTotal += record.amount ?? 0; // instant feedback
-			scheduleFetchUserTotal(); // correct it after
-			break;
 		case 'update':
 		case 'delete':
 			scheduleFetchUserTotal();

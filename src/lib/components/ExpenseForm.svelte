@@ -135,9 +135,10 @@
 			try {
 				values.amount = toMonthly(values.amount, formState.payDropDown);
 				await saveRecord(values);
+				open = false;
+				await tick();
 				reset();
 				resetState();
-				open = false;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');

@@ -64,7 +64,7 @@
 			slug: generateSlug(values.name),
 			pay_frequency: formState.payDropDown,
 			phone: formState.phoneValue,
-			state: formState.stateDropDown,
+			state: formState.stateDropDown || null,
 			date: formState.dateValue ? calendarDateToISO(formState.dateValue) : null,
 			status: checked
 		});
@@ -113,9 +113,10 @@
 			try {
 				values.amount = toMonthly(values.amount, formState.payDropDown);
 				await saveRecord(values);
+				open = false;
+				await tick();
 				reset();
 				resetState();
-				open = false;
 			} catch (error) {
 				console.dir(error?.response, { depth: null });
 				toast.error(error?.message ?? 'Could not connect to the server');
@@ -143,7 +144,8 @@
 		formState.phoneValue = data?.phone || null;
 		formState.dateValue = data?.date ? fromDate(new Date(data.date), getLocalTimeZone()) : null;
 		indexes.pay = payTypes.findIndex((item) => item.value === data?.pay_frequency);
-		indexes.state = data?.state?.length ? states.findIndex((x) => x.value === data?.state) : 0;
+		const stateIndex = states.findIndex((x) => x.value === data?.state);
+		indexes.state = stateIndex >= 0 ? stateIndex : -1;
 		noValue = !data?.state?.length;
 		await tick();
 		record.update = true;
@@ -157,7 +159,7 @@
 			zip: data?.zip || ''
 		});
 		formState.payDropDown = payTypes[indexes.pay]?.value ?? payTypes[0].value;
-		formState.stateDropDown = states[indexes.state]?.value ?? '';
+		formState.stateDropDown = indexes.state >= 0 ? states[indexes.state].value : '';
 	};
 
 	const toMonthly = (amount, frequency) => {
