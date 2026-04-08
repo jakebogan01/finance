@@ -116,7 +116,7 @@
 <Separator class="my-5" />
 <Card.Root
 	class={[
-		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border-t border-grey-500 bg-grey-900 lg:min-h-52 dark:border-gray-300 dark:bg-gray-100',
+		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border-t border-grey-500 bg-grey-900 pb-1! lg:min-h-52 dark:border-gray-300 dark:bg-gray-100 3xl-tall:pb-5!',
 		className
 	]}
 >

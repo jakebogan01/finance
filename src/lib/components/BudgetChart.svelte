@@ -163,7 +163,7 @@
 
 <Card.Root
 	class={[
-		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border border-grey-300 bg-grey-1000 py-4 sm:py-5 lg:min-h-52 dark:bg-white-0',
+		'flex min-h-70 flex-1 flex-col space-y-1 rounded-2xl border border-grey-300 bg-grey-1000 pb-1! sm:py-5 lg:min-h-52 dark:bg-white-0 3xl-tall:pb-5!',
 		className
 	]}
 >
@@ -183,38 +183,44 @@
 			{/if}
 		</div>
 	</Card.Header>
-	<Card.Content class="flex flex-1 flex-col px-0! 2xl:mt-10">
-		<Chart.Container config={chartConfig} class="flex aspect-auto w-full flex-1 flex-col">
-			<BarChart
-				bind:context
-				data={chartData}
-				xScale={scaleBand().padding(0.35)}
-				x="month"
-				axis="x"
-				rule={false}
-				series={activeSeries}
-				seriesLayout="stack"
-				props={{
-					bars: {
-						stroke: 'none',
-						initialY: context?.height,
-						initialHeight: 0,
-						motion: {
-							y: { type: 'tween', duration: 300, easing: cubicInOut },
-							height: { type: 'tween', duration: 300, easing: cubicInOut }
-						}
-					},
-					highlight: { area: false },
-					xAxis: { format: (d) => d.slice(0, 3) }
-				}}
-			>
-				{#snippet belowMarks()}
-					<Highlight area={{ class: 'fill-muted' }} />
-				{/snippet}
-				{#snippet tooltip()}
-					<Chart.Tooltip />
-				{/snippet}
-			</BarChart>
-		</Chart.Container>
+	<Card.Content class="relative mt-4 flex flex-1 flex-col px-0! 2xl:mt-10">
+		{#if expenseHistory?.length > 0 && activeExpenses?.length > 0}
+			<Chart.Container config={chartConfig} class="flex aspect-auto w-full flex-1 flex-col">
+				<BarChart
+					bind:context
+					data={chartData}
+					xScale={scaleBand().padding(0.35)}
+					x="month"
+					axis="x"
+					rule={false}
+					series={activeSeries}
+					seriesLayout="stack"
+					props={{
+						bars: {
+							stroke: 'none',
+							initialY: context?.height,
+							initialHeight: 0,
+							motion: {
+								y: { type: 'tween', duration: 300, easing: cubicInOut },
+								height: { type: 'tween', duration: 300, easing: cubicInOut }
+							}
+						},
+						highlight: { area: false },
+						xAxis: { format: (d) => d.slice(0, 3) }
+					}}
+				>
+					{#snippet belowMarks()}
+						<Highlight area={{ class: 'fill-muted' }} />
+					{/snippet}
+					{#snippet tooltip()}
+						<Chart.Tooltip />
+					{/snippet}
+				</BarChart>
+			</Chart.Container>
+		{:else}
+			<div class="absolute inset-0 flex items-center justify-center gap-x-4">
+				<span class="text-preset-3 text-grey-200">No expense data</span>
+			</div>
+		{/if}
 	</Card.Content>
 </Card.Root>

@@ -1,4 +1,5 @@
 <script>
+	import { accountHistoryStore } from '$lib/stores/accountHistoryStore.svelte.js';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
@@ -16,20 +17,24 @@
 		incomeStore.init();
 		expenseStore.init();
 		budgetStore.init();
+		accountHistoryStore.init();
 	});
 	onDestroy(() => {
 		incomeStore.cleanup();
 		expenseStore.cleanup();
 		budgetStore.cleanup();
+		accountHistoryStore.cleanup();
 	});
 </script>
 
 <MobileSidebar />
 
-<div class="flex flex-1 flex-col 3xl-tall:items-center 3xl-tall:justify-center 3xl-tall:p-10">
+<div
+	class="flex min-h-0 flex-1 flex-col 3xl-tall:items-center 3xl-tall:justify-center 3xl-tall:p-10"
+>
 	<div
 		class={[
-			'relative mx-auto flex w-full max-w-400 flex-1 flex-col px-4 py-5 sm:px-5 3xl-tall:ultra-screen',
+			'wrapper relative mx-auto flex min-h-0 w-full max-w-400 flex-1 flex-col px-4 py-5 sm:px-5 3xl-tall:ultra-screen',
 			darkMode.status ? 'dark' : ''
 		]}
 	>
@@ -37,7 +42,7 @@
 			<Sidebar />
 		</div>
 
-		<div class="flex flex-1 flex-col space-y-5 xl:pl-71">
+		<div class="flex min-h-0 flex-1 flex-col space-y-5 xl:pl-71">
 			<Topbar />
 
 			{#if page.url.pathname === EXPENSES || page.url.pathname === INCOME}
@@ -47,7 +52,7 @@
 					{@render children?.()}
 				</main>
 			{:else}
-				<main class="relative grid gap-5 lg:flex-1 lg:grid-cols-[10fr_8fr]">
+				<main class="relative grid min-h-0 gap-5 lg:flex-1 lg:grid-cols-[10fr_8fr]">
 					{@render children?.()}
 				</main>
 			{/if}

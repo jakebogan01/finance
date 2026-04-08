@@ -7,6 +7,7 @@
 		cleanObject,
 		updateUserTotal
 	} from '$lib/utils/functions.js';
+	import { logAccountHistory, usdFormatter } from '$lib/utils/functions.js';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import FormButton from '$lib/components/FormButton.svelte';
@@ -88,6 +89,14 @@
 
 		if (record.update) {
 			await pb.collection('expenses').update(record.id, payload);
+			await logAccountHistory({
+				type: 'expense_update',
+				title: `Updated expense "${payload.title}"`,
+				meta: {
+					id: record.id,
+					amount: payload.current_amount
+				}
+			});
 			const updated = await pb
 				.collection('expenses')
 				.getOne(record.id, { expand: 'current_history' });
@@ -99,6 +108,14 @@
 			toast.success('Successfully updated');
 		} else {
 			const newRecord = await pb.collection('expenses').create(payload);
+			await logAccountHistory({
+				type: 'expense_create',
+				title: `Created expense "${payload.title}"`,
+				meta: {
+					id: newRecord.id,
+					amount: payload.current_amount
+				}
+			});
 			await createExpenseHistory(newRecord, payload.current_amount);
 			const total = await updateUserTotal(pb.authStore.record.id);
 			if (typeof total === 'number') expenseStore.setUserTotal(total);

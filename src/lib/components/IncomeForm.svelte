@@ -8,6 +8,7 @@
 		calendarDateToISO,
 		updateUserIncomeTotal
 	} from '$lib/utils/functions.js';
+	import { logAccountHistory, usdFormatter } from '$lib/utils/functions.js';
 	import { fromDate, getLocalTimeZone } from '@internationalized/date';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
@@ -73,13 +74,29 @@
 
 		if (record.update) {
 			await pb.collection('incomes').update(record.id, payload);
+			await logAccountHistory({
+				type: 'income_update',
+				title: `Updated income "${payload.name}"`,
+				meta: {
+					id: record.id,
+					amount: payload.amount
+				}
+			});
 			const total = await updateUserIncomeTotal(pb.authStore.record.id);
 			if (typeof total === 'number') incomeStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			INCOMESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
 		} else {
-			await pb.collection('incomes').create(payload);
+			const newRecord = await pb.collection('incomes').create(payload);
+			await logAccountHistory({
+				type: 'income_create',
+				title: `Created income "${payload.name}"`,
+				meta: {
+					id: newRecord.id,
+					amount: payload.amount
+				}
+			});
 			const total = await updateUserIncomeTotal(pb.authStore.record.id);
 			if (typeof total === 'number') incomeStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));

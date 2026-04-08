@@ -215,6 +215,44 @@ export const cleanNumber = (value) => {
 
 /**
  * ----------------------------------------
+ * Account History Logger
+ * ----------------------------------------
+ */
+export const logAccountHistory = async ({ type, title, description = '', meta = {} }) => {
+	try {
+		const userId = pb.authStore.record?.id;
+		if (!userId) return;
+
+		await pb.collection('account_history').create({
+			user: userId,
+			type,
+			title,
+			description,
+			meta,
+			$autoCancel: false
+		});
+	} catch (error) {
+		if (!error?.isAbort) {
+			console.error('Failed to log account history:', error);
+		}
+	}
+};
+
+export const getAccountHistory = async (limit = 20) => {
+	try {
+		return await pb.collection('account_history').getList(1, limit, {
+			filter: `user="${pb.authStore.record?.id}"`,
+			sort: '-created',
+			$autoCancel: false
+		});
+	} catch (error) {
+		console.error(error);
+		return { items: [] };
+	}
+};
+
+/**
+ * ----------------------------------------
  * Object Utilities
  * ----------------------------------------
  */
@@ -238,13 +276,43 @@ export const isEmpty = (value) => {
  */
 export const deleteRecord = async (type, id) => {
 	try {
-		await pb.collection(type.toLowerCase()).delete(id);
+		const collection = type.toLowerCase();
+
+		// ✅ Get record BEFORE deleting (so we can log meaningful info)
+		let record = null;
+		try {
+			record = await pb.collection(collection).getOne(id, {
+				$autoCancel: false
+			});
+		} catch (err) {
+			// If fetch fails, continue anyway (don't block delete)
+			console.warn('Could not fetch record before delete:', err);
+		}
+
+		// ✅ Delete record
+		await pb.collection(collection).delete(id);
+
+		// ✅ Log account history
+		await logAccountHistory({
+			type: `${collection.slice(0, -1)}_delete`, // incomes → income_delete
+			title: `Deleted ${collection.slice(0, -1)} "${record?.name || record?.title || ''}"`,
+			meta: {
+				id,
+				name: record?.name || null,
+				title: record?.title || null
+			}
+		});
+
+		// ✅ UI feedback
 		toast.success(`${type} successfully deleted!`);
-		if (type.toLowerCase() === 'incomes') {
+
+		// ✅ Reset URL state (your existing behavior)
+		if (collection === 'incomes') {
 			INCOMESLUG.value = null;
 			history.replaceState(null, '', window.location.pathname + window.location.search);
 		}
-		if (type.toLowerCase() === 'expenses') {
+
+		if (collection === 'expenses') {
 			EXPENSESLUG.value = null;
 			history.replaceState(null, '', window.location.pathname + window.location.search);
 		}
@@ -480,18 +548,34 @@ export const saveUserBudget = async (amount) => {
 		const existing = await getUserBudget();
 
 		if (existing) {
-			return await pb.collection('budgets').update(existing.id, {
+			const updated = await pb.collection('budgets').update(existing.id, {
 				amount,
 				$autoCancel: false
 			});
+
+			await logAccountHistory({
+				type: 'budget_update',
+				title: `Updated budget to ${usdFormatter.format(amount)}`,
+				meta: { amount }
+			});
+
+			return updated;
 		}
 
 		// create if not exists
-		return await pb.collection('budgets').create({
+		const created = await pb.collection('budgets').create({
 			user: userId,
 			amount,
 			$autoCancel: false
 		});
+
+		await logAccountHistory({
+			type: 'budget_update',
+			title: `Set budget to ${usdFormatter.format(amount)}`,
+			meta: { amount }
+		});
+
+		return created;
 	} catch (error) {
 		console.dir(error?.response, { depth: null });
 		toast.error('Failed to connect to server');

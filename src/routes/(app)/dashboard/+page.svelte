@@ -1,7 +1,9 @@
 <script>
+	import { accountHistoryStore } from '$lib/stores/accountHistoryStore.svelte.js';
 	import SearchCarouselButton from '$lib/components/SearchCarouselButton.svelte';
 	import RemainingBalance from '$lib/components/RemainingBalance.svelte';
 	import ExpenseCarousel from '$lib/components/ExpenseCarousel.svelte';
+	import AccountHistory from '$lib/components/AccountHistory.svelte';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import { budgetStore } from '$lib/stores/budgetStore.svelte.js';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
@@ -53,7 +55,9 @@
 					<CreateButton class="dark:bg-white-0" bind:handleReset bind:open buttonText="Add expense">
 						<ExpenseForm bind:handleReset {resetForm} bind:open />
 					</CreateButton>
-					<DisplayDate />
+					{#if accountHistoryStore.records?.length > 0}
+						<DisplayDate />
+					{/if}
 				</div>
 				<div class="flex items-center">
 					<Carousel.Previous class="mr-5 dark:border-transparent {checkNumOfExpenses}" />
@@ -72,9 +76,10 @@
 	<BudgetChart {expenseHistory} {activeExpenses} budget={budgetStore.amount} />
 </section>
 
-<section>
+<section class="flex min-h-0 min-w-0 flex-col space-y-5">
 	<div class="flex items-center gap-5">
 		<RemainingBalance />
 		<MonthlyBudget />
 	</div>
+	<AccountHistory accountHistory={accountHistoryStore.records} />
 </section>
