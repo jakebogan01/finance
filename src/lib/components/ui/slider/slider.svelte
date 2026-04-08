@@ -38,7 +38,7 @@ get along, so we shut typescript up by casting `value` to `never`.
 			<SliderPrimitive.Range
 				data-slot="slider-range"
 				class={cn(
-					'absolute bg-yellow-100 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
+					'absolute bg-yellow-200 data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full'
 				)}
 			/>
 		</span>
