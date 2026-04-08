@@ -61,6 +61,7 @@
 		cleanObject({
 			...values,
 			user: pb.authStore.record?.id,
+			owner: pb.authStore.record?.name,
 			slug: generateSlug(values.name),
 			pay_frequency: formState.payDropDown,
 			phone: formState.phoneValue,

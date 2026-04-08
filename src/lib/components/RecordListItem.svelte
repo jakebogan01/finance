@@ -25,7 +25,9 @@
 				<div
 					class="absolute top-7.5 -right-1.5 flex size-7.5 items-center justify-center rounded-full bg-grey-1100 dark:bg-yellow-200"
 				>
-					<span class="text-preset-1 text-white-0">JB</span>
+					<span class="text-preset-1 text-white-0">
+						{getInitials(item?.owner)}
+					</span>
 				</div>
 			</div>
 			<div class="min-w-0 flex-auto">

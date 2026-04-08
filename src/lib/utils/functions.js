@@ -249,6 +249,7 @@ export const logAccountHistory = async ({ type, title, description = '', meta = 
 
 		await pb.collection('account_history').create({
 			user: userId,
+			owner: pb.authStore.record?.name,
 			type,
 			title,
 			description,

@@ -21,7 +21,7 @@
 									i
 								)}"
 							>
-								{getInitials(item?.made_by)}
+								{getInitials(item?.owner)}
 							</div>
 							<div class="w-full min-w-0 flex-auto">
 								<p class="text-preset-3-medium">{item?.title}</p>
