@@ -7,7 +7,7 @@
 		cleanObject,
 		updateUserTotal
 	} from '$lib/utils/functions.js';
-	import { logAccountHistory, usdFormatter } from '$lib/utils/functions.js';
+	import { logAccountHistory, getChangedFields } from '$lib/utils/functions.js';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 	import FormButton from '$lib/components/FormButton.svelte';
@@ -88,15 +88,18 @@
 		const payload = buildPayload(values);
 
 		if (record.update) {
+			const oldRecord = await pb
+				.collection('expenses')
+				.getOne(record.id, { expand: 'current_history' });
 			await pb.collection('expenses').update(record.id, payload);
-			await logAccountHistory({
-				type: 'expense_update',
-				title: `Updated expense "${payload.title}"`,
-				meta: {
-					id: record.id,
-					amount: payload.current_amount
-				}
-			});
+			const changes = getChangedFields(oldRecord, payload);
+			if (Object.keys(changes).length > 0) {
+				await logAccountHistory({
+					type: 'expense_update',
+					title: `Updated expense "${payload.title}"`,
+					meta: changes
+				});
+			}
 			const updated = await pb
 				.collection('expenses')
 				.getOne(record.id, { expand: 'current_history' });

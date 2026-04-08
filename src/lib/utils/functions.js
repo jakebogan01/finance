@@ -99,6 +99,30 @@ export const logout = async () => {
 
 /**
  * ----------------------------------------
+ * Get Changed Fields (Diff)
+ * ----------------------------------------
+ */
+export const getChangedFields = (oldObj = {}, newObj = {}) => {
+	const changes = {};
+
+	for (const key in newObj) {
+		const oldVal = oldObj?.[key];
+		const newVal = newObj?.[key];
+
+		// Skip unchanged
+		if (JSON.stringify(oldVal) === JSON.stringify(newVal)) continue;
+
+		changes[key] = {
+			old: oldVal ?? null,
+			new: newVal ?? null
+		};
+	}
+
+	return changes;
+};
+
+/**
+ * ----------------------------------------
  * String Utilities
  * ----------------------------------------
  */
@@ -278,7 +302,6 @@ export const deleteRecord = async (type, id) => {
 	try {
 		const collection = type.toLowerCase();
 
-		// ✅ Get record BEFORE deleting (so we can log meaningful info)
 		let record = null;
 		try {
 			record = await pb.collection(collection).getOne(id, {
@@ -289,24 +312,18 @@ export const deleteRecord = async (type, id) => {
 			console.warn('Could not fetch record before delete:', err);
 		}
 
-		// ✅ Delete record
 		await pb.collection(collection).delete(id);
 
-		// ✅ Log account history
 		await logAccountHistory({
-			type: `${collection.slice(0, -1)}_delete`, // incomes → income_delete
+			type: `${collection.slice(0, -1)}_delete`,
 			title: `Deleted ${collection.slice(0, -1)} "${record?.name || record?.title || ''}"`,
 			meta: {
-				id,
-				name: record?.name || null,
-				title: record?.title || null
+				deleted: record
 			}
 		});
 
-		// ✅ UI feedback
 		toast.success(`${type} successfully deleted!`);
 
-		// ✅ Reset URL state (your existing behavior)
 		if (collection === 'incomes') {
 			INCOMESLUG.value = null;
 			history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -548,16 +565,24 @@ export const saveUserBudget = async (amount) => {
 		const existing = await getUserBudget();
 
 		if (existing) {
+			const oldAmount = existing.amount;
 			const updated = await pb.collection('budgets').update(existing.id, {
 				amount,
 				$autoCancel: false
 			});
 
-			await logAccountHistory({
-				type: 'budget_update',
-				title: `Updated budget to ${usdFormatter.format(amount)}`,
-				meta: { amount }
-			});
+			if (oldAmount !== amount) {
+				await logAccountHistory({
+					type: 'budget_update',
+					title: `Updated budget: ${usdFormatter.format(oldAmount)} to ${usdFormatter.format(amount)}`,
+					meta: {
+						amount: {
+							old: oldAmount,
+							new: amount
+						}
+					}
+				});
+			}
 
 			return updated;
 		}

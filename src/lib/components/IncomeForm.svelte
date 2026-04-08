@@ -8,7 +8,7 @@
 		calendarDateToISO,
 		updateUserIncomeTotal
 	} from '$lib/utils/functions.js';
-	import { logAccountHistory, usdFormatter } from '$lib/utils/functions.js';
+	import { logAccountHistory, getChangedFields } from '$lib/utils/functions.js';
 	import { fromDate, getLocalTimeZone } from '@internationalized/date';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
@@ -73,15 +73,16 @@
 		const payload = buildPayload(values);
 
 		if (record.update) {
+			const oldRecord = await pb.collection('incomes').getOne(record.id);
 			await pb.collection('incomes').update(record.id, payload);
-			await logAccountHistory({
-				type: 'income_update',
-				title: `Updated income "${payload.name}"`,
-				meta: {
-					id: record.id,
-					amount: payload.amount
-				}
-			});
+			const changes = getChangedFields(oldRecord, payload);
+			if (Object.keys(changes).length > 0) {
+				await logAccountHistory({
+					type: 'income_update',
+					title: `Updated income "${payload.name}"`,
+					meta: changes
+				});
+			}
 			const total = await updateUserIncomeTotal(pb.authStore.record.id);
 			if (typeof total === 'number') incomeStore.setUserTotal(total);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
