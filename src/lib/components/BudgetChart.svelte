@@ -171,9 +171,7 @@
 		<div
 			class="flex flex-1 flex-col justify-center gap-1 sm:flex-row sm:items-center sm:justify-between"
 		>
-			<Card.Title class="font-semibold sm:text-lg sm:font-semibold dark:text-grey-600"
-				>Budget Comparison</Card.Title
-			>
+			<Card.Title class="font-semibold sm:text-lg dark:text-grey-600">Budget Comparison</Card.Title>
 			{#if currentBudget !== 0}
 				<Card.Description>
 					<span class={['text-preset-2', budgetStatus.color]}>

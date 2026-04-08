@@ -86,3 +86,12 @@ export const expenseSchema = z.object({
 	title: nameField,
 	amount: amountField
 });
+
+export const profileSchema = z.object({
+	name: optionalStringField,
+	email: optionalEmailField
+});
+
+export const updatePasswordSchema = z.object({
+	password: passwordField
+});
