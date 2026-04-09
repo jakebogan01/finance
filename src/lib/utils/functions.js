@@ -1,7 +1,9 @@
 import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 import { EXPENSESLUG } from '$lib/stores/expenseSlug.svelte.js';
 import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
+import RefreshCcw from '@lucide/svelte/icons/refresh-ccw';
 import { DASHBOARD, SIGNIN } from '$lib/utils/constants';
+import Receipt from '@lucide/svelte/icons/receipt-text';
 import { redirect } from '@sveltejs/kit';
 import { goto } from '$app/navigation';
 import { toast } from 'svelte-sonner';
@@ -451,6 +453,15 @@ export const states = [
 	'Wisconsin',
 	'Wyoming'
 ].map((s) => ({ value: s.replace(/\s+/g, ' '), label: s }));
+
+export const getExpenseCategoryIcon = (category = '') => {
+	const value = category?.toLowerCase();
+
+	if (value === 'bill') return Receipt;
+	if (value === 'subscription') return RefreshCcw;
+
+	return Receipt; // fallback
+};
 
 export const fillMissingMonths = (history) => {
 	if (!history || history.length === 0) return [];
