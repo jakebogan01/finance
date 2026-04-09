@@ -8,6 +8,7 @@
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import Head from '$lib/components/Head.svelte';
 	import { onMount } from 'svelte';
+	import AccountAccess from '$lib/components/AccountAccess.svelte';
 
 	onMount(() => authCheck(303, SIGNIN, true));
 </script>
@@ -24,5 +25,6 @@
 </section>
 
 <section class="flex min-h-0 min-w-0 flex-col space-y-5">
+	<AccountAccess />
 	<AccountHistory accountHistory={accountHistoryStore.records} />
 </section>
