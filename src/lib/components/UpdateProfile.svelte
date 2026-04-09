@@ -27,8 +27,10 @@
 				const cleanValues = cleanObject(values);
 
 				if (cleanValues?.name?.length > 0 && cleanValues?.name !== pb.authStore.record.name) {
-					await pb.collection('users').update(pb.authStore.record.id, { name: cleanValues.name });
-					// using pb.authStore.record.name in dashboard, need to have this update in realtime
+					const updatedUser = await pb
+						.collection('users')
+						.update(pb.authStore.record.id, { name: cleanValues.name });
+					pb.authStore.save(pb.authStore.token, updatedUser);
 					const changes = getChangedFields(
 						{ name: pb.authStore.record?.name },
 						{ name: values?.name }

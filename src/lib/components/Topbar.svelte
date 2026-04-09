@@ -9,6 +9,11 @@
 	import { resolve } from '$app/paths';
 	import pb from '$lib/pocketbase.js';
 	import { page } from '$app/state';
+	import { onMount } from 'svelte';
+
+	let user = pb.authStore.record;
+
+	onMount(() => pb.authStore.onChange(() => (user = pb.authStore.record)));
 </script>
 
 <div
@@ -18,7 +23,7 @@
 		<Avatar />
 		<div>
 			<p class="text-preset-2">Welcome!</p>
-			<p class="text-preset-5-medium sm:text-3xl">{pb?.authStore?.record?.name}</p>
+			<p class="text-preset-5-medium sm:text-3xl">{user?.name}</p>
 		</div>
 	</div>
 	<div class="flex items-center gap-3">

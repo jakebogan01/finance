@@ -30,7 +30,10 @@
 
 <Meter.Root
 	value={state.strength.score}
-	class={cn('relative h-1.5 w-full gap-1 overflow-hidden rounded-full bg-grey-800', className)}
+	class={cn(
+		'relative h-1.5 w-full gap-1 overflow-hidden rounded-full bg-grey-800 dark:bg-gray-200',
+		className
+	)}
 	min={0}
 	max={4}
 >
@@ -41,7 +44,7 @@
 	<!-- This creates the gaps between the bars -->
 	<div class="absolute top-0 left-0 z-10 flex h-1.5 w-full place-items-center gap-1">
 		{#each Array.from({ length: 4 }) as _, i (i)}
-			<div class="h-1.5 w-1/4 rounded-full ring-3 ring-grey-1000"></div>
+			<div class="h-1.5 w-1/4 rounded-full ring-3 ring-grey-1000 dark:ring-white-0"></div>
 		{/each}
 	</div>
 </Meter.Root>
