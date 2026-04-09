@@ -1,11 +1,14 @@
 <script>
 	import { getAvatarColor, getInitials, timeAgo } from '$lib/utils/functions.js';
 	import { CopyButton } from '$lib/components/ui/copy-button/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
+	import InviteCodeInput from '$lib/components/InviteCodeInput.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import CopyIcon from '@lucide/svelte/icons/copy';
 	import pb from '$lib/pocketbase';
 
 	let { accountHistory = [] } = $props();
+
+	let open = $state(false);
 </script>
 
 <div
@@ -28,12 +31,19 @@
 				</span>
 			</CopyButton>
 		</div>
-		<Button
-			type="button"
-			class="h-13 cursor-pointer rounded-lg bg-yellow-200 px-6 font-medium text-grey-600 sm:w-auto md:hover:bg-yellow-100 dark:text-white-0"
-		>
-			Invite
-		</Button>
+		<Dialog.Root bind:open>
+			<Dialog.Trigger
+				type="button"
+				onclick={() => (open = true)}
+				class={[
+					'h-13 cursor-pointer rounded-lg bg-yellow-200 px-6 font-medium text-grey-600 sm:w-auto md:hover:bg-yellow-100 dark:text-white-0'
+				]}
+				asChild
+			>
+				Invite
+			</Dialog.Trigger>
+			<InviteCodeInput />
+		</Dialog.Root>
 	</div>
 	<div class="flex min-h-0 flex-1 flex-col overflow-y-auto pr-2">
 		<ul role="list" class="relative min-h-0 flex-1 space-y-3">
