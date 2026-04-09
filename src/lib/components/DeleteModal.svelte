@@ -2,14 +2,55 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { Spinner } from '$lib/components/ui/spinner/index.js';
 	import { deleteRecord } from '$lib/utils/functions.js';
+	import { SIGNUP } from '$lib/utils/constants.js';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
+	import { resolve } from '$app/paths';
+	import pb from '$lib/pocketbase.js';
 
-	let { data, deleteDialogOpen = $bindable(), open = $bindable(), collectionName } = $props();
+	let {
+		data = {},
+		deleteDialogOpen = $bindable(),
+		open = $bindable(),
+		collectionName = '',
+		deleteAccount = false
+	} = $props();
 
 	let disableButton = $state(false);
 
 	const handleDeletion = () => {
 		disableButton = true;
-		deleteRecord(collectionName, data?.id);
+		if (deleteAccount) {
+			deleteUser();
+		} else {
+			deleteRecord(collectionName, data?.id);
+		}
+	};
+
+	const deleteUser = async () => {
+		try {
+			const res = await fetch('/api/account/delete-user', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					userId: pb.authStore.record.id
+				})
+			});
+
+			const result = await res.json();
+			if (res.ok) {
+				pb.authStore.clear();
+				await goto(resolve(SIGNUP));
+				toast.success('Successfully deleted account!');
+			} else {
+				console.error('Failed to delete user:', result.error);
+			}
+		} catch (error) {
+			console.dir(error, { depth: null });
+			toast.error(error ?? 'Could not connect to the server');
+		}
 	};
 </script>
 
@@ -29,7 +70,7 @@
 			Cancel
 		</AlertDialog.Cancel>
 		<AlertDialog.Action
-			class="h-13 bg-red-400 px-6 font-medium text-white-0 md:hover:bg-red-500"
+			class="h-13 bg-red-500 px-6 font-medium text-white-0 md:hover:bg-red-400"
 			onclick={handleDeletion}
 			disabled={disableButton}
 		>

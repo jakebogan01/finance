@@ -1,9 +1,9 @@
 <script>
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import DeleteModal from '$lib/components/DeleteModal.svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import DeleteUser from '$lib/components/DeleteUser.svelte';
 
-	let deleteDialogOpen = $state(false);
+	let open = $state(false);
 </script>
 
 <div
@@ -26,9 +26,9 @@
 		</div>
 		<div class="mt-5 max-h-fit sm:mt-7">
 			<Button
-				onclick={() => (deleteDialogOpen = true)}
+				onclick={() => (open = true)}
 				type="button"
-				class="h-13 w-full bg-red-200 px-6 font-medium sm:w-auto md:hover:bg-red-100 dark:bg-red-500 dark:text-white md:dark:hover:bg-red-400"
+				class="h-13 w-full bg-red-500 px-6 font-medium text-white-0 sm:w-auto md:hover:bg-red-400"
 			>
 				Yes, delete my account
 			</Button>
@@ -36,6 +36,6 @@
 	</div>
 </div>
 
-<AlertDialog.Root bind:open={deleteDialogOpen}>
-	<DeleteUser bind:deleteDialogOpen />
+<AlertDialog.Root bind:open>
+	<DeleteModal bind:open c={true} />
 </AlertDialog.Root>
