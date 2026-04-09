@@ -96,7 +96,7 @@
 					</Password.Input>
 				</Password.Root>
 			</FormField>
-			<div class="mt-10 flex justify-end">
+			<div class="mt-0 flex justify-end 2xl:mt-10">
 				<FormButton {$isSubmitting} text="Update" class="w-full sm:w-auto" />
 			</div>
 		</form>
