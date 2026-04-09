@@ -1,9 +1,9 @@
 <script>
+	import { cleanObject, getChangedFields, logAccountHistory } from '$lib/utils/functions.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import FormField from '$lib/components/FormField.svelte';
 	import { profileSchema } from '$lib/utils/schemas.js';
-	import { cleanObject } from '$lib/utils/functions.js';
 	import { validator } from '@felte/validator-zod';
 	import { SIGNIN } from '$lib/utils/constants.js';
 	import reporterDom from '@felte/reporter-dom';
@@ -20,7 +20,6 @@
 		},
 		extend: [validator({ schema: profileSchema }), reporterDom()],
 		onSubmit: async (values) => {
-			console.log(values);
 			try {
 				if (values.name.length === 0 && values.email.length === 0) {
 					return;
@@ -30,6 +29,17 @@
 				if (cleanValues?.name?.length > 0 && cleanValues?.name !== pb.authStore.record.name) {
 					await pb.collection('users').update(pb.authStore.record.id, { name: cleanValues.name });
 					// using pb.authStore.record.name in dashboard, need to have this update in realtime
+					const changes = getChangedFields(
+						{ name: pb.authStore.record?.name },
+						{ name: values?.name }
+					);
+					if (Object.keys(changes).length > 0) {
+						await logAccountHistory({
+							type: 'profile_update',
+							title: `Updated account name`,
+							meta: changes
+						});
+					}
 				}
 
 				if (cleanValues?.email?.length > 0 && cleanValues?.email !== pb.authStore.record?.email) {
@@ -45,6 +55,17 @@
 					});
 					const result = await res.json();
 					if (res.ok) {
+						const changes = getChangedFields(
+							{ email: pb.authStore.record?.email },
+							{ email: values?.email }
+						);
+						if (Object.keys(changes).length > 0) {
+							await logAccountHistory({
+								type: 'profile_update',
+								title: `Updated account email`,
+								meta: changes
+							});
+						}
 						pb.authStore.clear();
 						await goto(resolve(SIGNIN));
 						toast.success('Successfully updated email!');

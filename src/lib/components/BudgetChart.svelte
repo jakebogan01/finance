@@ -181,7 +181,7 @@
 			{/if}
 		</div>
 	</Card.Header>
-	<Card.Content class="relative mt-4 flex flex-1 flex-col px-0! 2xl:mt-10">
+	<Card.Content class="relative mt-4 flex flex-1 flex-col px-0! lg:mt-10">
 		{#if expenseHistory?.length > 0 && activeExpenses?.length > 0}
 			<Chart.Container config={chartConfig} class="flex aspect-auto w-full flex-1 flex-col">
 				<BarChart

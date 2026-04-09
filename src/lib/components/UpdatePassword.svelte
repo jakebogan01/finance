@@ -1,5 +1,6 @@
 <script>
 	import { updatePasswordSchema } from '$lib/utils/schemas.js';
+	import { logAccountHistory } from '$lib/utils/functions.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import FormField from '$lib/components/FormField.svelte';
 	import * as Password from '$lib/components/ui/password';
@@ -44,6 +45,10 @@
 
 				const result = await res.json();
 				if (res.ok) {
+					await logAccountHistory({
+						type: 'profile_update',
+						title: `Updated account password`
+					});
 					pb.authStore.clear();
 					await goto(resolve(SIGNIN));
 					toast.success('Successfully updated password!');
