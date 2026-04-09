@@ -19,7 +19,7 @@
 					{usdFormatter.format(incomeStore.userTotal)}
 				{/snippet}
 				{#snippet content()}
-					Before expenses
+					Current income
 				{/snippet}
 			</Tooltip>
 			<Separator orientation="vertical" class="h-11.5 bg-grey-500" />

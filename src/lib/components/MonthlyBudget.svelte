@@ -49,9 +49,9 @@
 					{/snippet}
 					{#snippet content()}
 						{#if afterBudget > 0}
-							Over budget
-						{:else}
 							Under budget
+						{:else}
+							Over budget
 						{/if}
 					{/snippet}
 				</Tooltip>
