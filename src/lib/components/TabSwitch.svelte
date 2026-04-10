@@ -1,10 +1,11 @@
 <script>
-	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import MoonIcon from '@lucide/svelte/icons/moon';
 	import SunIcon from '@lucide/svelte/icons/sun';
+	import { toast } from 'svelte-sonner';
+	import pb from '$lib/pocketbase.js';
 
 	let { tabItems, showIcons } = $props();
-	let active = $derived(tabItems?.[0] ?? null);
+	let active = $derived(pb.authStore.record?.dark_mode ? 'Light' : 'Dark');
 	let containerEl = null;
 	let isSwitching = $state(false);
 
@@ -16,9 +17,16 @@
 		document.startViewTransition(() => updateTheme());
 	};
 
-	const updateTheme = () => {
-		darkMode.status = !darkMode.status;
-		document.documentElement.classList.toggle('dark', darkMode.status);
+	const updateTheme = async () => {
+		try {
+			const updatedUser = await pb
+				.collection('users')
+				.update(pb.authStore.record.id, { dark_mode: !pb.authStore.record?.dark_mode });
+			pb.authStore.save(pb.authStore.token, updatedUser);
+		} catch (error) {
+			console.dir(error?.response, { depth: null });
+			toast.error(error?.message ?? 'Server error');
+		}
 	};
 
 	const handleTabChange = (item) => {

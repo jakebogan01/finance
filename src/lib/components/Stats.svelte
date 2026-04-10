@@ -41,7 +41,7 @@
 					</p>
 					<p class="text-preset-5-semibold ml-16 dark:text-grey-900">{usdFormatter.format(sum)}</p>
 				</dt>
-				<dd class="pb-12">
+				<dd class="pb-12 xl:hidden 2xl:block">
 					<div
 						class="absolute inset-x-0 bottom-0 bg-[#181818] md:transition-colors md:hover:bg-grey-600 dark:bg-gray-100 dark:md:hover:bg-gray-200"
 					>

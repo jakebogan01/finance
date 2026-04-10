@@ -5,15 +5,23 @@
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { budgetStore } from '$lib/stores/budgetStore.svelte.js';
 	import { EXPENSES, INCOME } from '$lib/utils/constants.js';
-	import { darkMode } from '$lib/stores/darkMode.svelte.js';
 	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Topbar from '$lib/components/Topbar.svelte';
 	import { onDestroy, onMount } from 'svelte';
+	import pb from '$lib/pocketbase.js';
 	import { page } from '$app/state';
 
 	let { children } = $props();
+	let user = $state(pb.authStore.record);
 
 	onMount(() => {
+		if (pb.authStore.record?.dark_mode) {
+			document.documentElement.classList.add('dark');
+		}
+		pb.authStore.onChange(() => {
+			user = pb.authStore.record;
+			document.documentElement.classList.toggle('dark', user?.dark_mode);
+		});
 		incomeStore.init();
 		expenseStore.init();
 		budgetStore.init();
@@ -35,7 +43,7 @@
 	<div
 		class={[
 			'wrapper relative mx-auto flex min-h-0 w-full max-w-400 flex-1 flex-col px-4 py-5 sm:px-5 3xl-tall:ultra-screen',
-			darkMode.status ? 'dark' : ''
+			user?.dark_mode ? 'dark' : ''
 		]}
 	>
 		<div class="hidden xl:fixed xl:inset-y-5 xl:z-50 xl:flex xl:w-66 xl:flex-col 3xl-tall:absolute">
