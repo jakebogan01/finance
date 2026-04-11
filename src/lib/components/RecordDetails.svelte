@@ -49,7 +49,7 @@
 			},
 			{
 				label: 'User',
-				value: 'JB',
+				value: data.owner,
 				icon: UserIcon,
 				copy: false
 			}

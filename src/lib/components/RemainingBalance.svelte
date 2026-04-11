@@ -10,6 +10,11 @@
 </script>
 
 <CardLayout title="Remaining Balance">
+	{#snippet content()}
+		{#if expenseStore.userTotal > 0}
+			<p class="text-preset-5-semibold text-center text-yellow-200">-{expenseStore.userTotal}</p>
+		{/if}
+	{/snippet}
 	{#snippet footer()}
 		<div
 			class="flex h-13.5 w-full items-center overflow-hidden rounded-full bg-grey-600 font-semibold sm:text-xl sm:font-medium dark:bg-grey-100"

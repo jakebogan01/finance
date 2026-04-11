@@ -605,7 +605,6 @@ export const getUserBudget = async () => {
 		// No budget yet
 		if (error?.status === 404) return null;
 		console.dir(error?.response, { depth: null });
-		toast.error('Failed to connect to server');
 		return null;
 	}
 };
