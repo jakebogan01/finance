@@ -1,5 +1,12 @@
 <script>
+	import {
+		initSharedAccessRealtime,
+		cleanupSharedAccessRealtime
+	} from '$lib/stores/sharedAccessRealtime.js';
+	import { initAuthListener, registerAuthReset } from '$lib/utils/authListener.js';
 	import { accountHistoryStore } from '$lib/stores/accountHistoryStore.svelte.js';
+	import { sharedAccessStore } from '$lib/stores/sharedAccessStore.svelte.js';
+	import { resetAccessibleUserIdsCache } from '$lib/utils/functions.js';
 	import { expenseStore } from '$lib/stores/expenseStore.svelte.js';
 	import MobileSidebar from '$lib/components/MobileSidebar.svelte';
 	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
@@ -14,7 +21,24 @@
 	let { children } = $props();
 	let user = $state(pb.authStore.record);
 
-	onMount(() => {
+	onMount(async () => {
+		await initSharedAccessRealtime();
+		initAuthListener();
+		registerAuthReset(() => {
+			resetAccessibleUserIdsCache();
+
+			incomeStore.cleanup();
+			expenseStore.cleanup();
+			accountHistoryStore.cleanup();
+			budgetStore.cleanup();
+			sharedAccessStore.cleanup();
+
+			incomeStore.init();
+			expenseStore.init();
+			accountHistoryStore.init();
+			budgetStore.init();
+			sharedAccessStore.init();
+		});
 		if (pb.authStore.record?.dark_mode) {
 			document.documentElement.classList.add('dark');
 		}
@@ -22,16 +46,21 @@
 			user = pb.authStore.record;
 			document.documentElement.classList.toggle('dark', user?.dark_mode);
 		});
-		incomeStore.init();
-		expenseStore.init();
-		budgetStore.init();
-		accountHistoryStore.init();
+		await Promise.all([
+			incomeStore.init(),
+			expenseStore.init(),
+			budgetStore.init(),
+			accountHistoryStore.init(),
+			sharedAccessStore.init()
+		]);
 	});
-	onDestroy(() => {
-		incomeStore.cleanup();
-		expenseStore.cleanup();
+	onDestroy(async () => {
+		await cleanupSharedAccessRealtime();
+		await incomeStore.cleanup();
+		await expenseStore.cleanup();
 		budgetStore.cleanup();
-		accountHistoryStore.cleanup();
+		await accountHistoryStore.cleanup();
+		await sharedAccessStore.cleanup();
 	});
 </script>
 

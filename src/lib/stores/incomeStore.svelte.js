@@ -1,19 +1,22 @@
-import { getUserIncomes } from '$lib/utils/functions.js';
+import { getUserIncomes, getAccessibleUserIds } from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';
 
 /**
- * ----------------------------------------
  * State
- * ----------------------------------------
  */
 let paginated = $state(null);
 let userTotal = $state(0);
+let accessibleUserIds = $state([]);
+
 let filters = $state({
 	status: 'all',
 	sort: 'latest',
 	search: ''
 });
+
+let initialized = false;
+let unsubscribed = false;
 
 let fetchTimeout;
 let searchTimeout;
@@ -21,12 +24,26 @@ let currentRequest = 0;
 let fetchUserTotalTimeout;
 
 /**
- * ----------------------------------------
  * Helpers
- * ----------------------------------------
  */
-const setUserTotal = (value) => {
-	userTotal = value ?? 0;
+const setSearch = (value) => {
+	clearTimeout(searchTimeout);
+
+	searchTimeout = setTimeout(() => {
+		const trimmed = value.trim();
+		if (trimmed.length > 0 && trimmed.length < 2) return;
+		if (filters.search === trimmed) return;
+
+		filters = { ...filters, search: trimmed };
+		fetchPage(1);
+	}, 500);
+};
+
+const setPage = (page) => fetchPage(page);
+
+const setFilters = async (newFilters) => {
+	filters = { ...filters, ...newFilters };
+	await fetchPage(1);
 };
 
 const getSortValue = () => {
@@ -38,8 +55,10 @@ const getSortValue = () => {
 const fetchUserTotal = async () => {
 	if (!pb.authStore.isValid) return;
 
+	const filter = accessibleUserIds.map((id) => `user="${id}"`).join(' || ');
+
 	const records = await pb.collection('incomes').getFullList({
-		filter: `user="${pb.authStore.record?.id}" && status=true`,
+		filter: `(${filter}) && status=true`,
 		fields: 'amount',
 		$autoCancel: false
 	});
@@ -69,71 +88,53 @@ const fetchPage = async (pageOverride) => {
 
 		paginated = result;
 	} catch (error) {
-		if (error?.isAbort) return;
-		console.dir(error?.response, { depth: null });
-		toast.error(error?.message ?? 'Server error');
+		if (!error?.isAbort) {
+			console.dir(error?.response, { depth: null });
+			toast.error(error?.message ?? 'Server error');
+		}
 	}
 };
 
-const scheduleFetchPage = () => {
-	clearTimeout(fetchTimeout);
-	fetchTimeout = setTimeout(fetchPage, 120);
+const setUserTotal = (value) => {
+	userTotal = value ?? 0;
 };
 
-const setPage = (page) => fetchPage(page);
-
-const setFilters = async (newFilters) => {
-	filters = { ...filters, ...newFilters };
-	await fetchPage(1);
-};
-
-const setSearch = (value) => {
-	clearTimeout(searchTimeout);
-
-	searchTimeout = setTimeout(() => {
-		const trimmed = value.trim();
-		if (trimmed.length > 0 && trimmed.length < 2) return;
-		if (filters.search === trimmed) return;
-
-		filters = { ...filters, search: trimmed };
-		fetchPage(1);
-	}, 500);
-};
-
-/**
- * ----------------------------------------
- * Realtime: INCOMES
- * ----------------------------------------
- */
-const handleIncomeRealtime = async (e) => {
+const handleRealtime = async (e) => {
 	const record = e.record;
-	if (record.user !== pb.authStore.record?.id) return;
 
-	switch (e.action) {
-		case 'create':
-		case 'update':
-		case 'delete':
-			scheduleFetchUserTotal();
-			scheduleFetchPage();
-			break;
-	}
+	if (!accessibleUserIds.includes(record.user)) return;
+
+	// ALWAYS refetch instead of mutating local state
+	await fetchPage(paginated?.page ?? 1);
+	scheduleFetchUserTotal();
 };
 
 /**
- * ----------------------------------------
  * Init / Cleanup
- * ----------------------------------------
  */
 const init = async () => {
+	if (initialized) return;
+	initialized = true;
+
+	accessibleUserIds = await getAccessibleUserIds();
+
 	paginated = await getUserIncomes();
-	await fetchUserTotal(); // initial total
-	await pb.collection('incomes').subscribe('*', handleIncomeRealtime);
+	await fetchUserTotal();
+
+	await pb.collection('incomes').subscribe('*', handleRealtime);
 };
 
 const cleanup = async () => {
+	if (unsubscribed) return;
+	unsubscribed = true;
+
 	clearTimeout(fetchTimeout);
 	clearTimeout(fetchUserTotalTimeout);
+
 	await pb.collection('incomes').unsubscribe('*');
+
+	initialized = false;
+	unsubscribed = false;
 };
 
 export const incomeStore = {
@@ -142,12 +143,6 @@ export const incomeStore = {
 	},
 	get paginated() {
 		return paginated;
-	},
-	get total() {
-		if (!paginated?.items?.length) return 0;
-		return paginated.items
-			.filter((e) => e.status === true)
-			.reduce((sum, e) => sum + (e.amount ?? 0), 0);
 	},
 	get filters() {
 		return filters;

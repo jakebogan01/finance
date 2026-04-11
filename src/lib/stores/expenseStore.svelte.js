@@ -1,4 +1,8 @@
-import { getExpenseHistoryMap, getUserExpenses } from '$lib/utils/functions.js';
+import {
+	getExpenseHistoryMap,
+	getUserExpenses,
+	getAccessibleUserIds
+} from '$lib/utils/functions.js';
 import { toast } from 'svelte-sonner';
 import pb from '$lib/pocketbase';
 
@@ -11,6 +15,10 @@ let paginated = $state(null);
 let userTotal = $state(0);
 let allExpenses = $state([]);
 let historyMap = $state({});
+let accessibleUserIds = $state([]);
+let initialized = false;
+let unsubscribed = false;
+
 let filters = $state({
 	status: 'all',
 	sort: 'latest',
@@ -32,17 +40,14 @@ const handleExpenseHistoryRealtime = async (e) => {
 
 	if (!record?.expense) return;
 
-	switch (e.action) {
-		case 'create':
-		case 'update':
-		case 'delete':
-			await fetchHistoryMap(); // refresh chart data
-			break;
-	}
+	// (optional: validate via expand if needed later)
+
+	await fetchHistoryMap();
 };
 
 const fetchHistoryMap = async () => {
 	if (!pb.authStore.isValid) return;
+
 	historyMap = await getExpenseHistoryMap(pb.authStore.record.id);
 };
 
@@ -59,13 +64,13 @@ const getSortValue = () => {
 const fetchUserTotal = async () => {
 	if (!pb.authStore.isValid) return;
 
+	const filter = accessibleUserIds.map((id) => `user="${id}"`).join(' || ');
+
 	const records = await pb.collection('expenses').getFullList({
-		filter: `user="${pb.authStore.record?.id}" && status=true`,
+		filter: `(${filter}) && status=true`,
 		fields: 'current_amount',
 		$autoCancel: false
 	});
-
-	if (!records.length && userTotal > 0) return;
 
 	userTotal = records.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
 };
@@ -125,12 +130,13 @@ const setSearch = (value) => {
 
 /**
  * ----------------------------------------
- * Realtime: EXPENSES
+ * Realtime
  * ----------------------------------------
  */
+
 const handleExpenseRealtime = async (e) => {
 	const record = e.record;
-	if (record.user !== pb.authStore.record?.id) return;
+	if (!accessibleUserIds.includes(record.user)) return;
 
 	switch (e.action) {
 		case 'create': {
@@ -186,6 +192,11 @@ const handleExpenseRealtime = async (e) => {
  * ----------------------------------------
  */
 const init = async () => {
+	if (initialized) return;
+	initialized = true;
+
+	accessibleUserIds = await getAccessibleUserIds();
+
 	paginated = await getUserExpenses();
 	await fetchHistoryMap();
 	await fetchUserTotal();
@@ -194,17 +205,22 @@ const init = async () => {
 		expand: 'current_history',
 		$autoCancel: false
 	});
-
-	await fetchUserTotal(); // initial total
 	await pb.collection('expenses').subscribe('*', handleExpenseRealtime);
 	await pb.collection('expense_history').subscribe('*', handleExpenseHistoryRealtime);
 };
 
 const cleanup = async () => {
+	if (unsubscribed) return;
+	unsubscribed = true;
+
 	clearTimeout(fetchTimeout);
 	clearTimeout(fetchUserTotalTimeout);
+
 	await pb.collection('expenses').unsubscribe('*');
 	await pb.collection('expense_history').unsubscribe('*');
+
+	initialized = false;
+	unsubscribed = false;
 };
 
 export const expenseStore = {
@@ -213,12 +229,6 @@ export const expenseStore = {
 	},
 	get paginated() {
 		return paginated;
-	},
-	get total() {
-		if (!paginated?.items?.length) return 0;
-		return paginated.items
-			.filter((e) => e.status === true)
-			.reduce((sum, e) => sum + (e.current_amount ?? 0), 0);
 	},
 	get filters() {
 		return filters;

@@ -1,14 +1,24 @@
 <script>
 	import { getAvatarColor, getInitials, timeAgo } from '$lib/utils/functions.js';
+	import { sharedAccessStore } from '$lib/stores/sharedAccessStore.svelte.js';
 	import { CopyButton } from '$lib/components/ui/copy-button/index.js';
 	import InviteCodeInput from '$lib/components/InviteCodeInput.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import CopyIcon from '@lucide/svelte/icons/copy';
+	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase';
 
-	let { accountHistory = [] } = $props();
-
 	let open = $state(false);
+
+	const handleAccept = async (id) => {
+		await sharedAccessStore.acceptInvite(id);
+		toast.success('Invite accepted');
+	};
+
+	const handleDecline = async (id) => {
+		await sharedAccessStore.declineInvite(id);
+		toast.success('Invite declined');
+	};
 </script>
 
 <div
@@ -42,12 +52,12 @@
 			>
 				Invite
 			</Dialog.Trigger>
-			<InviteCodeInput />
+			<InviteCodeInput bind:open />
 		</Dialog.Root>
 	</div>
 	<div class="flex min-h-0 flex-1 flex-col overflow-y-auto pr-2">
 		<ul role="list" class="relative min-h-0 flex-1 space-y-3">
-			{#each accountHistory as item, i (item?.id)}
+			{#each sharedAccessStore.invites.filter((i) => i.to_user === pb.authStore.record?.id && i.status === 'pending') as invite, i (invite.id)}
 				<li>
 					<div
 						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 border-grey-900 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 dark:border-gray-400/60 dark:bg-white"
@@ -58,11 +68,21 @@
 									i
 								)}"
 							>
-								{getInitials(item?.owner)}
+								{getInitials(invite?.from_name)}
 							</div>
 							<div class="w-full min-w-0 flex-auto">
-								<p class="text-preset-3-medium">{item?.title}</p>
-								<p class="text-preset-1 text-grey-50">{timeAgo(item?.created)}</p>
+								<p class="text-preset-3-medium">
+									{invite.from_name} invited you
+								</p>
+								<!--								<p class="text-preset-1 text-grey-50">{timeAgo(item?.created)}</p>-->
+								<div class="flex gap-2">
+									<button onclick={() => handleAccept(invite.id)} class="btn-success">
+										Accept
+									</button>
+									<button onclick={() => handleDecline(invite.id)} class="btn-danger">
+										Decline
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -70,6 +90,22 @@
 			{:else}
 				<div class="absolute inset-0 flex justify-center items-center gap-x-4">
 					<span class="text-preset-3 text-grey-200 dark:text-grey-400">No shared accounts</span>
+				</div>
+			{/each}
+			{#each sharedAccessStore.invites.filter((i) => i.from_user === pb.authStore.record?.id && i.status === 'pending') as invite (invite.id)}
+				{#if !sharedAccessStore.hasAcceptedInvite(invite.from_user, invite.to_user)}
+					<div class="rounded-xl border p-3">
+						<p class="text-sm">
+							Invite sent to {invite.to_name}
+						</p>
+					</div>
+				{/if}
+			{/each}
+			{#each sharedAccessStore.invites.filter((i) => i.status === 'accepted') as invite (invite.id)}
+				<div class="flex items-center gap-3 rounded-xl border p-3">
+					<p>
+						{invite.from_user === pb.authStore.record?.id ? invite.to_name : invite.from_name}
+					</p>
 				</div>
 			{/each}
 		</ul>

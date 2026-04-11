@@ -25,6 +25,42 @@ export const authCheck = (status = 303, redirectLink = DASHBOARD, requireAuth = 
 	if (!requireAuth && authed) redirect(status, redirectLink);
 };
 
+let cachedUserIds = null;
+
+export const getAccessibleUserIds = async () => {
+	if (cachedUserIds) return cachedUserIds;
+
+	const userId = pb.authStore.record?.id;
+	if (!userId) return [];
+
+	const invites = await pb.collection('shared_invites').getFullList({
+		filter: `status="accepted" && (from_user="${userId}" || to_user="${userId}")`,
+		fields: 'from_user,to_user',
+		$autoCancel: false
+	});
+
+	const sharedUserIds = invites.map((invite) =>
+		invite.from_user === userId ? invite.to_user : invite.from_user
+	);
+
+	cachedUserIds = [userId, ...sharedUserIds];
+
+	return cachedUserIds;
+};
+
+export const resetAccessibleUserIdsCache = () => {
+	cachedUserIds = null;
+};
+
+export const buildUserFilter = (userIds = [], fields = ['user']) => {
+	if (!userIds.length) return '';
+
+	return userIds
+		.map((id) => fields.map((field) => `${field}="${id}"`).join(' || '))
+		.map((group) => `(${group})`)
+		.join(' || ');
+};
+
 /**
  * ----------------------------------------
  * Formatters
@@ -185,7 +221,7 @@ export const updateUserTotal = async (userId) => {
 
 let updatingIncomeTotal = false;
 export const updateUserIncomeTotal = async (userId) => {
-	if (updatingIncomeTotal) return incomeStore.userTotal;
+	if (updatingIncomeTotal) return incomeStore.userTotal ?? 0;
 	updatingIncomeTotal = true;
 
 	try {
@@ -200,9 +236,11 @@ export const updateUserIncomeTotal = async (userId) => {
 			.reduce((sum, i) => sum + (i.amount ?? 0), 0);
 
 		await pb.collection('users').update(userId, { total_income: total, $autoCancel: false });
-		return total;
+
+		return total ?? 0;
 	} catch (err) {
 		if (!err?.isAbort) console.error('updateUserIncomeTotal failed:', err);
+		return 0;
 	} finally {
 		updatingIncomeTotal = false;
 	}
@@ -244,7 +282,7 @@ export const cleanNumber = (value) => {
  * Account History Logger
  * ----------------------------------------
  */
-export const logAccountHistory = async ({ type, title, description = '', meta = {} }) => {
+export const logAccountHistory = async ({ type, title, meta = {} }) => {
 	try {
 		const userId = pb.authStore.record?.id;
 		if (!userId) return;
@@ -254,7 +292,6 @@ export const logAccountHistory = async ({ type, title, description = '', meta = 
 			owner: pb.authStore.record?.name,
 			type,
 			title,
-			description,
 			meta,
 			$autoCancel: false
 		});
@@ -267,8 +304,10 @@ export const logAccountHistory = async ({ type, title, description = '', meta = 
 
 export const getAccountHistory = async (limit = 20) => {
 	try {
+		const userIds = await getAccessibleUserIds();
+		const filter = buildUserFilter(userIds, ['user']);
 		return await pb.collection('account_history').getList(1, limit, {
-			filter: `user="${pb.authStore.record?.id}"`,
+			filter,
 			sort: '-created',
 			$autoCancel: false
 		});
@@ -354,7 +393,8 @@ export const getUserIncomes = async ({
 	status = 'all',
 	search = ''
 } = {}) => {
-	let filter = `user="${pb.authStore.record?.id}"`;
+	const userIds = await getAccessibleUserIds();
+	let filter = buildUserFilter(userIds, ['user']);
 	if (status === 'active') filter += ' && status=true';
 	if (status === 'inactive') filter += ' && status=false';
 	if (search?.trim()) filter += ` && name ~ "${search.replace(/"/g, '\\"')}"`;
@@ -371,7 +411,8 @@ export const getUserExpenses = async ({
 	status = 'all',
 	search = ''
 } = {}) => {
-	let filter = `user="${pb.authStore.record?.id}"`;
+	const userIds = await getAccessibleUserIds();
+	let filter = buildUserFilter(userIds, ['user']);
 	if (status === 'active') filter += ' && status=true';
 	if (status === 'inactive') filter += ' && status=false';
 	if (search?.trim()) filter += ` && title ~ "${search.replace(/"/g, '\\"')}"`;

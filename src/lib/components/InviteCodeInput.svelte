@@ -1,14 +1,85 @@
 <script>
+	import { resetAccessibleUserIdsCache, logAccountHistory } from '$lib/utils/functions.js';
 	import * as InputOTP from '$lib/components/ui/input-otp/index.js';
 	import FormButton from '$lib/components/FormButton.svelte';
 	import * as Field from '$lib/components/ui/field/index.js';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { toast } from 'svelte-sonner';
+	import pb from '$lib/pocketbase';
 
 	let { open = $bindable() } = $props();
+
+	let code = $state('');
+
+	const submitInvite = async (e) => {
+		e.preventDefault();
+		try {
+			if (code.length !== 6) {
+				toast.error('Enter a valid 6-digit code');
+				return;
+			}
+
+			const currentUserId = pb.authStore.record?.id;
+
+			// find user by invite code
+			const target = await pb
+				.collection('users')
+				.getFirstListItem(`invite_code="${code}"`, { $autoCancel: false });
+
+			if (!target) {
+				toast.error('Invalid invite code');
+				return;
+			}
+
+			if (target.id === currentUserId) {
+				toast.error('You cannot invite yourself');
+				return;
+			}
+
+			// prevent duplicates
+			const existing = await pb.collection('shared_invites').getFullList({
+				filter: `from_user="${currentUserId}" && to_user="${target.id}"`,
+				$autoCancel: false
+			});
+
+			if (existing.length > 0) {
+				toast.error('Already connected');
+				return;
+			}
+
+			// create invite
+			await pb.collection('shared_invites').create({
+				from_user: currentUserId,
+				from_name: pb.authStore.record.name,
+				to_name: target.name,
+				to_user: target.id,
+				status: 'pending',
+				$autoCancel: false
+			});
+
+			await logAccountHistory({
+				type: 'invite_sent',
+				title: `Sent invite to ${target.name}`,
+				meta: {
+					to_user: target.id
+				}
+			});
+
+			resetAccessibleUserIdsCache();
+
+			toast.success('Invite sent!');
+
+			open = false;
+			code = '';
+		} catch (err) {
+			console.error(err);
+			toast.error('Failed to send invite');
+		}
+	};
 </script>
 
-<Dialog.Content showCloseButton={false} class="p-5">
-	<form>
+<Dialog.Content bind:open showCloseButton={false} class="p-5">
+	<form onsubmit={submitInvite}>
 		<Dialog.Header class="text-center">
 			<Dialog.Title class="text-preset-5-semibold">Enter Account Code</Dialog.Title>
 		</Dialog.Header>
@@ -17,6 +88,7 @@
 				<Field.Label for="invite_code" class="sr-only">Account Code</Field.Label>
 				<InputOTP.Root
 					maxlength={6}
+					bind:value={code}
 					id="invite_code"
 					class="mt-10 mb-3 items-center justify-center"
 					required

@@ -208,7 +208,7 @@
 
 @custom-variant 3xl-tall (@media (min-width: 1023px) and (min-height: 1081px));
 @utility ultra-screen {
-	@apply 3xl-tall:max-h-250 3xl-tall:rounded-4xl 3xl-tall:border 3xl-tall:border-grey-300 3xl-tall:bg-grey-700 3xl-tall:before:absolute 3xl-tall:before:-inset-custom 3xl-tall:before:-z-1 3xl-tall:before:rounded-4xl 3xl-tall:before:bg-radial-[at_100%_25%] 3xl-tall:before:from-white-0 3xl-tall:before:to-yellow-200 3xl-tall:before:opacity-30 3xl-tall:before:blur-4xl 3xl-tall:before:content-[''] dark:3xl-tall:bg-grey-100 dark:3xl-tall:before:from-yellow-100;
+	@apply 3xl-tall:max-h-240 3xl-tall:rounded-4xl 3xl-tall:border 3xl-tall:border-grey-300 3xl-tall:bg-grey-700 3xl-tall:before:absolute 3xl-tall:before:-inset-custom 3xl-tall:before:-z-1 3xl-tall:before:rounded-4xl 3xl-tall:before:bg-radial-[at_100%_25%] 3xl-tall:before:from-white-0 3xl-tall:before:to-yellow-200 3xl-tall:before:opacity-30 3xl-tall:before:blur-4xl 3xl-tall:before:content-[''] dark:3xl-tall:bg-grey-100 dark:3xl-tall:before:from-yellow-100;
 }
 
 input:-webkit-autofill,

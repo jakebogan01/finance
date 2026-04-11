@@ -1,7 +1,6 @@
 <script>
 	import MoonIcon from '@lucide/svelte/icons/moon';
 	import SunIcon from '@lucide/svelte/icons/sun';
-	import { toast } from 'svelte-sonner';
 	import pb from '$lib/pocketbase.js';
 
 	let { tabItems, showIcons } = $props();
@@ -25,7 +24,6 @@
 			pb.authStore.save(pb.authStore.token, updatedUser);
 		} catch (error) {
 			console.dir(error?.response, { depth: null });
-			toast.error(error?.message ?? 'Server error');
 		}
 	};
 

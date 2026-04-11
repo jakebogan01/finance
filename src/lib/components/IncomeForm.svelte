@@ -10,7 +10,6 @@
 	} from '$lib/utils/functions.js';
 	import { logAccountHistory, getChangedFields } from '$lib/utils/functions.js';
 	import { fromDate, getLocalTimeZone } from '@internationalized/date';
-	import { incomeStore } from '$lib/stores/incomeStore.svelte.js';
 	import { INCOMESLUG } from '$lib/stores/incomeSlug.svelte.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import FormButton from '$lib/components/FormButton.svelte';
@@ -84,8 +83,7 @@
 					meta: changes
 				});
 			}
-			const total = await updateUserIncomeTotal(pb.authStore.record.id);
-			if (typeof total === 'number') incomeStore.setUserTotal(total);
+			await updateUserIncomeTotal(pb.authStore.record.id);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			INCOMESLUG.value = `#${payload.slug}`;
 			toast.success('Successfully updated');
@@ -99,8 +97,7 @@
 					amount: payload.amount
 				}
 			});
-			const total = await updateUserIncomeTotal(pb.authStore.record.id);
-			if (typeof total === 'number') incomeStore.setUserTotal(total);
+			await updateUserIncomeTotal(pb.authStore.record.id);
 			await goto(resolve(`${page.url.pathname}#${payload.slug}`));
 			toast.success('Successfully created');
 		}
