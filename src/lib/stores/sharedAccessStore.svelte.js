@@ -51,6 +51,7 @@ const acceptInvite = async (inviteId) => {
 
 	await pb.collection('account_history').create({
 		user: pb.authStore.record?.id,
+		owner: pb.authStore.record?.name,
 		type: 'invite_accepted',
 		title: 'Accepted account invite',
 		$autoCancel: false

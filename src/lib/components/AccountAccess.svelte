@@ -3,6 +3,8 @@
 	import { sharedAccessStore } from '$lib/stores/sharedAccessStore.svelte.js';
 	import { CopyButton } from '$lib/components/ui/copy-button/index.js';
 	import InviteCodeInput from '$lib/components/InviteCodeInput.svelte';
+	import CircleCheckIcon from '@lucide/svelte/icons/circle-check';
+	import CircleXIcon from '@lucide/svelte/icons/circle-x';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import CopyIcon from '@lucide/svelte/icons/copy';
 	import { toast } from 'svelte-sonner';
@@ -72,14 +74,30 @@
 							</div>
 							<div class="w-full min-w-0 flex-auto">
 								<p class="text-preset-3-medium">
-									{invite.from_name} invited you
+									{invite.from_name} invited to share accounts
 								</p>
-								<!--								<p class="text-preset-1 text-grey-50">{timeAgo(item?.created)}</p>-->
+								<p class="text-preset-1 text-grey-50">{timeAgo(invite?.created)}</p>
 								<div class="flex gap-2">
-									<button onclick={() => handleAccept(invite.id)} class="btn-success">
+									<button
+										type="button"
+										onclick={() => handleAccept(invite.id)}
+										class="group flex cursor-pointer items-center gap-1 text-green-200 md:transition-colors md:hover:text-white-0"
+									>
+										<CircleCheckIcon
+											class="size-4 text-green-200 md:transition-colors md:group-hover:text-white-0"
+											strokeWidth="1.5"
+										/>
 										Accept
 									</button>
-									<button onclick={() => handleDecline(invite.id)} class="btn-danger">
+									<button
+										type="button"
+										onclick={() => handleDecline(invite.id)}
+										class="group flex cursor-pointer items-center gap-1 text-red-400 md:transition-colors md:hover:text-white-0"
+									>
+										<CircleXIcon
+											class="size-4 text-red-200 md:transition-colors md:group-hover:text-white-0"
+											strokeWidth="1.5"
+										/>
 										Decline
 									</button>
 								</div>
@@ -87,26 +105,56 @@
 						</div>
 					</div>
 				</li>
-			{:else}
-				<div class="absolute inset-0 flex justify-center items-center gap-x-4">
-					<span class="text-preset-3 text-grey-200 dark:text-grey-400">No shared accounts</span>
-				</div>
 			{/each}
-			{#each sharedAccessStore.invites.filter((i) => i.from_user === pb.authStore.record?.id && i.status === 'pending') as invite (invite.id)}
+			{#each sharedAccessStore.invites.filter((i) => i.from_user === pb.authStore.record?.id && i.status === 'pending') as invite, i (invite.id)}
 				{#if !sharedAccessStore.hasAcceptedInvite(invite.from_user, invite.to_user)}
-					<div class="rounded-xl border p-3">
-						<p class="text-sm">
-							Invite sent to {invite.to_name}
-						</p>
-					</div>
+					<li>
+						<div
+							class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 border-grey-900 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 dark:border-gray-400/60 dark:bg-white"
+						>
+							<div class="flex min-w-0 flex-1 items-center gap-x-4">
+								<div
+									class="text-preset-6-bold relative flex size-12.5 flex-none items-center justify-center rounded-full text-grey-600 {getAvatarColor(
+										i
+									)}"
+								>
+									{getInitials(invite?.to_name)}
+								</div>
+								<div class="w-full min-w-0 flex-auto">
+									<p class="text-preset-3-medium">
+										Invite sent to {invite.to_name}
+									</p>
+									<p class="text-preset-1 text-grey-50">{timeAgo(invite?.created)}</p>
+								</div>
+							</div>
+						</div>
+					</li>
 				{/if}
 			{/each}
-			{#each sharedAccessStore.invites.filter((i) => i.status === 'accepted') as invite (invite.id)}
-				<div class="flex items-center gap-3 rounded-xl border p-3">
-					<p>
-						{invite.from_user === pb.authStore.record?.id ? invite.to_name : invite.from_name}
-					</p>
-				</div>
+			{#each sharedAccessStore.invites.filter((i) => i.status === 'accepted') as invite, i (invite.id)}
+				<li>
+					<div
+						class="relative flex items-center justify-between overflow-hidden rounded-2xl border-2 border-grey-900 bg-grey-900 px-4 py-4 sm:px-6 sm:py-5 dark:border-gray-400/60 dark:bg-white"
+					>
+						<div class="flex min-w-0 flex-1 items-center gap-x-4">
+							<div
+								class="text-preset-6-bold relative flex size-12.5 flex-none items-center justify-center rounded-full text-grey-600 {getAvatarColor(
+									i
+								)}"
+							>
+								{getInitials(invite?.to_name)}
+							</div>
+							<div class="w-full min-w-0 flex-auto">
+								<p class="text-preset-3-medium">
+									Account shared with {invite.from_user === pb.authStore.record?.id
+										? invite.to_name
+										: invite.from_name}
+								</p>
+								<p class="text-preset-1 text-grey-50">{timeAgo(invite?.created)}</p>
+							</div>
+						</div>
+					</div>
+				</li>
 			{/each}
 		</ul>
 	</div>

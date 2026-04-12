@@ -21,10 +21,24 @@
 
 			const currentUserId = pb.authStore.record?.id;
 
+			// create invite
+			const sharedInvite = await pb.collection('shared_invites').create({
+				from_user: currentUserId,
+				from_name: pb.authStore.record.name,
+				status: 'pending',
+				code: code,
+				$autoCancel: false
+			});
+
 			// find user by invite code
-			const target = await pb
-				.collection('users')
-				.getFirstListItem(`invite_code="${code}"`, { $autoCancel: false });
+			const target = await pb.collection('users').getFirstListItem('', {
+				filter: `invite_code="${code}"`,
+				requestKey: null, // optional
+				$autoCancel: false,
+				query: {
+					invite_code: code
+				}
+			});
 
 			if (!target) {
 				toast.error('Invalid invite code');
@@ -47,13 +61,10 @@
 				return;
 			}
 
-			// create invite
-			await pb.collection('shared_invites').create({
-				from_user: currentUserId,
-				from_name: pb.authStore.record.name,
+			// update invite
+			await pb.collection('shared_invites').update(sharedInvite.id, {
 				to_name: target.name,
 				to_user: target.id,
-				status: 'pending',
 				$autoCancel: false
 			});
 

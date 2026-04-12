@@ -54,6 +54,7 @@
 	const createExpenseHistory = async (record, amount) => {
 		const history = await pb.collection('expense_history').create({
 			expense: record.id,
+			owner: pb.authStore.record?.id,
 			amount,
 			month,
 			year
