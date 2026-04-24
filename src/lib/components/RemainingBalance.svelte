@@ -6,7 +6,10 @@
 	import { usdFormatter } from '$lib/utils/functions.js';
 	import Tooltip from '$lib/components/Tooltip.svelte';
 
-	let remainingBalance = $derived(incomeStore.userTotal - expenseStore.userTotal);
+	let remainingBalance = $derived.by(() => {
+		if (incomeStore.userTotal === 0) return 0;
+		return incomeStore.userTotal - expenseStore.userTotal;
+	});
 </script>
 
 <CardLayout title="Remaining Balance">

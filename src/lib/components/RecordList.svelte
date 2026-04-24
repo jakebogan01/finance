@@ -28,7 +28,7 @@
 	>
 		<ul role="list" class="relative space-y-3 lg:flex-1">
 			{#if items.length > 0}
-				{#each items as item, i (item.id)}
+				{#each items as item, i (i)}
 					<RecordListItem {item} {i} {handleSlug} />
 				{/each}
 			{:else}

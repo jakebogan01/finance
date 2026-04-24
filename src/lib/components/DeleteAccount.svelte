@@ -37,5 +37,5 @@
 </div>
 
 <AlertDialog.Root bind:open>
-	<DeleteModal bind:open c={true} />
+	<DeleteModal bind:open deleteAccount={true} />
 </AlertDialog.Root>

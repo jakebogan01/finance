@@ -13,7 +13,7 @@
 </script>
 
 <Carousel.Content class="ms-0 -mr-5">
-	{#each expenses as item, i (item?.id)}
+	{#each expenses as item, i (i)}
 		{@const Icon = getExpenseCategoryIcon(item?.category)}
 		<Command.Item
 			class="min-100:basis-1/2 imtess min-w-0 shrink-0 grow-0 basis-1/2 ps-0 pr-5 sm:basis-1/3 md:basis-1/3"

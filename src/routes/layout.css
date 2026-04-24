@@ -114,6 +114,7 @@
 	--blur-3px: 3px;
 	--inset-custom: -4px;
 	--blur-4xl: 20px;
+	--breakpoint-1400: 87.5rem;
 }
 
 @theme inline {

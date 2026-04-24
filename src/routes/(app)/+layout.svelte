@@ -43,8 +43,9 @@
 			document.documentElement.classList.add('dark');
 		}
 		pb.authStore.onChange(() => {
-			user = pb.authStore.record;
-			document.documentElement.classList.toggle('dark', user?.dark_mode);
+			if (pb.authStore.record !== null) {
+				document.documentElement.classList.toggle('dark', pb.authStore.record?.dark_mode);
+			}
 		});
 		await Promise.all([
 			incomeStore.init(),
