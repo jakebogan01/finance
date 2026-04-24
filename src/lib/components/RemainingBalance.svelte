@@ -15,7 +15,9 @@
 <CardLayout title="Remaining Balance">
 	{#snippet content()}
 		{#if expenseStore.userTotal > 0}
-			<p class="text-preset-5-semibold text-center text-yellow-200">-{expenseStore.userTotal}</p>
+			<p class="text-preset-5-semibold text-center text-yellow-200">
+				-{usdFormatter.format(expenseStore.userTotal)}
+			</p>
 		{/if}
 	{/snippet}
 	{#snippet footer()}

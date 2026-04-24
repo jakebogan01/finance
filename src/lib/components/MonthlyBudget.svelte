@@ -48,11 +48,7 @@
 						{usdFormatter.format(afterBudget)}
 					{/snippet}
 					{#snippet content()}
-						{#if afterBudget > 0}
-							Under budget
-						{:else}
-							Over budget
-						{/if}
+						After expenses
 					{/snippet}
 				</Tooltip>
 			{/if}
